@@ -3,16 +3,34 @@
 from fastapi import FastAPI, HTTPException
 from .schemas import PropertyRequest, PropertyInfo
 from .config import settings
+from app.services.auth import routes
+from app.db.database import engine, Base
 import httpx
 from urllib.parse import urlencode
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 import logging
 
 app = FastAPI(
-    title="Propaya Property Information API",
+    title="JIRA for Property Development",
     description="API to fetch property information and images based on address input.",
     version="1.0.0"
 )
+
+# Import models to create tables
+from app.models import user
+
+@app.on_event("startup")
+async def startup():
+    # Create all the tables in the database
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+# Add SessionMiddleware with the same secret key as JWT
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
+# Include routes for authentication
+app.include_router(routes.router)
 
 # CORS configuration
 app.add_middleware(
