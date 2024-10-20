@@ -15,6 +15,7 @@ class IncomeCreate(IncomeBase):
     pass
 
 class IncomeUpdate(BaseModel):
+    property_id: Optional[int] = None
     category: Optional[str] = None
     amount: Optional[float] = None
     date_received: Optional[date] = None

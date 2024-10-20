@@ -1,20 +1,26 @@
 # app/schemas/tenant.py
 
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
+from datetime import date
+from app.schemas.lease import Lease
 
 class TenantBase(BaseModel):
     first_name: str
     last_name: str
     email: Optional[EmailStr] = None
     phone_number: Optional[str] = None
-    date_of_birth: Optional[str] = None  # Use datetime/date types if needed
+    date_of_birth: Optional[date] = None
 
 class TenantCreate(TenantBase):
     pass
 
-class TenantUpdate(TenantBase):
-    pass
+class TenantUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    phone_number: Optional[str] = None
+    date_of_birth: Optional[date] = None
 
 class TenantInDBBase(TenantBase):
     id: int
@@ -23,4 +29,4 @@ class TenantInDBBase(TenantBase):
         orm_mode = True
 
 class Tenant(TenantInDBBase):
-    pass
+    leases: Optional[List[Lease]] = []

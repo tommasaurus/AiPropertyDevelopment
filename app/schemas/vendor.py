@@ -1,13 +1,13 @@
 # app/schemas/vendor.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 class VendorBase(BaseModel):
     name: str
     contact_person: Optional[str] = None
     phone_number: Optional[str] = None
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
     address: Optional[str] = None
     services_provided: Optional[str] = None
     notes: Optional[str] = None
@@ -19,7 +19,7 @@ class VendorUpdate(BaseModel):
     name: Optional[str] = None
     contact_person: Optional[str] = None
     phone_number: Optional[str] = None
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
     address: Optional[str] = None
     services_provided: Optional[str] = None
     notes: Optional[str] = None

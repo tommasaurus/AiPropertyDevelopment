@@ -18,6 +18,8 @@ class ContractCreate(ContractBase):
     pass
 
 class ContractUpdate(BaseModel):
+    property_id: Optional[int] = None
+    vendor_id: Optional[int] = None
     contract_type: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None

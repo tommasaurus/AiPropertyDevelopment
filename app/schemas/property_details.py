@@ -1,7 +1,8 @@
 # app/schemas/property_details.py
 
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
+from app.schemas.utility import Utility
 
 class PropertyDetailsBase(BaseModel):
     property_id: int
@@ -40,4 +41,4 @@ class PropertyDetailsInDBBase(PropertyDetailsBase):
         orm_mode = True
 
 class PropertyDetails(PropertyDetailsInDBBase):
-    pass
+    utilities: Optional[List[Utility]] = []
