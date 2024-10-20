@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from app.config import settings
+from app.core.config import settings
 from .models import TokenData  # Assuming TokenData is defined in models.py
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")

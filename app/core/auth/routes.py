@@ -10,7 +10,7 @@ from app.models.user import User
 from .auth_service import signup_user, login_user
 from .oauth import oauth
 from .oauth_service import authenticate_oauth_user
-from app.config import settings
+from app.core.config import settings
 from jose import jwt
 import logging
 
