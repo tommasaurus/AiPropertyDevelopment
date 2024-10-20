@@ -1,0 +1,63 @@
+# app/api/endpoints/income.py
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List
+from app import schemas, crud
+from app.db.database import get_db
+from app.core.security import get_current_user
+from app.models.user import User
+
+router = APIRouter()
+
+@router.post("/", response_model=schemas.Income)
+async def create_income(
+    income_in: schemas.IncomeCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return await crud.crud_income.create_income(db=db, income_in=income_in)
+
+@router.get("/", response_model=List[schemas.Income])
+async def read_incomes(
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    incomes = await crud.crud_income.get_incomes(db=db, skip=skip, limit=limit)
+    return incomes
+
+@router.get("/{income_id}", response_model=schemas.Income)
+async def read_income(
+    income_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    income = await crud.crud_income.get_income(db=db, income_id=income_id)
+    if income is None:
+        raise HTTPException(status_code=404, detail="Income not found")
+    return income
+
+@router.put("/{income_id}", response_model=schemas.Income)
+async def update_income(
+    income_id: int,
+    income_in: schemas.IncomeUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    income = await crud.crud_income.get_income(db=db, income_id=income_id)
+    if income is None:
+        raise HTTPException(status_code=404, detail="Income not found")
+    return await crud.crud_income.update_income(db=db, income=income, income_in=income_in)
+
+@router.delete("/{income_id}", response_model=schemas.Income)
+async def delete_income(
+    income_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    income = await crud.crud_income.delete_income(db=db, income_id=income_id)
+    if income is None:
+        raise HTTPException(status_code=404, detail="Income not found")
+    return income

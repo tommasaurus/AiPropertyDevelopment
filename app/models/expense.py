@@ -1,0 +1,24 @@
+# app/models/expense.py
+
+from sqlalchemy import Column, Integer, Float, Date, String, Text, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
+from app.db.database import Base
+
+class Expense(Base):
+    __tablename__ = 'expenses'
+
+    id = Column(Integer, primary_key=True)
+    property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)
+    vendor_id = Column(Integer, ForeignKey('vendors.id'), nullable=True)
+    category = Column(String(50), nullable=False)
+    amount = Column(Float, nullable=False)
+    date_incurred = Column(Date, nullable=False)
+    description = Column(Text, nullable=True)
+    receipt_url = Column(String(255), nullable=True)
+    is_recurring = Column(Boolean, default=False)
+    frequency = Column(String(20), nullable=True)
+
+    # Relationships
+    property = relationship('Property', back_populates='expenses')
+    vendor = relationship('Vendor', back_populates='expenses')
+    documents = relationship('Document', back_populates='expense')
