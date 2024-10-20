@@ -28,4 +28,5 @@ class Property(Base):
     incomes = relationship('Income', back_populates='property')
     invoices = relationship('Invoice', back_populates='property')
     contracts = relationship('Contract', back_populates='property')
-    documents = relationship('Document', back_populates='property')
+    documents = relationship('Document', back_populates='property')    
+    details = relationship('PropertyDetails', back_populates='property', uselist=False)

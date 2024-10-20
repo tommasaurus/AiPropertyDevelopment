@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 from app.db.database import get_db
 from .models import UserCreate, UserLogin, Token
 from app.models.user import User
@@ -13,6 +12,10 @@ from .oauth import oauth
 from .oauth_service import authenticate_oauth_user
 from app.config import settings
 from jose import jwt
+import logging
+
+logger = logging.getLogger(__name__)
+
 router = APIRouter()
 
 # Signup route
@@ -28,12 +31,14 @@ async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
 # OAuth login route for Google
 @router.get("/login/google")
 async def google_login(request: Request):
-    redirect_uri = request.url_for("auth")
+    redirect_uri = request.url_for("auth_callback")  # Updated endpoint name
+    logger.info(f"Generated redirect_uri: {redirect_uri}")
+    print(f"Generated redirect_uri: {redirect_uri}")
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 # OAuth callback route
-@router.get("/auth")
-async def auth(request: Request, db: AsyncSession = Depends(get_db)):
+@router.get("/callback", name="auth_callback")  # Renamed route and added name
+async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
     try:
         # Retrieve the token from the OAuth flow
         token = await oauth.google.authorize_access_token(request)

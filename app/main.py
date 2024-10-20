@@ -1,5 +1,3 @@
-# app/main.py
-
 from fastapi import FastAPI
 from app.api.endpoints import (
     user,
@@ -21,6 +19,23 @@ from app.db.database import engine, Base
 from app.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+
+# Import all models
+from app.models import (
+    user as user_model,
+    property as property_model,
+    tenant as tenant_model,
+    lease as lease_model,
+    payment as payment_model,
+    expense as expense_model,
+    income as income_model,
+    invoice as invoice_model,
+    vendor as vendor_model,
+    contract as contract_model,
+    document as document_model,
+    property_details as property_details_model,
+    utility as utility_model,
+)
 
 app = FastAPI(
     title="Property Management Application",
