@@ -3,8 +3,14 @@
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import date
+from app.schemas.user_summary import UserSummary
 from app.schemas.property_details import PropertyDetails
-from app.schemas.lease import Lease
+from app.schemas.lease_summary import LeaseSummary
+from app.schemas.expense_summary import ExpenseSummary
+from app.schemas.income_summary import IncomeSummary
+from app.schemas.invoice_summary import InvoiceSummary
+from app.schemas.contract_summary import ContractSummary
+from app.schemas.document_summary import DocumentSummary
 
 class PropertyBase(BaseModel):
     owner_id: int
@@ -44,5 +50,14 @@ class PropertyInDBBase(PropertyBase):
         orm_mode = True
 
 class Property(PropertyInDBBase):
+    owner: UserSummary
     property_details: Optional[PropertyDetails] = None
-    leases: Optional[List[Lease]] = []
+    leases: Optional[List[LeaseSummary]] = []
+    expenses: Optional[List[ExpenseSummary]] = []
+    incomes: Optional[List[IncomeSummary]] = []
+    invoices: Optional[List[InvoiceSummary]] = []
+    contracts: Optional[List[ContractSummary]] = []
+    documents: Optional[List[DocumentSummary]] = []
+
+    class Config:
+        orm_mode = True

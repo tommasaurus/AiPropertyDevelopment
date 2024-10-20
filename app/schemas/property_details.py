@@ -2,7 +2,8 @@
 
 from pydantic import BaseModel
 from typing import Optional, List
-from app.schemas.utility import Utility
+from app.schemas.utility_summary import UtilitySummary
+from app.schemas.property_summary import PropertySummary
 
 class PropertyDetailsBase(BaseModel):
     property_id: int
@@ -41,4 +42,8 @@ class PropertyDetailsInDBBase(PropertyDetailsBase):
         orm_mode = True
 
 class PropertyDetails(PropertyDetailsInDBBase):
-    utilities: Optional[List[Utility]] = []
+    property: PropertySummary
+    utilities: Optional[List[UtilitySummary]] = []
+
+    class Config:
+        orm_mode = True

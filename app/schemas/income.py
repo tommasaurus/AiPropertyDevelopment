@@ -3,6 +3,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
+from app.schemas.property_summary import PropertySummary
 
 class IncomeBase(BaseModel):
     property_id: int
@@ -28,4 +29,7 @@ class IncomeInDBBase(IncomeBase):
         orm_mode = True
 
 class Income(IncomeInDBBase):
-    pass
+    property: PropertySummary
+
+    class Config:
+        orm_mode = True

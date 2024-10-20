@@ -3,7 +3,10 @@
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import date
-from app.schemas.payment import Payment
+from app.schemas.property_summary import PropertySummary
+from app.schemas.tenant_summary import TenantSummary
+from app.schemas.payment_summary import PaymentSummary
+from app.schemas.document_summary import DocumentSummary
 
 class LeaseBase(BaseModel):
     property_id: int
@@ -37,4 +40,10 @@ class LeaseInDBBase(LeaseBase):
         orm_mode = True
 
 class Lease(LeaseInDBBase):
-    payments: Optional[List[Payment]] = []
+    property: PropertySummary
+    tenant: TenantSummary
+    payments: Optional[List[PaymentSummary]] = []
+    documents: Optional[List[DocumentSummary]] = []
+
+    class Config:
+        orm_mode = True

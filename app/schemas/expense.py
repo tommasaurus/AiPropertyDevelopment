@@ -1,8 +1,11 @@
 # app/schemas/expense.py
 
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import date
+from app.schemas.property_summary import PropertySummary
+from app.schemas.vendor_summary import VendorSummary
+from app.schemas.document_summary import DocumentSummary
 
 class ExpenseBase(BaseModel):
     property_id: int
@@ -36,4 +39,9 @@ class ExpenseInDBBase(ExpenseBase):
         orm_mode = True
 
 class Expense(ExpenseInDBBase):
-    pass
+    property: PropertySummary
+    vendor: Optional[VendorSummary] = None
+    documents: Optional[List[DocumentSummary]] = []
+
+    class Config:
+        orm_mode = True

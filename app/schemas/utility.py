@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel
 from typing import Optional
+from app.schemas.property_details_summary import PropertyDetailsSummary
 
 class UtilityBase(BaseModel):
     property_details_id: int
@@ -28,4 +29,7 @@ class UtilityInDBBase(UtilityBase):
         orm_mode = True
 
 class Utility(UtilityInDBBase):
-    pass
+    property_details: PropertyDetailsSummary
+
+    class Config:
+        orm_mode = True

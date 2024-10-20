@@ -3,6 +3,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
+from app.schemas.lease_summary import LeaseSummary
 
 class PaymentBase(BaseModel):
     lease_id: int
@@ -31,4 +32,7 @@ class PaymentInDBBase(PaymentBase):
         orm_mode = True
 
 class Payment(PaymentInDBBase):
-    pass
+    lease: LeaseSummary
+
+    class Config:
+        orm_mode = True
