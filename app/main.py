@@ -14,7 +14,7 @@ from app.api.endpoints import (
     property_details,
     utility,
 )
-from app.core.auth.routes import router as auth_router
+from app.api.endpoints.auth_routes import router as auth_router
 from app.db.database import engine, Base
 from app.core.config import settings
 from fastapi.middleware.cors import CORSMiddleware

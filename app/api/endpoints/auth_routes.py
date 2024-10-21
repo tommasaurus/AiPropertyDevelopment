@@ -1,15 +1,17 @@
-# app/core/auth/routes.py
+# app/api/endpoints/auth_routes.py
 
 from fastapi import APIRouter, Depends, status, HTTPException
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
-from .models import UserCreate, UserLogin, Token
+from app.core.security import get_current_user
+from app.core.auth.models import UserCreate, UserLogin, Token
 from app.models.user import User
-from .auth_service import signup_user, login_user
-from .oauth import oauth
-from .oauth_service import authenticate_oauth_user
+from app.core.auth.auth_service import signup_user, login_user
+from app.core.auth.oauth import oauth
+from app.core.auth.oauth_service import authenticate_oauth_user
+from app.core.auth.auth_service import refresh_access_token
 from app.core.config import settings
 from jose import jwt
 import logging
@@ -36,24 +38,38 @@ async def google_login(request: Request):
     print(f"Generated redirect_uri: {redirect_uri}")
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
-# OAuth callback route
-@router.get("/callback", name="auth_callback")  # Renamed route and added name
+# OAuth callback route for Google login
+@router.get("/callback", name="auth_callback")
 async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
     try:
         # Retrieve the token from the OAuth flow
         token = await oauth.google.authorize_access_token(request)
 
-        # Use the service function to authenticate the user
+        # Authenticate the user or create a new one in the system
         jwt_token = await authenticate_oauth_user(db, token)
 
-        # Return a response or redirect with the JWT token
-        response = RedirectResponse(url="/")  # Update URL as needed
-        response.set_cookie("Authorization", f"Bearer {jwt_token}", httponly=True, secure=True)
+        # Redirect to homepage or wherever you'd like the user to go after login
+        response = RedirectResponse(url="/")  # You can change this URL to any post-login page
+
+        # Set the JWT token as a cookie
+        response.set_cookie(
+            key="jwt_token",               # Custom cookie name
+            value=jwt_token,               # The JWT token
+            httponly=True,                 # Ensures cookie is only accessible via HTTP, protecting from JavaScript
+            secure=True,                   # Use True in production to enforce HTTPS
+            samesite="Lax"                 # Prevent CSRF for cross-site requests
+        )
+
         return response
 
     except HTTPException as he:
         # Re-raise HTTP exceptions
         raise he
     except Exception as e:
-        print(f"Error during Google OAuth: {str(e)}")
+        logger.error(f"Error during Google OAuth: {str(e)}")
         raise HTTPException(status_code=500, detail="Authentication failed")
+
+# Refresh Token Route
+@router.post("/token/refresh", response_model=Token)
+async def refresh_token(refresh_token: str):
+    return await refresh_access_token(refresh_token)

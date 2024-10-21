@@ -1,17 +1,20 @@
 # app/services/document_processor.py
 
 import openai
-from app.core.config import settings
+# from app.core.config import settings
 from typing import Dict, Any
+from docx import Document
 import pytesseract
 from PIL import Image
+import pyheif
 import pdfplumber
 import re
 import json
 import logging
+import os
 
 # Initialize OpenAI API key
-openai.api_key = settings.OPENAI_API_KEY
+# openai.api_key = settings.OPENAI_API_KEY
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -19,7 +22,7 @@ logging.basicConfig(level=logging.INFO)
 
 def extract_text_from_file(file_path: str) -> str:
     """
-    Extracts text from an image or PDF file using OCR.
+    Extracts text from an image (PNG, JPG, HEIC) or PDF/DOCX file using OCR and document parsing.
 
     Args:
         file_path (str): The path to the file.
@@ -32,16 +35,44 @@ def extract_text_from_file(file_path: str) -> str:
 
     try:
         if file_extension in {".png", ".jpg", ".jpeg"}:
+            # Handle image files
             logger.info(f"Extracting text from image: {file_path}")
             image = Image.open(file_path)
             text = pytesseract.image_to_string(image)
+
+        elif file_extension == ".heic":
+            # Handle HEIC (iPhone photo format)
+            logger.info(f"Extracting text from HEIC image: {file_path}")
+            heif_file = pyheif.read(file_path)  # Read HEIC image
+            image = Image.frombytes(
+                heif_file.mode, 
+                heif_file.size, 
+                heif_file.data,
+                "raw",
+                heif_file.mode,
+                heif_file.stride
+            )
+            text = pytesseract.image_to_string(image)
+
         elif file_extension == ".pdf":
+            # Handle PDF files
             logger.info(f"Extracting text from PDF: {file_path}")
             with pdfplumber.open(file_path) as pdf:
                 for page in pdf.pages:
                     text += page.extract_text() or ""
+
+        elif file_extension == ".docx":
+            # Handle DOCX files
+            logger.info(f"Extracting text from DOCX file: {file_path}")
+            doc = Document(file_path)
+            for paragraph in doc.paragraphs:
+                text += paragraph.text + "\n"
+
         else:
+            # Unsupported file type
             logger.warning(f"Unsupported file type: {file_extension}")
+            raise ValueError(f"Unsupported file type: {file_extension}")
+
     except Exception as e:
         logger.error(f"Error during text extraction: {str(e)}")
         raise
@@ -146,3 +177,9 @@ def parse_openai_response(response_text: str) -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Failed to parse OpenAI response: {str(e)}")
         raise ValueError("Failed to parse OpenAI response as JSON.")
+
+
+
+if __name__ == "__main__":
+    text = extract_text_from_file("/Users/tommyqu/Desktop/Resume/Thomas Qu - Resume.pdf")
+    print(text)
