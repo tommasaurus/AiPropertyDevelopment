@@ -1,42 +1,83 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./navbarFooter.css";
 import dwellexLogo from "../../logo/dwellexLogo.png";
 
 export const Navbar = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 1024); // Increased breakpoint
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsCollapsed(window.innerWidth <= 1024); // Increased breakpoint
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <nav className='navbar'>
       <div className='navbar-container'>
         <Link to='/' className='navbar-logo'>
-          <img src={dwellexLogo} alt='Company Logo' />
+          <img src={dwellexLogo} alt='Dwellex Logo' />
         </Link>
-        <ul className='nav-menu'>
-          <li className='nav-item'>
-            <Link to='/features' className='nav-link'>
-              Features
-            </Link>
-          </li>
-          <li className='nav-item'>
-            <Link to='/pricing' className='nav-link'>
-              Pricing
-            </Link>
-          </li>
-          <li className='nav-item'>
-            <Link to='/about' className='nav-link'>
-              About Us
-            </Link>
-          </li>
-          <li className='nav-item'>
-            <Link to='/contact' className='nav-link'>
-              Contact
-            </Link>
-          </li>
-          <li className='nav-item'>
+        {isCollapsed ? (
+          <div className='mobile-menu'>
             <Link to='/client' className='client-button'>
-              Client
+              CLIENT
             </Link>
-          </li>
-        </ul>
+            <button className='dropdown-toggle' onClick={toggleDropdown}>
+              <span className='hamburger-icon'>☰</span>
+            </button>
+            {isDropdownOpen && (
+              <ul className='nav-menu dropdown'>
+                <li className='nav-item'>
+                  <Link to='/features' className='nav-link'>
+                    Features
+                  </Link>
+                </li>
+                <li className='nav-item'>
+                  <Link to='/pricing' className='nav-link'>
+                    Pricing
+                  </Link>
+                </li>
+                <li className='nav-item'>
+                  <Link to='/contact' className='nav-link'>
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </div>
+        ) : (
+          <ul className='nav-menu'>
+            <li className='nav-item'>
+              <Link to='/features' className='nav-link'>
+                Features
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to='/pricing' className='nav-link'>
+                Pricing
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to='/contact' className='nav-link'>
+                Contact
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to='/client' className='client-button'>
+                CLIENT
+              </Link>
+            </li>
+          </ul>
+        )}
       </div>
     </nav>
   );
