@@ -1,8 +1,11 @@
 # app/schemas/contract.py
 
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import date
+from app.schemas.property_summary import PropertySummary
+from app.schemas.vendor_summary import VendorSummary
+from app.schemas.document_summary import DocumentSummary
 
 class ContractBase(BaseModel):
     property_id: int
@@ -11,7 +14,6 @@ class ContractBase(BaseModel):
     start_date: date
     end_date: Optional[date] = None
     terms: Optional[str] = None
-    document_url: Optional[str] = None
     is_active: Optional[bool] = True
 
 class ContractCreate(ContractBase):
@@ -24,7 +26,6 @@ class ContractUpdate(BaseModel):
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     terms: Optional[str] = None
-    document_url: Optional[str] = None
     is_active: Optional[bool] = None
 
 class ContractInDBBase(ContractBase):
@@ -34,4 +35,9 @@ class ContractInDBBase(ContractBase):
         orm_mode = True
 
 class Contract(ContractInDBBase):
-    pass
+    property: PropertySummary
+    vendor: VendorSummary
+    documents: Optional[List[DocumentSummary]] = []
+
+    class Config:
+        orm_mode = True

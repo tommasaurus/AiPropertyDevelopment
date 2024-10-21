@@ -16,7 +16,7 @@ from app.api.endpoints import (
 )
 from app.core.auth.routes import router as auth_router
 from app.db.database import engine, Base
-from app.config import settings
+from app.core.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 

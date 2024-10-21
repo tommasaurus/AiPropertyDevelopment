@@ -3,7 +3,8 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import date
-from app.schemas.lease import Lease
+from app.schemas.lease_summary import LeaseSummary
+from app.schemas.document_summary import DocumentSummary
 
 class TenantBase(BaseModel):
     first_name: str
@@ -29,4 +30,8 @@ class TenantInDBBase(TenantBase):
         orm_mode = True
 
 class Tenant(TenantInDBBase):
-    leases: Optional[List[Lease]] = []
+    leases: Optional[List[LeaseSummary]] = []
+    documents: Optional[List[DocumentSummary]] = []
+
+    class Config:
+        orm_mode = True

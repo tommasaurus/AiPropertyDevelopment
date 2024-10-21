@@ -2,7 +2,7 @@
 
 from authlib.integrations.starlette_client import OAuth
 from jose import jwt
-from app.config import settings
+from app.core.config import settings
 
 # Initialize OAuth configuration using Pydantic settings
 oauth = OAuth()

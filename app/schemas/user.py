@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
-from app.schemas.property import Property
+from app.schemas.property_summary import PropertySummary
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -25,4 +25,7 @@ class UserInDBBase(UserBase):
         orm_mode = True
 
 class User(UserInDBBase):
-    properties: Optional[List[Property]] = []
+    properties: Optional[List[PropertySummary]] = []
+
+    class Config:
+        orm_mode = True

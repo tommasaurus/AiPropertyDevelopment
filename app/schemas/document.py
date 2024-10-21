@@ -3,6 +3,12 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+from app.schemas.property_summary import PropertySummary
+from app.schemas.tenant_summary import TenantSummary
+from app.schemas.lease_summary import LeaseSummary
+from app.schemas.expense_summary import ExpenseSummary
+from app.schemas.invoice_summary import InvoiceSummary
+from app.schemas.contract_summary import ContractSummary
 
 class DocumentBase(BaseModel):
     property_id: Optional[int] = None
@@ -37,4 +43,12 @@ class DocumentInDBBase(DocumentBase):
         orm_mode = True
 
 class Document(DocumentInDBBase):
-    pass
+    property: Optional[PropertySummary] = None
+    tenant: Optional[TenantSummary] = None
+    lease: Optional[LeaseSummary] = None
+    expense: Optional[ExpenseSummary] = None
+    invoice: Optional[InvoiceSummary] = None
+    contract: Optional[ContractSummary] = None
+
+    class Config:
+        orm_mode = True
