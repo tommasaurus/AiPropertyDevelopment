@@ -61,6 +61,9 @@ const ClientLogin = () => {
             Sign In
           </button>
         </form>
+        <Link to='/signup' className='btn btn-signup'>
+          Sign Up
+        </Link>
         <Link to='/forgot-password' className='forgot-password'>
           Forgot password?
         </Link>
