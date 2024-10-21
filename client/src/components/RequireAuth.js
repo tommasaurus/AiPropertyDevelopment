@@ -1,12 +1,31 @@
-import React from 'react';
+// RequireAuth.js
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getAccessToken } from '../services/token'; // Use the token helper you already created
+import api from '../services/api'; // Use the updated api.js that handles cookies
 
 const RequireAuth = ({ children }) => {
-  const token = getAccessToken();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  if (!token) {
-    // If there is no token, redirect to the login page
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        await api.get('/auth/check'); // You might need to implement this route to check user status
+        setIsAuthenticated(true);
+      } catch (error) {
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    }
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading state
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to="/client" replace />;
   }
 

@@ -34,8 +34,7 @@ async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
 @router.get("/login/google")
 async def google_login(request: Request):
     redirect_uri = request.url_for("auth_callback")  # Updated endpoint name
-    logger.info(f"Generated redirect_uri: {redirect_uri}")
-    print(f"Generated redirect_uri: {redirect_uri}")
+    logger.info(f"Generated redirect_uri: {redirect_uri}")    
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 # OAuth callback route for Google login
@@ -48,8 +47,9 @@ async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
         # Authenticate the user or create a new one in the system
         jwt_token = await authenticate_oauth_user(db, token)
 
-        # Redirect to homepage or wherever you'd like the user to go after login
-        response = RedirectResponse(url="/")  # You can change this URL to any post-login page
+        # Redirect to dashboard on the frontend (port 3000)
+        frontend_dashboard_url = "http://localhost:3000/dashboard"
+        response = RedirectResponse(url=frontend_dashboard_url)  # Redirect to frontend dashboard
 
         # Set the JWT token as a cookie
         response.set_cookie(
@@ -73,3 +73,10 @@ async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
 @router.post("/token/refresh", response_model=Token)
 async def refresh_token(refresh_token: str):
     return await refresh_access_token(refresh_token)
+
+@router.get("/check")
+async def check_user_auth(current_user: User = Depends(get_current_user)):
+    """
+    Simple route to check if the user is authenticated.
+    """
+    return {"status": "authenticated", "user": current_user.email}
