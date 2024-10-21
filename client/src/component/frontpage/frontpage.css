@@ -1,0 +1,91 @@
+.hero-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh; /* Reduced from 100vh to create some margin */
+  background-color: #f5f8ff;
+  padding: 1rem; /* Reduced from 2rem to create less top/bottom space */
+  overflow: hidden;
+}
+
+.hero-container::before,
+.hero-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 0;
+}
+
+.hero-container::before {
+  left: 0;
+  background-image: url("https://cdn.prod.website-files.com/638f3177988a2191df92b80b/6392eaaa8774f6dcb0518caa_Ellipse%2016%20(2).svg");
+  background-position: left center;
+}
+
+.hero-container::after {
+  right: 0;
+  background-image: url("https://cdn.prod.website-files.com/638f3177988a2191df92b80b/6392ebcc21530f2246c19932_Ellipse%2017.svg");
+  background-position: right center;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 800px;
+}
+
+h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #4a90e2, #8e44ad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: bold; /* Changed from normal to bold */
+  color: #333;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  background: linear-gradient(45deg, #4a90e2, #8e44ad);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .cta-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
