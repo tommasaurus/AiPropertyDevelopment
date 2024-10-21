@@ -44,9 +44,11 @@ h1 {
   font-size: 4rem;
   margin-bottom: 1rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #4a90e2, #8e44ad);
+  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   line-height: 1.2;
 }
 
@@ -60,7 +62,7 @@ h2 {
 .cta-button {
   padding: 1rem 2rem;
   font-size: 1.25rem;
-  background: linear-gradient(45deg, #4a90e2, #8e44ad);
+  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
   color: #ffffff;
   border: none;
   border-radius: 50px;
@@ -71,8 +73,8 @@ h2 {
 }
 
 .cta-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-0.3rem);
+  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.2);
 }
 
 @media (max-width: 768px) {

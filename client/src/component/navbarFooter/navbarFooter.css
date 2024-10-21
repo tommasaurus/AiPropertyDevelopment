@@ -49,8 +49,7 @@
 .client-button {
   padding: 0.5rem 1.5rem;
   font-size: 1.1rem;
-  background: linear-gradient(45deg, #4a90e2, #8e44ad);
-  background-size: 200% 200%;
+  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
   color: #ffffff;
   border: none;
   border-radius: 25px;
@@ -60,12 +59,13 @@
   text-transform: uppercase;
   margin-left: 2rem;
   text-decoration: none;
+  position: relative;
+  top: 0;
 }
 
 .client-button:hover {
-  background-position: 100% 100%;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(40, 24, 255, 0.2);
+  top: -5px;
+  box-shadow: 0 4px 15px rgba(32, 103, 255, 0.5);
 }
 
 /* Footer styles */
@@ -103,14 +103,13 @@
 
 .footer-section {
   margin-right: 6rem;
-
   margin-bottom: 1rem;
 }
 
 .footer-section h4 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
-  color: #007bff;
+  color: #0066ff;
 }
 
 .footer-section ul {
