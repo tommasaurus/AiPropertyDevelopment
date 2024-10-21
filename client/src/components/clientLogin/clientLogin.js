@@ -1,7 +1,9 @@
+// ClientLogin.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser, loginWithGoogle } from "../../services/login"; // Import login functions
-import "./clientLogin.css"; // Style as needed
+import { loginUser, loginWithGoogle } from "../../services/login";
+import "./clientLogin.css";
+import dwellexLogo from "../../logo/dwellexLogo.png";
 
 const ClientLogin = () => {
   const [email, setEmail] = useState("");
@@ -11,52 +13,57 @@ const ClientLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Call the loginUser function from your services
       await loginUser(email, password);
       console.log("Login successful");
-      navigate("/dashboard"); // Redirect to the dashboard or another protected route after login
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
     }
   };
 
   const handleGoogleLogin = () => {
-    // Use the loginWithGoogle function from your services
     loginWithGoogle();
   };
 
   return (
-    <div className="client-login-container">
-      <h2>Welcome to Dwellex</h2>
-      <p>Please login or sign up to access your client portal</p>
-
-      <form onSubmit={handleLogin} className="login-form">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="btn btn-login">
-          Login
+    <div className='client-login-container'>
+      <div className='login-card'>
+        <img src={dwellexLogo} alt='Dwellex Logo' className='logo' />
+        <h2>WELCOME BACK!</h2>
+        <p>To continue, log in to Dwellex</p>
+        <button onClick={handleGoogleLogin} className='btn btn-google-login'>
+          <img
+            src='/path-to-google-icon.png'
+            alt='Google Icon'
+            className='google-icon'
+          />
+          Continue with Google
         </button>
-      </form>
-
-      <div className="login-buttons">
-        <button onClick={handleGoogleLogin} className="btn btn-google-login">
-          Login with Google
-        </button>
-        <Link to="/signup" className="btn btn-signup">
-          Sign Up
-        </Link> {/* Link to the signup page */}
+        <div className='separator'>
+          <span>or</span>
+        </div>
+        <form onSubmit={handleLogin} className='login-form'>
+          <input
+            type='email'
+            placeholder='Email Address *'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type='password'
+            placeholder='Password *'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type='submit' className='btn btn-login'>
+            Sign In
+          </button>
+        </form>
+        <Link to='/forgot-password' className='forgot-password'>
+          Forgot password?
+        </Link>
       </div>
     </div>
   );
