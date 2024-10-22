@@ -1,3 +1,5 @@
+/* Base Layout Styles
+---------------------------------------- */
 .hero-container {
   position: relative;
   display: flex;
@@ -37,9 +39,13 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  max-width: 800px;
+  max-width: 1300px; /* Added max-width to contain content */
+  width: 100%; /* Ensure full width */
+  margin: 0 auto; /* Center the content */
 }
 
+/* Typography
+---------------------------------------- */
 h1 {
   font-size: 4rem;
   margin-bottom: 1rem;
@@ -59,6 +65,8 @@ h2 {
   color: #333;
 }
 
+/* Buttons
+---------------------------------------- */
 .cta-button {
   padding: 1rem 2rem;
   font-size: 1.25rem;
@@ -78,6 +86,8 @@ h2 {
   box-shadow: 0 4px 15px rgba(0, 102, 255, 0.2);
 }
 
+/* Features List
+---------------------------------------- */
 .container {
   display: flex;
   justify-content: center;
@@ -114,6 +124,170 @@ h2 {
   text-align: left;
 }
 
+/* Pricing Section
+---------------------------------------- */
+.pricing-container {
+  padding: 4rem 2rem;
+  background-color: transparent;
+  width: 100%;
+  margin: 0 auto; /* Center the container */
+}
+
+.pricing-grid {
+  max-width: 100%; /* Increased from 1200px */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5rem; /* Increased gap between cards */
+  width: 100%; /* Added to ensure some margin from screen edges */
+}
+
+.pricing-card {
+  border-radius: 24px;
+  padding: 3rem; /* Increased padding for better content spacing */
+  position: relative;
+  box-shadow: 0 8px 50px rgba(0, 81, 255, 0.471);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  text-align: center;
+  border: 2px solid #2067ff; /* Added thin blue border */
+}
+
+.pricing-card:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 12px 90px rgba(0, 81, 255, 0.2);
+}
+
+.plan-label {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: rgba(32, 103, 255, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 50px;
+  font-weight: 500;
+  color: #2067ff;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Pricing Content
+---------------------------------------- */
+.pricing-container {
+  padding: 4rem 2rem;
+  background-color: transparent; /* Changed from #f5f8ff to transparent */
+}
+
+.price-text {
+  font-size: 3rem;
+}
+
+.duration,
+.plus,
+.price-amount {
+  color: #2067ff;
+}
+
+.duration {
+  font-size: 1.25rem;
+}
+
+.plus {
+  margin: 0 0.5rem;
+}
+
+.period {
+  font-size: 1.25rem;
+  color: #666;
+}
+
+.billing-text {
+  color: #2067ff;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.plan-description {
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Feature List
+---------------------------------------- */
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.feature-list li {
+  padding-left: 2rem; /* Remove left padding since we're centering */
+  position: relative;
+  margin-bottom: 1rem;
+  color: #333;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  gap: 1rem;
+}
+
+.feature-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #2067ff;
+}
+
+.additional-info {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.additional-info::before {
+  content: "-";
+  position: absolute;
+  left: 0;
+  color: #666;
+}
+
+/* Enterprise Section
+---------------------------------------- */
+.enterprise-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.highlight {
+  color: #2067ff;
+}
+
+.pricing-button {
+  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: auto;
+}
+
+.pricing-button:hover {
+  transform: translateY(-0.3rem);
+  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.2);
+}
+
+/* Responsive Styles
+---------------------------------------- */
 @media (max-width: 1200px) {
   .list-block {
     gap: 2rem;
@@ -136,6 +310,15 @@ h2 {
 
   .title {
     font-size: 1rem;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+
+  .enterprise-title {
+    font-size: 2rem;
   }
 }
 
@@ -174,5 +357,23 @@ h2 {
 
   .title {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pricing-container {
+    padding: 2rem 1rem;
+  }
+
+  .price-container {
+    font-size: 2rem;
+  }
+
+  .price-text {
+    font-size: 2.5rem;
+  }
+
+  .enterprise-title {
+    font-size: 1.75rem;
   }
 }

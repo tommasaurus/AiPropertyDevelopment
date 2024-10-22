@@ -1,5 +1,6 @@
 import React from "react";
 import "./frontpage.css";
+import PricingSection from "./pricingSection"; // Add this import at the top
 
 const Frontpage = () => {
   return (
@@ -57,6 +58,7 @@ const Frontpage = () => {
             </div>
           </div>
         </div>
+        <PricingSection />
       </div>
     </div>
   );
