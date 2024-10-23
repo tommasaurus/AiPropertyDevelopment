@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = Field(..., env="SECRET_KEY")
     REFRESH_SECRET_KEY: str = Field(..., env="REFRESH_SECRET_KEY")
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 120
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     class Config:

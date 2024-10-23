@@ -12,8 +12,7 @@ from app.schemas.invoice_summary import InvoiceSummary
 from app.schemas.contract_summary import ContractSummary
 from app.schemas.document_summary import DocumentSummary
 
-class PropertyBase(BaseModel):
-    owner_id: int
+class PropertyBase(BaseModel):    
     address: str
     num_bedrooms: Optional[int] = None
     num_bathrooms: Optional[int] = None
@@ -26,22 +25,15 @@ class PropertyBase(BaseModel):
     purchase_date: Optional[date] = None
     property_type: Optional[str] = None
 
+    class Config:
+        orm_mode = True  # Include orm_mode to ensure compatibility with ORM models
+
 class PropertyCreate(PropertyBase):
     pass
 
-class PropertyUpdate(BaseModel):
-    owner_id: Optional[int] = None
-    address: Optional[str] = None
-    num_bedrooms: Optional[int] = None
-    num_bathrooms: Optional[int] = None
-    num_floors: Optional[int] = None
-    is_commercial: Optional[bool] = None
-    is_hoa: Optional[bool] = None
-    hoa_fee: Optional[float] = None
-    is_nnn: Optional[bool] = None
-    purchase_price: Optional[float] = None
-    purchase_date: Optional[date] = None
-    property_type: Optional[str] = None
+class PropertyUpdate(PropertyBase):  # Inherit from PropertyBase to avoid redundancy
+    # All fields will be optional because PropertyBase's fields are already optional
+    pass
 
 class PropertyInDBBase(PropertyBase):
     id: int

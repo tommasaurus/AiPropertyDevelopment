@@ -7,8 +7,9 @@ from app.db.database import Base
 class Property(Base):
     __tablename__ = 'properties'
     
-    id = Column(Integer, primary_key=True)
-    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)  # Auto-incrementing primary key
+    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)  # Foreign key to User model
+    
     address = Column(String(255), nullable=False)
     num_bedrooms = Column(Integer, nullable=True)
     num_bathrooms = Column(Integer, nullable=True)
@@ -21,12 +22,12 @@ class Property(Base):
     purchase_date = Column(Date, nullable=True)
     property_type = Column(String(50), nullable=True)
     
-    # Relationships
-    owner = relationship('User', back_populates='properties')
-    leases = relationship('Lease', back_populates='property')
-    expenses = relationship('Expense', back_populates='property')
-    incomes = relationship('Income', back_populates='property')
-    invoices = relationship('Invoice', back_populates='property')
-    contracts = relationship('Contract', back_populates='property')
-    documents = relationship('Document', back_populates='property')    
-    details = relationship('PropertyDetails', back_populates='property', uselist=False)
+    # Relationships with lazy loading using 'selectin'
+    owner = relationship('User', back_populates='properties', lazy='selectin')
+    leases = relationship('Lease', back_populates='property', lazy='selectin')
+    expenses = relationship('Expense', back_populates='property', lazy='selectin')
+    incomes = relationship('Income', back_populates='property', lazy='selectin')
+    invoices = relationship('Invoice', back_populates='property', lazy='selectin')
+    contracts = relationship('Contract', back_populates='property', lazy='selectin')
+    documents = relationship('Document', back_populates='property', lazy='selectin')
+    details = relationship('PropertyDetails', back_populates='property', uselist=False, lazy='selectin')
