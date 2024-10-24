@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"; // Add this import
 import "./frontpage.css";
 import PricingSection from "./pricingSection";
 import ContactSection from "./contactSection";
+import frontpage from "../../images/frontpage.png";
 
 const Frontpage = () => {
   const navigate = useNavigate(); // Add this hook
@@ -75,6 +76,13 @@ const Frontpage = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className='dashboard-preview'>
+        <img
+          src={frontpage}
+          alt='ProhostAI Dashboard Interface'
+          className='dashboard-image'
+        />
       </div>
       <PricingSection />
       <ContactSection />
