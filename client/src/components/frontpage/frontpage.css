@@ -1,14 +1,25 @@
-/* Base Layout Styles
----------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap");
+
+/* Base Layout Styles */
+.page-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Outfit", sans-serif;
+}
+
+/* Hero Section */
 .hero-container {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
+  min-height: 40vh;
   background-color: #f5f8ff;
   padding: 1rem;
   overflow: hidden;
+  margin-bottom: 1vh;
 }
 
 .hero-container::before,
@@ -39,13 +50,12 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  max-width: 1300px; /* Added max-width to contain content */
-  width: 100%; /* Ensure full width */
-  margin: 0 auto; /* Center the content */
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-/* Typography
----------------------------------------- */
+/* Typography */
 h1 {
   font-size: 4rem;
   margin-bottom: 1rem;
@@ -65,41 +75,64 @@ h2 {
   color: #333;
 }
 
-/* Buttons
----------------------------------------- */
-.cta-button {
-  padding: 1rem 2rem;
+/* Buttons */
+.tff-button {
+  padding: 0.6rem 2rem;
   font-size: 1.25rem;
-  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
   color: #ffffff;
   border: none;
-  border-radius: 50px;
+  border-radius: 20px;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
+  margin-top: 1.5vh;
+  margin-bottom: 6.5vh;
+  min-width: 200px;
+  background-size: 200% 200%;
+  background-image: linear-gradient(45deg, #4aaeff, #2067ff, #4aaeff, #2067ff);
+  animation: gradientMove 3s linear infinite;
+  position: relative;
+  overflow: hidden;
 }
 
-.cta-button:hover {
+.tff-button:hover {
   transform: translateY(-0.3rem);
   box-shadow: 0 4px 15px rgba(0, 102, 255, 0.2);
 }
 
-/* Features List
----------------------------------------- */
-.container {
+@keyframes gradientMove {
+  0% {
+    background-position: 200% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.button-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 3rem;
+  margin-bottom: 5vh;
+}
+
+.trial-text {
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: -5.5vh;
+}
+
+/* Property Types Section */
+.property-types-container {
+  margin-top: 2rem;
 }
 
 .list-block {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 4rem;
+  gap: 6rem;
   flex-wrap: nowrap;
 }
 
@@ -124,72 +157,58 @@ h2 {
   text-align: left;
 }
 
-/* Pricing Section
----------------------------------------- */
+/* Pricing Section */
 .pricing-container {
-  padding: 4rem 2rem;
-  background-color: transparent;
-  width: 100%;
-  margin: 0 auto; /* Center the container */
+  max-width: 7xl;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 .pricing-grid {
-  max-width: 100%; /* Increased from 1200px */
-  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 5rem; /* Increased gap between cards */
-  width: 100%; /* Added to ensure some margin from screen edges */
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .pricing-card {
-  border-radius: 24px;
-  padding: 3rem; /* Increased padding for better content spacing */
-  position: relative;
-  box-shadow: 0 8px 50px rgba(0, 81, 255, 0.471);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-  text-align: center;
-  border: 2px solid #2067ff; /* Added thin blue border */
-}
-
-.pricing-card:hover {
-  transform: translateY(-0.5rem);
-  box-shadow: 0 12px 90px rgba(0, 81, 255, 0.2);
+  background-color: white;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  border: 2px solid #2067ff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .plan-label {
   display: inline-block;
   padding: 0.5rem 1rem;
   background-color: rgba(32, 103, 255, 0.1);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border-radius: 50px;
-  font-weight: 500;
+  border-radius: 9999px;
   color: #2067ff;
+  font-weight: 500;
   margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
-/* Pricing Content
----------------------------------------- */
-.pricing-container {
-  padding: 4rem 2rem;
-  background-color: transparent; /* Changed from #f5f8ff to transparent */
+.price-container {
+  margin-bottom: 1rem;
 }
 
 .price-text {
-  font-size: 3rem;
+  font-size: 2.5rem;
+  font-weight: bold;
 }
 
 .duration,
 .plus,
-.price-amount {
+.price-amount,
+.period {
   color: #2067ff;
 }
 
-.duration {
+.duration,
+.period {
   font-size: 1.25rem;
 }
 
@@ -197,54 +216,44 @@ h2 {
   margin: 0 0.5rem;
 }
 
-.period {
-  font-size: 1.25rem;
-  color: #666;
-}
-
 .billing-text {
   color: #2067ff;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin-bottom: 1.5rem;
 }
 
 .plan-description {
   color: #666;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
+  font-size: 0.875rem;
 }
 
-/* Feature List
----------------------------------------- */
 .feature-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 2rem 0;
+  margin: 0 0 1.5rem 0;
 }
 
 .feature-list li {
-  padding-left: 2rem; /* Remove left padding since we're centering */
-  position: relative;
-  margin-bottom: 1rem;
-  color: #333;
   display: flex;
-  align-items: left;
-  justify-content: left;
-  gap: 1rem;
+  align-items: center;
+  color: #4a5568;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .feature-list li::before {
   content: "✓";
-  position: absolute;
-  left: 0;
   color: #2067ff;
+  margin-right: 0.75rem;
 }
 
 .additional-info {
   color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 2rem;
-  padding-left: 1.5rem;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
   position: relative;
 }
 
@@ -255,10 +264,8 @@ h2 {
   color: #666;
 }
 
-/* Enterprise Section
----------------------------------------- */
 .enterprise-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
   line-height: 1.2;
   margin-bottom: 1.5rem;
@@ -269,16 +276,16 @@ h2 {
 }
 
 .pricing-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
   background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
   color: white;
   border: none;
-  border-radius: 50px;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  font-weight: bold;
+  border-radius: 9999px;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-top: auto;
+  font-weight: bold;
 }
 
 .pricing-button:hover {
@@ -286,15 +293,151 @@ h2 {
   box-shadow: 0 4px 15px rgba(0, 102, 255, 0.2);
 }
 
-/* Responsive Styles
----------------------------------------- */
+/* Contact Section */
+.contact-section {
+  padding: 4rem 2rem;
+  background-color: #f5f8ff;
+  position: relative;
+  overflow: hidden;
+  margin-top: -2rem;
+}
+
+.contact-section::before,
+.contact-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 0;
+}
+
+.contact-section::before {
+  left: 0;
+  background-image: url("https://cdn.prod.website-files.com/638f3177988a2191df92b80b/6392eaaa8774f6dcb0518caa_Ellipse%2016%20(2).svg");
+  background-position: left center;
+}
+
+.contact-section::after {
+  right: 0;
+  background-image: url("https://cdn.prod.website-files.com/638f3177988a2191df92b80b/6392ebcc21530f2246c19932_Ellipse%2017.svg");
+  background-position: right center;
+}
+
+.contact-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-header {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.contact-subheader {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.contact-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.contact-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #2067ff;
+  border-radius: 20px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: white;
+  font-family: "Outfit", sans-serif;
+}
+
+.contact-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.contact-input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(32, 103, 255, 0.1);
+}
+
+.contact-button {
+  padding: 0.7rem 2rem;
+  font-size: 1.25rem;
+  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+  width: fit-content;
+  min-width: 200px;
+}
+
+.contact-button:hover {
+  transform: translateY(-0.3rem);
+  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.2);
+}
+
+.contact-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.send-icon {
+  margin-right: 0.5rem;
+}
+
+.success-message,
+.error-message {
+  padding: 1rem;
+  border-radius: 50px;
+  margin-top: 0.1rem;
+  font-weight: 500;
+}
+
+.success-message {
+  color: #4caf50;
+}
+
+.error-message {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+/* Responsive Styles */
 @media (max-width: 1200px) {
   .list-block {
     gap: 2rem;
   }
 
-  .title {
-    font-size: 1.2rem;
+  .pricing-grid {
+    gap: 1.5rem;
   }
 }
 
@@ -308,17 +451,13 @@ h2 {
     height: 7vh;
   }
 
-  .title {
-    font-size: 1rem;
-  }
-
   .pricing-grid {
     grid-template-columns: 1fr;
     max-width: 600px;
   }
 
   .enterprise-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 }
 
@@ -331,49 +470,53 @@ h2 {
     font-size: 1.5rem;
   }
 
-  .cta-button {
+  .tff-button {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
   }
 
-  .container {
-    padding: 2rem 1rem;
-  }
-
   .list-block {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center;
+    gap: 2rem;
   }
 
-  .list {
-    width: 100%;
+  .pricing-container {
+    padding: 1rem;
   }
 
-  .icon img {
-    width: 7vh;
-    height: 7vh;
+  .pricing-card {
+    padding: 1.5rem;
   }
 
-  .title {
-    font-size: 1.2rem;
+  .contact-section {
+    padding: 3rem 1rem;
+  }
+
+  .contact-header {
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .pricing-container {
-    padding: 2rem 1rem;
-  }
-
-  .price-container {
-    font-size: 2rem;
-  }
-
-  .price-text {
+  h1 {
     font-size: 2.5rem;
   }
 
+  .pricing-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .price-text {
+    font-size: 2rem;
+  }
+
   .enterprise-title {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+  }
+
+  .contact-button {
+    width: 100%;
+    min-width: auto;
   }
 }

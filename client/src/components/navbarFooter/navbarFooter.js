@@ -5,11 +5,11 @@ import dwellexLogo from "../../logo/dwellexLogo.png";
 
 export const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 1024); // Increased breakpoint
+  const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 1024);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsCollapsed(window.innerWidth <= 1024); // Increased breakpoint
+      setIsCollapsed(window.innerWidth <= 1024);
     };
 
     window.addEventListener("resize", handleResize);
@@ -20,6 +20,30 @@ export const Navbar = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleNavClick = (e, section) => {
+    e.preventDefault();
+    let scrollAmount;
+
+    switch (section) {
+      case "features":
+        scrollAmount = window.innerHeight * 0.1; // Slight scroll (10% of viewport height)
+        break;
+      case "pricing":
+        scrollAmount = window.innerHeight * 0.5; // Medium scroll (40% of viewport height)
+        break;
+      case "contact":
+        scrollAmount = window.innerHeight * 1.3; // Large scroll (80% of viewport height)
+        break;
+      default:
+        return;
+    }
+
+    window.scrollTo({
+      top: scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <nav className='navbar'>
       <div className='navbar-container'>
@@ -28,8 +52,8 @@ export const Navbar = () => {
         </Link>
         {isCollapsed ? (
           <div className='mobile-menu'>
-            <Link to='/client' className='client-button'>
-              CLIENT
+            <Link to='/login' className='login-button'>
+              Login
             </Link>
             <button className='dropdown-toggle' onClick={toggleDropdown}>
               <span className='hamburger-icon'>☰</span>
@@ -37,19 +61,31 @@ export const Navbar = () => {
             {isDropdownOpen && (
               <ul className='nav-menu dropdown'>
                 <li className='nav-item'>
-                  <Link to='/features' className='nav-link'>
+                  <a
+                    href='#features'
+                    className='nav-link'
+                    onClick={(e) => handleNavClick(e, "features")}
+                  >
                     Features
-                  </Link>
+                  </a>
                 </li>
                 <li className='nav-item'>
-                  <Link to='/pricing' className='nav-link'>
+                  <a
+                    href='#pricing'
+                    className='nav-link'
+                    onClick={(e) => handleNavClick(e, "pricing")}
+                  >
                     Pricing
-                  </Link>
+                  </a>
                 </li>
                 <li className='nav-item'>
-                  <Link to='/contact' className='nav-link'>
+                  <a
+                    href='#contact'
+                    className='nav-link'
+                    onClick={(e) => handleNavClick(e, "contact")}
+                  >
                     Contact
-                  </Link>
+                  </a>
                 </li>
               </ul>
             )}
@@ -57,23 +93,35 @@ export const Navbar = () => {
         ) : (
           <ul className='nav-menu'>
             <li className='nav-item'>
-              <Link to='/features' className='nav-link'>
+              <a
+                href='#features'
+                className='nav-link'
+                onClick={(e) => handleNavClick(e, "features")}
+              >
                 Features
-              </Link>
+              </a>
             </li>
             <li className='nav-item'>
-              <Link to='/pricing' className='nav-link'>
+              <a
+                href='#pricing'
+                className='nav-link'
+                onClick={(e) => handleNavClick(e, "pricing")}
+              >
                 Pricing
-              </Link>
+              </a>
             </li>
             <li className='nav-item'>
-              <Link to='/contact' className='nav-link'>
+              <a
+                href='#contact'
+                className='nav-link'
+                onClick={(e) => handleNavClick(e, "contact")}
+              >
                 Contact
-              </Link>
+              </a>
             </li>
             <li className='nav-item'>
-              <Link to='/client' className='client-button'>
-                CLIENT
+              <Link to='/login' className='login-button'>
+                Login
               </Link>
             </li>
           </ul>

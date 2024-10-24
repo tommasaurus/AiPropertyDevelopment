@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap");
+
 /* Global styles */
 body {
   background-color: #f5f8ff;
@@ -10,6 +12,7 @@ body {
 
 /* Navbar styles */
 .navbar {
+  font-family: "Outfit", sans-serif;
   background-color: #f5f8ff;
   padding: 1rem 0;
 }
@@ -41,7 +44,7 @@ body {
 }
 
 .nav-item {
-  margin-left: 5rem;
+  margin-left: 3rem;
 }
 
 .nav-link {
@@ -56,26 +59,26 @@ body {
   color: #007bff;
 }
 
-.client-button {
-  padding: 0.5rem 1.5rem;
-  font-size: 1.1rem;
-  background: linear-gradient(245deg, #4aaeff 8%, #2067ff 98%);
-  color: #ffffff;
-  border: none;
-  border-radius: 25px;
+.login-button {
+  padding: 0.5rem 1.3rem;
+  font-size: 1.3rem;
+  background-color: #f5f8ff;
+  color: #136dff;
+  border: 1px solid #000000;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
-  text-transform: uppercase;
+  transition: all 0.2s ease;
+  font-weight: 700;
   text-decoration: none;
   position: relative;
-  top: 0;
   white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.client-button:hover {
-  top: -5px;
-  box-shadow: 0 4px 15px rgba(32, 103, 255, 0.5);
+.login-button:hover {
+  background-color: #d3d3d3;
+  top: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Mobile menu and dropdown styles */
@@ -93,9 +96,10 @@ body {
 }
 
 .hamburger-icon {
-  font-size: 2rem;
+  font-size: 2.4rem;
   line-height: 1;
   display: block;
+  margin-bottom: 0.5rem;
 }
 
 .nav-menu.dropdown {
@@ -229,7 +233,7 @@ body {
     display: flex;
   }
 
-  .client-button {
+  .login-button {
     font-size: 1rem;
     padding: 0.4rem 1rem;
   }
