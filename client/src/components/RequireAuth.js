@@ -26,7 +26,7 @@ const RequireAuth = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/client" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children; // If authenticated, render the child component (Dashboard)

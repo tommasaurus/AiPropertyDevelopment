@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import api from '../../../services/api'
 import {
   LayoutDashboard,
   Building2,
@@ -19,23 +20,19 @@ const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Clear any authentication tokens or user data from localStorage
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userData");
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout');
 
-    // Clear any session storage data if used
-    sessionStorage.clear();
+      // Optionally clear any localStorage/sessionStorage if used for other data
+      localStorage.removeItem("userData");
+      sessionStorage.clear();
 
-    // Clear any cookies if used for authentication
-    document.cookie.split(";").forEach((cookie) => {
-      document.cookie = cookie
-        .replace(/^ +/, "")
-        .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
-    });
-
-    // Redirect to login page
-    navigate("/");
+      // Redirect to login page
+      navigate("/login");
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   const navItems = [

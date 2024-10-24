@@ -1,6 +1,6 @@
 # app/api/endpoints/auth_routes.py
 
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, Response
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,6 +29,13 @@ async def signup(user: UserCreate, db: AsyncSession = Depends(get_db)):
 @router.post("/login", response_model=Token)
 async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
     return await login_user(db, user.email, user.password)
+
+# Logout route
+@router.post("/logout")
+async def logout(response: Response):
+    # Clear the JWT cookie by setting it to expire
+    response.delete_cookie(key="jwt_token")
+    return {"message": "Logged out successfully"}
 
 # OAuth login route for Google
 @router.get("/login/google")

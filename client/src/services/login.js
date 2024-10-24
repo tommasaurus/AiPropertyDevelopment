@@ -4,9 +4,7 @@ import api from './api';
 // Function for logging in with email and password
 export async function loginUser(email, password) {
     try {
-        const response = await api.post('/auth/login', { email, password });
-        localStorage.setItem('access_token', response.data.access_token);
-        localStorage.setItem('refresh_token', response.data.refresh_token);
+        const response = await api.post('/auth/login', { email, password });        
         console.log('User logged in successfully');
         return response.data;
     } catch (error) {
@@ -34,9 +32,7 @@ export async function handleOAuthCallback() {
         const accessToken = urlParams.get('access_token');
         const refreshToken = urlParams.get('refresh_token');
 
-        if (accessToken && refreshToken) {
-            localStorage.setItem('access_token', accessToken);
-            localStorage.setItem('refresh_token', refreshToken);
+        if (accessToken && refreshToken) {            
             console.log('OAuth login successful');
         } else {
             throw new Error('OAuth tokens not found in the response');
