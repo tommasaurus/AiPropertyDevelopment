@@ -1,14 +1,3 @@
-/* Dashboard Layout */
-.dashboard-layout {
-  min-height: 100vh;
-  padding-left: 73px;
-  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dashboard-layout.sidebar-expanded {
-  padding-left: 230px;
-}
-
 /* Sidebar Styles */
 .dashboard-sidebar {
   position: fixed;
@@ -135,7 +124,7 @@
   padding: 1rem 0.45rem;
   margin: 0 0.8rem;
   border-radius: 0.5rem;
-  color: #64748b;
+  color: #2e3643;
   transition: all 0.2s ease;
   border: none;
   background: none;
@@ -183,8 +172,14 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .dashboard-layout {
-    padding-left: 0;
+  .dashboard-main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .dashboard-main.sidebar-expanded {
+    margin-left: 0;
+    width: 100%;
   }
 
   .dashboard-sidebar {

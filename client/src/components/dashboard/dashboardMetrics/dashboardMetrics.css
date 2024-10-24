@@ -1,0 +1,169 @@
+.dashboard-metrics {
+  padding: 1.5rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.metric-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.metric-content {
+  padding: 1.5rem;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.metric-icon-wrapper {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon {
+  width: 1.6rem;
+  height: 1.7rem;
+}
+
+.metric-subtitle {
+  font-size: 1rem;
+  color: #666;
+}
+
+.metric-details {
+  margin-top: 1rem;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.metric-title {
+  font-size: 1.2rem;
+  color: #4b5563;
+}
+
+/* Background Colors */
+.bg-red {
+  background-color: #fee2e2;
+}
+
+.bg-blue {
+  background-color: #dbeafe;
+}
+
+.bg-purple {
+  background-color: #ede9fe;
+}
+
+.bg-green {
+  background-color: #dcfce7;
+}
+
+.bg-yellow {
+  background-color: #fef3c7;
+}
+
+.bg-orange {
+  background-color: #ffedd5;
+}
+
+/* Icon Colors */
+.icon-red {
+  color: #dc2626;
+}
+
+.icon-blue {
+  color: #2563eb;
+}
+
+.icon-purple {
+  color: #7c3aed;
+}
+
+.icon-green {
+  color: #16a34a;
+}
+
+.icon-yellow {
+  color: #d97706;
+}
+
+.icon-orange {
+  color: #ea580c;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-metrics {
+    padding: 1rem;
+  }
+
+  .metric-value {
+    font-size: 1.25rem;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover Effects */
+.metric-card:hover .metric-icon {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.metric-card:hover .metric-value {
+  color: #2563eb;
+  transition: color 0.2s ease;
+}
+
+/* Smooth Transitions */
+.metric-card,
+.metric-icon,
+.metric-value {
+  transition: all 0.2s ease-in-out;
+}

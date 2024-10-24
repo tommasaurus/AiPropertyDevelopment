@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from '../../../services/api'
+import api from "../../../services/api";
 import {
   LayoutDashboard,
   Building2,
@@ -9,6 +9,7 @@ import {
   HelpCircle,
   LogOut,
   Pin,
+  MessagesSquare,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
@@ -22,7 +23,7 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      await api.post('/auth/logout');
+      await api.post("/auth/logout");
 
       // Optionally clear any localStorage/sessionStorage if used for other data
       localStorage.removeItem("userData");
@@ -31,7 +32,7 @@ const Sidebar = () => {
       // Redirect to login page
       navigate("/login");
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error("Error logging out:", error);
     }
   };
 
@@ -60,6 +61,12 @@ const Sidebar = () => {
       path: "/tenants",
       active: window.location.pathname === "/tenants",
     },
+    {
+      icon: MessagesSquare,
+      label: "Messages",
+      path: "/messages",
+      active: window.location.pathname === "/messages",
+    },
   ];
 
   const bottomNavItems = [
@@ -68,12 +75,6 @@ const Sidebar = () => {
       label: "Settings",
       path: "/settings",
       active: window.location.pathname === "/settings",
-    },
-    {
-      icon: HelpCircle,
-      label: "Help",
-      path: "/help",
-      active: window.location.pathname === "/help",
     },
     {
       icon: LogOut,
