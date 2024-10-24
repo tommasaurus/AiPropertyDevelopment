@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginUser, loginWithGoogle } from "../../services/login";
 import "./clientLogin.css";
-import dwellexLogo from "../../logo/dwellexLogo.png";
+import dwellexLogo from "../../images/dwellexLogo.png";
 
 const ClientLogin = () => {
   const [email, setEmail] = useState("");

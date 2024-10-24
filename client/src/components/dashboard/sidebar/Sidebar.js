@@ -111,10 +111,13 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    document.body.classList.toggle("sidebar-expanded", isExpanded);
-    return () => {
-      document.body.classList.remove("sidebar-expanded");
-    };
+    // Only apply to dashboard pages
+    if (window.location.pathname.startsWith("/dashboard")) {
+      document.body.classList.toggle("dashboard-sidebar-expanded", isExpanded);
+      return () => {
+        document.body.classList.remove("dashboard-sidebar-expanded");
+      };
+    }
   }, [isExpanded]);
 
   const renderNavItem = (item, index) => {
@@ -136,7 +139,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`sidebar ${isExpanded ? "expanded" : ""}`}
+      className={`dashboard-sidebar ${isExpanded ? "expanded" : ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { loginWithGoogle } from "../../services/login";
 import signupUser from "../../services/signup";
 import "./clientSignup.css";
-import dwellexLogo from "../../logo/dwellexLogo.png";
+import dwellexLogo from "../../images/dwellexLogo.png";
 
 const ClientSignup = () => {
   const [email, setEmail] = useState("");
