@@ -10,6 +10,7 @@ import ClientLogin from "./components/clientLogin/clientLogin";
 import Frontpage from "./components/frontpage/frontpage";
 import ClientSignup from "./components/clientSignup/clientSignup";
 import Dashboard from "./components/dashboard/Dashboard";
+import Properties from "./components/dashboard/properties/Properties";
 import RequireAuth from "./components/RequireAuth";
 
 function LayoutWithNavbarFooter({ children }) {
@@ -36,10 +37,13 @@ function App() {
             <Route path='/login' element={<ClientLogin />} />
             <Route path='/signup' element={<ClientSignup />} />
             <Route
-              path='/dashboard'
+              path="/dashboard/*"
               element={
                 <RequireAuth>
-                  <Dashboard />
+                  <Routes>
+                    <Route path="" element={<Dashboard />} />
+                    <Route path="properties" element={<Properties />} />                    
+                  </Routes>
                 </RequireAuth>
               }
             />

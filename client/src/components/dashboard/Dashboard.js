@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Bell, Search } from "lucide-react";
 import Sidebar from "./sidebar/Sidebar";
-import PropertyDetails from "./propertyDetails/propertyDetails";
 import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
 import api from "../../services/api";
 import dwellexLogo from "../../images/dwellexLogo.png";

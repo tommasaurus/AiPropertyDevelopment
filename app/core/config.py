@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 from pydantic import Field
 
 class Settings(BaseSettings):
-    OPENAI_API_KEY: str
+    OPENAI_API_KEY: str = Field(..., env="OPENAI_API_KEY")
     DATABASE_URL: str = Field(..., env="DATABASE_URL")
     REGRID_API_KEY: str = Field(..., env="REGRID_API_KEY")
     GOOGLE_STREET_VIEW_API_KEY: str = Field(..., env="GOOGLE_STREET_VIEW_API_KEY")

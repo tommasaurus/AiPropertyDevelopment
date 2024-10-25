@@ -46,26 +46,26 @@ const Sidebar = () => {
     {
       icon: Building2,
       label: "Properties",
-      path: "/properties",
-      active: window.location.pathname === "/properties",
+      path: "/dashboard/properties",
+      active: window.location.pathname === "/dashboard/properties",
     },
     {
       icon: Calendar,
       label: "Calendar",
-      path: "/calendar",
-      active: window.location.pathname === "/calendar",
+      path: "/dashboard/calendar",
+      active: window.location.pathname === "/dashboard/calendar",
     },
     {
       icon: UserCircle,
       label: "Tenants",
-      path: "/tenants",
-      active: window.location.pathname === "/tenants",
+      path: "/dashboard/tenants",
+      active: window.location.pathname === "/dashboard/tenants",
     },
     {
       icon: MessagesSquare,
       label: "Messages",
-      path: "/messages",
-      active: window.location.pathname === "/messages",
+      path: "/dashboard/messages",
+      active: window.location.pathname === "/dashboard/messages",
     },
   ];
 
