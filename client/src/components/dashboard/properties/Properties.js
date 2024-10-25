@@ -26,9 +26,8 @@ const Properties = () => {
   }, []);
 
   useEffect(() => {
-    // Update greeting based on local time
     const updateGreeting = () => {
-      const hour = currentTime.getHours();
+      const hour = new Date().getHours();
       if (hour >= 5 && hour < 12) {
         setGreeting("Good morning");
       } else if (hour >= 12 && hour < 17) {
@@ -37,17 +36,16 @@ const Properties = () => {
         setGreeting("Good evening");
       }
     };
-
+  
+    // Set initial greeting
     updateGreeting();
-
-    // Update time every minute
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-      updateGreeting();
-    }, 60000);
-
+  
+    // Update greeting every minute
+    const timer = setInterval(updateGreeting, 60000);
+  
+    // Cleanup on component unmount
     return () => clearInterval(timer);
-  }, [currentTime]);
+  }, []);
 
   return (
     <div className="dashboard-layout">
