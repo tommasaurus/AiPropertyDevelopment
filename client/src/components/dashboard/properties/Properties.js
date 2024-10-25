@@ -8,7 +8,7 @@ const Properties = () => {
   const [properties, setProperties] = useState([]);
   const [greeting, setGreeting] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
-
+  const [dragActive, setDragActive] = useState(false);
   const businessName = "Jason"; // Temporary hardcoded name, replace if needed
 
   useEffect(() => {
@@ -36,16 +36,52 @@ const Properties = () => {
         setGreeting("Good evening");
       }
     };
-  
+
     // Set initial greeting
     updateGreeting();
-  
+
     // Update greeting every minute
     const timer = setInterval(updateGreeting, 60000);
-  
+
     // Cleanup on component unmount
     return () => clearInterval(timer);
   }, []);
+
+  // Handle drag events
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragActive(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragActive(false);
+    const files = Array.from(e.dataTransfer.files);
+    handleFiles(files);
+  };
+
+  const handleFiles = (files) => {
+    console.log("Files uploaded:", files);
+    // Here you can implement further upload logic or preview
+  };
+
+  const handleClick = () => {
+    document.getElementById("fileInput").click();
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    handleFiles(files);
+  };
 
   return (
     <div className="dashboard-layout">
@@ -66,6 +102,25 @@ const Properties = () => {
               day: "numeric",
             })}
           </p>
+        </div>
+
+        {/* Drag and Drop Upload Box */}
+        <div
+          className={`file-drop-area ${dragActive ? "active" : ""}`}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onClick={handleClick}
+        >
+          <input
+            type="file"
+            id="fileInput"
+            multiple
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+          />
+          <p>Drag & drop files here, or click to upload</p>
         </div>
 
         {/* Properties Section */}
