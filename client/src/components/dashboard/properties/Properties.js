@@ -5,7 +5,11 @@ import api from "../../../services/api";
 import "./Properties.css";
 
 const Properties = () => {
+  // State variables for properties and leases
   const [properties, setProperties] = useState([]);
+  const [leases, setLeases] = useState([]);
+  
+  // State variables for UI and form handling
   const [greeting, setGreeting] = useState("");
   const [selectedDocType, setSelectedDocType] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState("");
@@ -17,6 +21,8 @@ const Properties = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // State for form data when adding a new property
   const [formData, setFormData] = useState({
     address: "",
     num_bedrooms: "",
@@ -30,9 +36,24 @@ const Properties = () => {
     purchase_date: "",
     property_type: ""
   });
+  
   const fileInputRef = useRef(null);
   const businessName = "Jason";
   const documentTypes = ["Lease", "Contract", "Invoice", "Receipt", "Legal", "Other"];
+
+  // Helper functions for formatting
+  const formatCurrency = (value) => {
+    const num = Number(value);
+    return !isNaN(num) ? `$${num.toFixed(2)}` : "N/A";
+  };
+
+  const formatDate = (dateString) => {
+    return dateString ? new Date(dateString).toLocaleDateString() : "N/A";
+  };
+
+  const formatJSON = (data) => {
+    return data ? JSON.stringify(data) : "N/A";
+  };
 
   // Fetch properties from API
   const fetchProperties = async () => {
@@ -41,11 +62,24 @@ const Properties = () => {
       setProperties(response.data);
     } catch (error) {
       console.error("Error fetching properties:", error);
+      setErrorMessage("Failed to fetch properties.");
+    }
+  };
+
+  // Fetch leases from API
+  const fetchLeases = async () => {
+    try {
+      const response = await api.get("/leases");
+      setLeases(response.data);
+    } catch (error) {
+      console.error("Error fetching leases:", error);
+      setErrorMessage("Failed to fetch leases.");
     }
   };
 
   useEffect(() => {
     fetchProperties();
+    fetchLeases();
   }, []);
 
   // Update greeting based on time of day
@@ -93,10 +127,6 @@ const Properties = () => {
     formData.append("document_type", documentType);
     formData.append("property_id", parseInt(selectedProperty, 10));
   
-    console.log("documentType:", documentType, "Type:", typeof documentType);
-    console.log("selectedProperty:", parseInt(selectedProperty, 10), "Type:", typeof parseInt(selectedProperty, 10));
-    console.log("file:", file, "Type:", typeof file);
-  
     try {
       setUploading(true);
       setErrorMessage("");
@@ -107,9 +137,15 @@ const Properties = () => {
       console.log("Lease document uploaded successfully:", response.data);
       setIsUploaded(true);
       setFile(null);
+
+      // Refetch leases to include the newly uploaded lease
+      await fetchLeases();
+  
     } catch (error) {
       console.error("Error uploading lease document:", error);
-      setErrorMessage("Failed to upload document. Please try again.");
+      setErrorMessage(
+        error.response?.data?.detail || "Failed to upload document. Please try again."
+      );
     } finally {
       setUploading(false);
     }
@@ -159,6 +195,9 @@ const Properties = () => {
       fetchProperties(); // Re-fetch properties after adding the new one
     } catch (error) {
       console.error("Error adding property:", error);
+      setErrorMessage(
+        error.response?.data?.detail || "Failed to add property. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -169,6 +208,7 @@ const Properties = () => {
       <Sidebar logo={dwellexLogo} />
 
       <main className="dashboard-main">
+        {/* Greeting Section */}
         <div className="greeting-section">
           <h1 className="greeting-title">
             {greeting} {businessName}
@@ -183,6 +223,7 @@ const Properties = () => {
           </p>
         </div>
 
+        {/* Document Type Selection */}
         <div className="document-type-section">
           <h2>Select Document Type</h2>
           <div className="document-type-boxes">
@@ -227,6 +268,7 @@ const Properties = () => {
           </select>
         </div>
 
+        {/* File Upload Area */}
         <div
           className="file-drop-area"
           onDragOver={(e) => e.preventDefault()}
@@ -248,6 +290,7 @@ const Properties = () => {
           <p>Drag & drop files here, or click to upload</p>
         </div>
 
+        {/* Selected File Preview */}
         {file && (
           <div className="uploaded-file-preview">
             <p>Selected file: {file.name}</p>
@@ -257,12 +300,56 @@ const Properties = () => {
           </div>
         )}
 
+        {/* Upload Button */}
         <button onClick={handleUploadLease} className="upload-button" disabled={uploading}>
           {uploading ? "Uploading..." : "Upload Document"}
         </button>
 
+        {/* Success and Error Messages */}
         {isUploaded && <p className="success-message">Document uploaded successfully!</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+        {/* Lease Details Section */}
+        <div className="leases-list">
+          <h2 className="leases-title">Leases</h2>
+          {leases.length > 0 ? (
+            <ul className="leases-items">
+              {leases.map((lease) => (
+                <li key={lease.id} className="lease-item">
+                  <h3>Lease ID: {lease.id}</h3>
+                  <p>
+                    <strong>Property Address:</strong>{" "}
+                    {
+                      properties.find((prop) => prop.id === lease.property_id)?.address ||
+                      "Unknown Property"
+                    }
+                  </p>
+                  <p><strong>Lease Type:</strong> {lease.lease_type}</p>
+                  <p>
+                    <strong>Rent Amount Total:</strong> {formatCurrency(lease.rent_amount_total)}
+                  </p>
+                  <p>
+                    <strong>Rent Amount Monthly:</strong> {formatCurrency(lease.rent_amount_monthly)}
+                  </p>
+                  <p><strong>Security Deposit Amount:</strong> {lease.security_deposit_amount || "N/A"}</p>
+                  <p><strong>Security Deposit Held By:</strong> {lease.security_deposit_held_by || "N/A"}</p>
+                  <p>
+                    <strong>Start Date:</strong> {formatDate(lease.start_date)}
+                  </p>
+                  <p>
+                    <strong>End Date:</strong> {formatDate(lease.end_date)}
+                  </p>
+                  <p><strong>Payment Frequency:</strong> {lease.payment_frequency || "N/A"}</p>
+                  <p><strong>Tenant Info:</strong> {formatJSON(lease.tenant_info)}</p>
+                  <p><strong>Special Lease Terms:</strong> {formatJSON(lease.special_lease_terms)}</p>
+                  <p><strong>Is Active:</strong> {lease.is_active ? 'Yes' : 'No'}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No leases available.</p>
+          )}
+        </div>
 
         {/* Properties List Section */}
         <div className="properties-list">
@@ -273,6 +360,15 @@ const Properties = () => {
                 <li key={property.id} className="property-item">
                   <h3>{property.address}</h3>
                   {/* Add any additional property details here */}
+                  <p><strong>Bedrooms:</strong> {property.num_bedrooms}</p>
+                  <p><strong>Bathrooms:</strong> {property.num_bathrooms}</p>
+                  <p><strong>Floors:</strong> {property.num_floors}</p>
+                  <p><strong>Commercial:</strong> {property.is_commercial ? 'Yes' : 'No'}</p>
+                  <p><strong>HOA:</strong> {property.is_hoa ? 'Yes' : 'No'}</p>
+                  {property.is_hoa && <p><strong>HOA Fee:</strong> ${property.hoa_fee}</p>}
+                  <p><strong>Purchase Price:</strong> {formatCurrency(property.purchase_price)}</p>
+                  <p><strong>Purchase Date:</strong> {formatDate(property.purchase_date)}</p>
+                  <p><strong>Property Type:</strong> {property.property_type}</p>
                 </li>
               ))}
             </ul>
@@ -290,7 +386,7 @@ const Properties = () => {
             <div className="modal-content">
               <h2>Add New Property</h2>
               <form onSubmit={handleSubmit}>
-              <label>
+                <label>
                   Address:
                   <input type="text" name="address" value={formData.address} onChange={handleInputChange} required />
                 </label>

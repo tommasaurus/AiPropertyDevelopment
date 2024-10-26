@@ -237,3 +237,70 @@
 .modal-content .modal-buttons button[type="button"]:hover {
   background-color: #d32f2f;
 }
+
+.leases-list {
+  margin-top: 30px;
+}
+
+.leases-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.leases-items {
+  list-style-type: none;
+  padding: 0;
+}
+
+.lease-item {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background-color: #fff;
+  transition: box-shadow 0.3s;
+}
+
+.lease-item:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lease-item h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.lease-item p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.lease-item p strong {
+  font-weight: bold;
+}
+
+/* Success and Error Messages */
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .document-type-boxes {
+    flex-direction: column;
+  }
+
+  .lease-item, .property-item {
+    padding: 15px;
+  }
+}
