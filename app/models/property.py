@@ -24,7 +24,7 @@ class Property(Base):
     
     # Relationships with lazy loading using 'selectin'
     owner = relationship('User', back_populates='properties', lazy='selectin')
-    leases = relationship('Lease', back_populates='property', lazy='selectin')
+    leases = relationship('Lease', back_populates='property', lazy='selectin', cascade="all, delete-orphan")
     expenses = relationship('Expense', back_populates='property', lazy='selectin')
     incomes = relationship('Income', back_populates='property', lazy='selectin')
     invoices = relationship('Invoice', back_populates='property', lazy='selectin')

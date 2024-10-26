@@ -1,37 +1,46 @@
 # app/schemas/lease.py
 
-from pydantic import BaseModel
-from typing import Optional, List
+from pydantic import BaseModel, Extra
+from typing import Optional, List, Dict, Any
 from datetime import date
-from app.schemas.property_summary import PropertySummary
-from app.schemas.tenant_summary import TenantSummary
-from app.schemas.payment_summary import PaymentSummary
-from app.schemas.document_summary import DocumentSummary
 
 class LeaseBase(BaseModel):
     property_id: int
-    tenant_id: int
     lease_type: str
-    rent_amount: float
-    security_deposit: Optional[float] = None
+    rent_amount_total: Optional[float] = None
+    rent_amount_monthly: Optional[float] = None
+    security_deposit_amount: Optional[str] = "Not specified in extract"
+    security_deposit_held_by: Optional[str] = None
     start_date: date
     end_date: date
-    lease_terms: Optional[str] = None
     payment_frequency: Optional[str] = 'Monthly'
+    tenant_info: Optional[Dict[str, Any]] = None  # Dictionary to hold tenant information
+    special_lease_terms: Optional[Dict[str, Any]] = None  # JSON for special lease terms
     is_active: Optional[bool] = True
+
+    class Config:
+        orm_mode = True
+        extra = Extra.allow
 
 class LeaseCreate(LeaseBase):
     pass
 
 class LeaseUpdate(BaseModel):
     lease_type: Optional[str] = None
-    rent_amount: Optional[float] = None
-    security_deposit: Optional[float] = None
+    rent_amount_total: Optional[float] = None
+    rent_amount_monthly: Optional[float] = None
+    security_deposit_amount: Optional[str] = None
+    security_deposit_held_by: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
-    lease_terms: Optional[str] = None
     payment_frequency: Optional[str] = None
+    tenant_info: Optional[Dict[str, Any]] = None
+    special_lease_terms: Optional[Dict[str, Any]] = None
     is_active: Optional[bool] = None
+
+    class Config:
+        orm_mode = True
+        extra = Extra.allow
 
 class LeaseInDBBase(LeaseBase):
     id: int
@@ -40,10 +49,5 @@ class LeaseInDBBase(LeaseBase):
         orm_mode = True
 
 class Lease(LeaseInDBBase):
-    property: PropertySummary
-    tenant: TenantSummary
-    payments: Optional[List[PaymentSummary]] = []
-    documents: Optional[List[DocumentSummary]] = []
-
     class Config:
         orm_mode = True

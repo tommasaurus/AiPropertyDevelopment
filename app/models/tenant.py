@@ -3,6 +3,7 @@
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import relationship
 from app.db.database import Base
+from app.models.lease_tenants import lease_tenants  
 
 class Tenant(Base):
     __tablename__ = 'tenants'
@@ -15,5 +16,5 @@ class Tenant(Base):
     date_of_birth = Column(Date, nullable=True)
 
     # Relationships
-    leases = relationship('Lease', back_populates='tenant')
+    leases = relationship('Lease', secondary=lease_tenants, back_populates='tenants')  
     documents = relationship('Document', back_populates='tenant')

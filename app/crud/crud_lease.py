@@ -1,34 +1,99 @@
 # app/crud/crud_lease.py
 
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from sqlalchemy.exc import IntegrityError
 from typing import List, Optional
 from app.models.lease import Lease
+from app.models.property import Property
 from app.schemas.lease import LeaseCreate, LeaseUpdate
+from app.services.mapping_functions import map_lease_data
 
-def get_lease(db: Session, lease_id: int) -> Optional[Lease]:
-    return db.query(Lease).filter(Lease.id == lease_id).first()
+async def create_lease(
+    db: AsyncSession,
+    lease_in: LeaseCreate,
+    owner_id: int
+) -> Lease:
+    # Verify that the property exists and belongs to the owner
+    result = await db.execute(
+        select(Property)
+        .filter(Property.id == lease_in.property_id)
+        .filter(Property.owner_id == owner_id)
+    )
+    property = result.scalars().first()
+    if not property:
+        raise ValueError("Property not found or you do not have permission to access this property.")
 
-def get_leases(db: Session, skip: int = 0, limit: int = 100) -> List[Lease]:
-    return db.query(Lease).offset(skip).limit(limit).all()
+    # Map the lease data
+    lease_data = lease_in.dict()
+    mapped_data = map_lease_data(lease_data)
 
-def create_lease(db: Session, lease_in: LeaseCreate) -> Lease:
-    db_lease = Lease(**lease_in.dict())
+    # Create the lease instance
+    db_lease = Lease(**mapped_data)
     db.add(db_lease)
-    db.commit()
-    db.refresh(db_lease)
+    try:
+        await db.commit()
+        await db.refresh(db_lease)
+    except IntegrityError as e:
+        await db.rollback()
+        raise ValueError("An error occurred while saving the lease: " + str(e))
     return db_lease
 
-def update_lease(db: Session, db_lease: Lease, lease_in: LeaseUpdate) -> Lease:
-    update_data = lease_in.dict(exclude_unset=True)
-    for key, value in update_data.items():
-        setattr(db_lease, key, value)
-    db.commit()
-    db.refresh(db_lease)
-    return db_lease
+# Retrieve leases by owner
+async def get_leases(
+    db: AsyncSession,
+    owner_id: int,
+    skip: int = 0,
+    limit: int = 100
+) -> List[Lease]:
+    result = await db.execute(
+        select(Lease)
+        .join(Property)
+        .filter(Property.owner_id == owner_id)
+        .offset(skip)
+        .limit(limit)
+    )
+    return result.scalars().all()
 
-def delete_lease(db: Session, lease_id: int):
-    db_lease = get_lease(db, lease_id)
-    if db_lease:
-        db.delete(db_lease)
-        db.commit()
-    return db_lease
+# Get a single lease by ID, ensuring ownership
+async def get_lease(
+    db: AsyncSession,
+    lease_id: int,
+    owner_id: int
+) -> Lease:
+    result = await db.execute(
+        select(Lease)
+        .join(Property)
+        .filter(Lease.id == lease_id)
+        .filter(Property.owner_id == owner_id)
+    )
+    return result.scalars().first()
+
+# Update a lease
+async def update_lease(
+    db: AsyncSession,
+    lease: Lease,
+    lease_in: LeaseUpdate
+) -> Lease:
+    for key, value in lease_in.dict(exclude_unset=True).items():
+        setattr(lease, key, value)
+    try:
+        await db.commit()
+        await db.refresh(lease)
+    except IntegrityError as e:
+        await db.rollback()
+        raise ValueError("An error occurred while updating the lease: " + str(e))
+    return lease
+
+# Delete a lease
+async def delete_lease(
+    db: AsyncSession,
+    lease_id: int,
+    owner_id: int
+) -> Lease:
+    lease = await get_lease(db=db, lease_id=lease_id, owner_id=owner_id)
+    if not lease:
+        raise ValueError("Lease not found or you do not have permission to delete this lease.")
+    await db.delete(lease)
+    await db.commit()
+    return lease

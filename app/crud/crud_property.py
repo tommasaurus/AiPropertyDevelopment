@@ -34,9 +34,11 @@ async def get_properties_by_owner(db: AsyncSession, owner_id: int, skip: int = 0
     return result.scalars().all()
 
 # Get a single property by its id
-async def get_property(db: AsyncSession, property_id: int) -> Property:
+async def get_property_by_owner(db: AsyncSession, property_id: int, owner_id: int) -> Property:
     result = await db.execute(
-        select(Property).filter(Property.id == property_id)
+        select(Property)
+        .filter(Property.id == property_id)
+        .filter(Property.owner_id == owner_id)
     )
     return result.scalars().first()
 
@@ -50,7 +52,7 @@ async def update_property(db: AsyncSession, property: Property, property_in: Pro
 
 # Delete a property
 async def delete_property(db: AsyncSession, property_id: int) -> Property:
-    property = await get_property(db=db, property_id=property_id)
+    property = await get_property_by_owner(db=db, property_id=property_id)
     await db.delete(property)
     await db.commit()
     return property
