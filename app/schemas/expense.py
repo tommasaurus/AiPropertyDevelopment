@@ -5,7 +5,6 @@ from typing import Optional, List
 from datetime import date
 from app.schemas.property_summary import PropertySummary
 from app.schemas.vendor_summary import VendorSummary
-from app.schemas.document_summary import DocumentSummary
 
 class ExpenseBase(BaseModel):
     property_id: int
@@ -41,7 +40,6 @@ class ExpenseInDBBase(ExpenseBase):
 class Expense(ExpenseInDBBase):
     property: PropertySummary
     vendor: Optional[VendorSummary] = None
-    documents: Optional[List[DocumentSummary]] = []
 
     class Config:
         orm_mode = True
