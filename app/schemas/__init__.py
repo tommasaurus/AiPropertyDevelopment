@@ -2,6 +2,7 @@
 
 from .user import User, UserCreate, UserUpdate
 from .property import Property, PropertyCreate, PropertyUpdate
+from .property_details import PropertyDetails, PropertyDetailsCreate, PropertyDetailsUpdate
 from .utility import Utility, UtilityCreate, UtilityUpdate
 from .tenant import Tenant, TenantCreate, TenantUpdate
 from .lease import Lease, LeaseCreate, LeaseUpdate
@@ -11,6 +12,7 @@ from .income import Income, IncomeCreate, IncomeUpdate
 from .invoice import Invoice, InvoiceCreate, InvoiceUpdate
 from .vendor import Vendor, VendorCreate, VendorUpdate
 from .contract import Contract, ContractCreate, ContractUpdate
+from .document import Document, DocumentCreate, DocumentUpdate
 from .token import Token
 
 __all__ = [
@@ -20,6 +22,9 @@ __all__ = [
     "Property",
     "PropertyCreate",
     "PropertyUpdate",
+    "PropertyDetails",
+    "PropertyDetailsCreate",
+    "PropertyDetailsUpdate",
     "Utility",
     "UtilityCreate",
     "UtilityUpdate",
@@ -47,5 +52,8 @@ __all__ = [
     "Contract",
     "ContractCreate",
     "ContractUpdate",
+    "Document",
+    "DocumentCreate",
+    "DocumentUpdate",
     "Token"    
 ]
