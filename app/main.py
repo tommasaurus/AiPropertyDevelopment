@@ -31,7 +31,9 @@ from app.models import (
     income as income_model,
     invoice as invoice_model,
     vendor as vendor_model,
-    contract as contract_model,        
+    contract as contract_model,
+    document as document_model,
+    property_details as property_details_model,
     utility as utility_model,
 )
 
