@@ -24,12 +24,8 @@ async def create_lease(
     if not property:
         raise ValueError("Property not found or you do not have permission to access this property.")
 
-    # Map the lease data
-    lease_data = lease_in.dict()
-    mapped_data = map_lease_data(lease_data)
-
-    # Create the lease instance
-    db_lease = Lease(**mapped_data)
+    # Create the lease instance directly from lease_in
+    db_lease = Lease(**lease_in.dict())
     db.add(db_lease)
     try:
         await db.commit()

@@ -7,13 +7,11 @@ import "./Properties.css";
 const Properties = () => {
   const [properties, setProperties] = useState([]);
   const [greeting, setGreeting] = useState("");
-  const [dragActive, setDragActive] = useState(false);
   const [selectedDocType, setSelectedDocType] = useState(null);
-  const [selectedProperty, setSelectedProperty] = useState(""); // State for selected property
+  const [selectedProperty, setSelectedProperty] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [customDocType, setCustomDocType] = useState("");
   const [file, setFile] = useState(null);
-  const [filePreview, setFilePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -77,38 +75,40 @@ const Properties = () => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
       setFile(selectedFile);
-      setFilePreview(URL.createObjectURL(selectedFile));
       setIsUploaded(false);
       setErrorMessage("");
     }
   };
 
-  // Upload file to backend
-  const handleUploadFile = async () => {
-    if (!file || (!selectedDocType && !customDocType) || !selectedProperty) {
+  // Upload lease document to backend
+  const handleUploadLease = async () => {
+    if (!file || !selectedDocType || !selectedProperty) {
       setErrorMessage("Please upload a file, select a document type, and select a property.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("documentType", selectedDocType === "Other" ? customDocType : selectedDocType);
-    formData.append("propertyId", selectedProperty); // Include selected property ID
-
+    const documentType = selectedDocType === "Other" ? customDocType : selectedDocType;
+    formData.append("document_type", documentType);
+    formData.append("property_id", parseInt(selectedProperty, 10));
+  
+    console.log("documentType:", documentType, "Type:", typeof documentType);
+    console.log("selectedProperty:", parseInt(selectedProperty, 10), "Type:", typeof parseInt(selectedProperty, 10));
+    console.log("file:", file, "Type:", typeof file);
+  
     try {
       setUploading(true);
       setErrorMessage("");
-
-      const response = await api.post("/placeholder-upload-endpoint", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      console.log("Upload successful:", response.data);
+  
+      // Remove the headers object to let Axios set the Content-Type automatically
+      const response = await api.post("/leases/upload", formData);
+  
+      console.log("Lease document uploaded successfully:", response.data);
       setIsUploaded(true);
       setFile(null);
-      setFilePreview(null);
     } catch (error) {
-      console.error("Error uploading document:", error);
+      console.error("Error uploading lease document:", error);
       setErrorMessage("Failed to upload document. Please try again.");
     } finally {
       setUploading(false);
@@ -228,12 +228,10 @@ const Properties = () => {
         </div>
 
         <div
-          className={`file-drop-area ${dragActive ? "active" : ""}`}
-          onDragEnter={() => setDragActive(true)}
-          onDragLeave={() => setDragActive(false)}
+          className="file-drop-area"
+          onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
-            setDragActive(false);
             if (e.dataTransfer.files && e.dataTransfer.files[0]) {
               handleFileChange({ target: { files: e.dataTransfer.files } });
             }
@@ -250,16 +248,16 @@ const Properties = () => {
           <p>Drag & drop files here, or click to upload</p>
         </div>
 
-        {filePreview && (
+        {file && (
           <div className="uploaded-file-preview">
-            <img src={filePreview} alt="Preview" className="file-preview-image" />
-            <button className="delete-file" onClick={() => { setFile(null); setFilePreview(null); }}>
+            <p>Selected file: {file.name}</p>
+            <button className="delete-file" onClick={() => { setFile(null); }}>
               Remove
             </button>
           </div>
         )}
 
-        <button onClick={handleUploadFile} className="upload-button" disabled={uploading}>
+        <button onClick={handleUploadLease} className="upload-button" disabled={uploading}>
           {uploading ? "Uploading..." : "Upload Document"}
         </button>
 
@@ -274,7 +272,7 @@ const Properties = () => {
               {properties.map((property) => (
                 <li key={property.id} className="property-item">
                   <h3>{property.address}</h3>
-                  <p>{property.address}</p>
+                  {/* Add any additional property details here */}
                 </li>
               ))}
             </ul>
@@ -292,7 +290,7 @@ const Properties = () => {
             <div className="modal-content">
               <h2>Add New Property</h2>
               <form onSubmit={handleSubmit}>
-                <label>
+              <label>
                   Address:
                   <input type="text" name="address" value={formData.address} onChange={handleInputChange} required />
                 </label>

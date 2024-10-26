@@ -1,5 +1,6 @@
 # app/services/mapping_functions.py
 
+from datetime import datetime, date
 import json
 import logging
 
@@ -32,6 +33,40 @@ def normalize_keys(d):
         new_dict[new_key] = new_value
     return new_dict
 
+# Helper function to safely get nested values
+def get_nested_value(data, keys, default="Not Found"):
+    for key in keys:
+        if isinstance(data, dict) and key in data:
+            data = data[key]
+        else:
+            return default
+    return data
+
+def clean_currency(value):
+    if isinstance(value, str):        
+        value = value.replace('$', '').replace(',', '').strip()
+        try:
+            return float(value)
+        except ValueError:
+            return None  # or 0.0 if you prefer
+    return value
+
+def parse_date(value):
+    if isinstance(value, str):
+        try:
+            # Try parsing MM/DD/YYYY format
+            return datetime.strptime(value, '%m/%d/%Y').date()
+        except ValueError:
+            # Try parsing ISO format as a fallback
+            try:
+                return datetime.strptime(value, '%Y-%m-%d').date()
+            except ValueError:
+                return None  # or raise an error
+    elif isinstance(value, date):
+        return value
+    return None
+
+
 def parse_json(raw_json: str) -> dict:
     """
     Parses and validates the JSON string response from OpenAI, normalizes keys,
@@ -63,24 +98,16 @@ def map_lease_data(parsed_data: dict) -> dict:
     Returns:
         dict: A dictionary of Lease fields ready to be used for creation.
     """
-    # Helper function to safely get nested values
-    def get_nested_value(data, keys, default="Not Found"):
-        for key in keys:
-            if isinstance(data, dict) and key in data:
-                data = data[key]
-            else:
-                return default
-        return data
 
     lease_data = {
         "lease_type": parsed_data.get("lease_type", "Not Found"),
-        "rent_amount_total": get_nested_value(parsed_data, ["rent_amount", "total"], "Not Found"),
-        "rent_amount_monthly": get_nested_value(parsed_data, ["rent_amount", "monthly_installment"], "Not Found"),
+        "rent_amount_total": clean_currency(get_nested_value(parsed_data, ["rent_amount", "total"], "0")),
+        "rent_amount_monthly": clean_currency(get_nested_value(parsed_data, ["rent_amount", "monthly_installment"], "0")),
         "security_deposit_amount": get_nested_value(parsed_data, ["security_deposit", "amount"], "Not Found"),
         "security_deposit_held_by": get_nested_value(parsed_data, ["security_deposit", "held_by"], "Not Found"),
-        "start_date": parsed_data.get("start_date", "Not Found"),
-        "end_date": parsed_data.get("end_date", "Not Found"),
-        "payment_frequency": parsed_data.get("payment_frequency", "Not Found"),
+        "start_date": parse_date(parsed_data.get("start_date", "1900-01-01")),
+        "end_date": parse_date(parsed_data.get("end_date", "1900-01-01")),
+        "payment_frequency": parsed_data.get("payment_frequency", "Monthly"),
         "tenant_info": parsed_data.get("tenant_information", {}),
         "special_lease_terms": parsed_data.get("special_lease_terms", {}),
         "is_active": True  # Default value; adjust if necessary
