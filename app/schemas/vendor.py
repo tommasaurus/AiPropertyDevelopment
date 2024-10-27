@@ -1,10 +1,7 @@
 # app/schemas/vendor.py
 
 from pydantic import BaseModel, EmailStr
-from typing import Optional, List
-from app.schemas.expense_summary import ExpenseSummary
-from app.schemas.invoice_summary import InvoiceSummary
-from app.schemas.contract_summary import ContractSummary
+from typing import Optional
 
 class VendorBase(BaseModel):
     name: str
@@ -29,14 +26,10 @@ class VendorUpdate(BaseModel):
 
 class VendorInDBBase(VendorBase):
     id: int
+    owner_id: int
 
     class Config:
         orm_mode = True
 
 class Vendor(VendorInDBBase):
-    expenses: Optional[List[ExpenseSummary]] = []
-    invoices: Optional[List[InvoiceSummary]] = []
-    contracts: Optional[List[ContractSummary]] = []
-
-    class Config:
-        orm_mode = True
+    pass

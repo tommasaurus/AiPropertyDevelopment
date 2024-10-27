@@ -29,13 +29,14 @@ from app.models import (
     payment as payment_model,
     expense as expense_model,
     income as income_model,
-    invoice as invoice_model,
     vendor as vendor_model,
     contract as contract_model,
     document as document_model,
     property_details as property_details_model,
     utility as utility_model,
 )
+from app.models.invoice import invoice as invoice_model
+from app.models.invoice import invoice_item as invoice_item_model
 
 app = FastAPI(
     title="Property Management Application",

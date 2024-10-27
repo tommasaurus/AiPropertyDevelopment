@@ -23,103 +23,6 @@
   color: #888;
 }
 
-.properties-list {
-  margin-top: 30px;
-}
-
-.properties-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.properties-items {
-  list-style-type: none;
-  padding: 0;
-}
-
-.property-item {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  background-color: #fff;
-  transition: box-shadow 0.3s;
-}
-
-.property-item:hover {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.property-item h3 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #1890ff;
-}
-
-.property-item p {
-  margin: 5px 0;
-  color: #555;
-}
-
-.add-property-button {
-  display: block;
-  width: 100%;
-  padding: 10px 15px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #1890ff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.add-property-button:hover {
-  background-color: #0078d4;
-}
-
-.file-drop-area {
-  border: 2px dashed #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.file-drop-area.active {
-  background-color: #f0f8ff;
-}
-
-.file-drop-area p {
-  font-size: 1rem;
-  color: #666;
-}
-
-.upload-button {
-  display: block;
-  width: 100%;
-  padding: 10px 15px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #52c41a;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 10px;
-}
-
-.upload-button:hover {
-  background-color: #41a915;
-}
-
 .document-type-section {
   margin-bottom: 20px;
 }
@@ -150,6 +53,161 @@
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 5px;
+}
+
+.property-selection {
+  margin-bottom: 20px;
+}
+
+.property-dropdown {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.file-drop-area {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.file-drop-area.active {
+  background-color: #f0f8ff;
+}
+
+.file-drop-area p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.uploaded-file-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fafafa;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.delete-file {
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-file:hover {
+  background-color: #ff7875;
+}
+
+.upload-button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #52c41a;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.upload-button:hover {
+  background-color: #41a915;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.leases-list, .invoices-list, .properties-list {
+  margin-top: 30px;
+}
+
+.leases-title, .invoices-title, .properties-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.leases-items, .invoices-items, .properties-items {
+  list-style-type: none;
+  padding: 0;
+}
+
+.lease-item, .invoice-item, .property-item {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background-color: #fff;
+  transition: box-shadow 0.3s;
+}
+
+.lease-item:hover, .invoice-item:hover, .property-item:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lease-item h3, .invoice-item h3, .property-item h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.lease-item p, .invoice-item p, .property-item p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.lease-item p strong, .invoice-item p strong, .property-item p strong {
+  font-weight: bold;
+}
+
+.line-items {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.line-item {
+  margin-bottom: 10px;
+}
+
+.add-property-button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #1890ff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-property-button:hover {
+  background-color: #0078d4;
 }
 
 .modal {
@@ -238,69 +296,13 @@
   background-color: #d32f2f;
 }
 
-.leases-list {
-  margin-top: 30px;
-}
-
-.leases-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.leases-items {
-  list-style-type: none;
-  padding: 0;
-}
-
-.lease-item {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  background-color: #fff;
-  transition: box-shadow 0.3s;
-}
-
-.lease-item:hover {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.lease-item h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #1890ff;
-}
-
-.lease-item p {
-  margin: 5px 0;
-  color: #555;
-}
-
-.lease-item p strong {
-  font-weight: bold;
-}
-
-/* Success and Error Messages */
-.success-message {
-  color: green;
-  margin-top: 10px;
-}
-
-.error-message {
-  color: red;
-  margin-top: 10px;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .document-type-boxes {
     flex-direction: column;
   }
 
-  .lease-item, .property-item {
+  .lease-item, .invoice-item, .property-item {
     padding: 15px;
   }
 }

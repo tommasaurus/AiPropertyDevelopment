@@ -8,7 +8,7 @@ from app.schemas.property_details import PropertyDetails
 from app.schemas.lease_summary import LeaseSummary
 from app.schemas.expense_summary import ExpenseSummary
 from app.schemas.income_summary import IncomeSummary
-from app.schemas.invoice_summary import InvoiceSummary
+from app.schemas.invoice.invoice_summary import InvoiceSummary
 from app.schemas.contract_summary import ContractSummary
 from app.schemas.document_summary import DocumentSummary
 

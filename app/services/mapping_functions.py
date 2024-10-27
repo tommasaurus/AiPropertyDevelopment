@@ -11,12 +11,6 @@ def normalize_keys(d):
     """
     Recursively normalizes the keys of the dictionary: strip whitespace, convert to lowercase,
     replace spaces with underscores.
-
-    Args:
-        d (dict): The dictionary to normalize.
-
-    Returns:
-        dict: A new dictionary with normalized keys.
     """
     new_dict = {}
     for key, value in d.items():
@@ -35,6 +29,9 @@ def normalize_keys(d):
 
 # Helper function to safely get nested values
 def get_nested_value(data, keys, default="Not Found"):
+    """
+    Safely retrieves a nested value from a dictionary.
+    """
     for key in keys:
         if isinstance(data, dict) and key in data:
             data = data[key]
@@ -57,14 +54,17 @@ def parse_date(value):
             # Try parsing MM/DD/YYYY format
             return datetime.strptime(value, '%m/%d/%Y').date()
         except ValueError:
-            # Try parsing ISO format as a fallback
             try:
+                # Try parsing YYYY-MM-DD format
                 return datetime.strptime(value, '%Y-%m-%d').date()
             except ValueError:
-                return None  # or raise an error
+                logger.warning(f"Failed to parse date: {value}")
+                return None  # Date parsing failed
     elif isinstance(value, date):
         return value
-    return None
+    else:
+        logger.warning(f"Invalid date value: {value}")
+        return None
 
 
 def parse_json(raw_json: str) -> dict:
@@ -115,3 +115,48 @@ def map_lease_data(parsed_data: dict) -> dict:
 
     return lease_data
 
+def map_invoice_data(parsed_data: dict) -> dict:
+    """
+    Maps the parsed data to the Invoice model fields, including line items.
+    """
+    try:
+        amount = clean_currency(parsed_data.get("amount", "0"))
+        paid_amount = clean_currency(parsed_data.get("paid_amount", "0"))
+
+        # Parse dates
+        invoice_date = parse_date(parsed_data.get("invoice_date"))
+        due_date = parse_date(parsed_data.get("due_date"))
+
+        # Process line items
+        line_items_data = []
+        line_items = parsed_data.get("line_items", [])
+        for item in line_items:
+            item_description = get_nested_value(item, ["description"], "No description")
+            quantity = clean_currency(get_nested_value(item, ["quantity"], "1")) or None
+            unit_price = clean_currency(get_nested_value(item, ["unit_price"], "0")) or None
+            total_price = clean_currency(get_nested_value(item, ["total_price"], "0")) or None
+
+            line_item = {
+                "description": item_description,
+                "quantity": float(quantity) if isinstance(quantity, (int, float)) else None,
+                "unit_price": float(unit_price) if isinstance(unit_price, (int, float)) else None,
+                "total_price": float(total_price) if isinstance(total_price, (int, float)) else None,
+            }
+            line_items_data.append(line_item)
+
+        invoice_data = {
+            "invoice_number": parsed_data.get("invoice_number") or None,
+            "amount": amount if amount is not None else 0.0,
+            "paid_amount": paid_amount if paid_amount is not None else 0.0,
+            "remaining_balance": round((amount if amount else 0.0) - (paid_amount if paid_amount else 0.0), 2),
+            "invoice_date": invoice_date.isoformat() if invoice_date else None,
+            "due_date": due_date.isoformat() if due_date else None,
+            "status": parsed_data.get("status") or "Unpaid",
+            "description": parsed_data.get("description") or None,
+            "vendor_info": parsed_data.get("vendor_information", {}),
+            "line_items": line_items_data,
+        }
+    except Exception as e:
+        logger.error(f"Error mapping invoice data: {e}")
+        invoice_data = {}  # Return an empty dict in case of an error
+    return invoice_data

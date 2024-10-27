@@ -7,7 +7,7 @@ from app.schemas.property_summary import PropertySummary
 from app.schemas.tenant_summary import TenantSummary
 from app.schemas.lease_summary import LeaseSummary
 from app.schemas.expense_summary import ExpenseSummary
-from app.schemas.invoice_summary import InvoiceSummary
+from app.schemas.invoice.invoice_summary import InvoiceSummary
 from app.schemas.contract_summary import ContractSummary
 
 class DocumentBase(BaseModel):
@@ -17,8 +17,7 @@ class DocumentBase(BaseModel):
     expense_id: Optional[int] = None
     invoice_id: Optional[int] = None
     contract_id: Optional[int] = None
-    document_type: str
-    file_url: str
+    document_type: str    
     description: Optional[str] = None
 
 class DocumentCreate(DocumentBase):
@@ -31,8 +30,7 @@ class DocumentUpdate(BaseModel):
     expense_id: Optional[int] = None
     invoice_id: Optional[int] = None
     contract_id: Optional[int] = None
-    document_type: Optional[str] = None
-    file_url: Optional[str] = None
+    document_type: Optional[str] = None    
     description: Optional[str] = None
 
 class DocumentInDBBase(DocumentBase):

@@ -5,10 +5,11 @@ import api from "../../../services/api";
 import "./Properties.css";
 
 const Properties = () => {
-  // State variables for properties and leases
+  // State variables for properties, leases, and invoices
   const [properties, setProperties] = useState([]);
   const [leases, setLeases] = useState([]);
-  
+  const [invoices, setInvoices] = useState([]); // New state for invoices
+
   // State variables for UI and form handling
   const [greeting, setGreeting] = useState("");
   const [selectedDocType, setSelectedDocType] = useState(null);
@@ -21,7 +22,7 @@ const Properties = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // State for form data when adding a new property
   const [formData, setFormData] = useState({
     address: "",
@@ -36,10 +37,10 @@ const Properties = () => {
     purchase_date: "",
     property_type: ""
   });
-  
+
   const fileInputRef = useRef(null);
   const businessName = "Jason";
-  const documentTypes = ["Lease", "Contract", "Invoice", "Receipt", "Legal", "Other"];
+  const documentTypes = ["Lease", "Contract", "Invoice", "Legal", "Other"];
 
   // Helper functions for formatting
   const formatCurrency = (value) => {
@@ -52,7 +53,7 @@ const Properties = () => {
   };
 
   const formatJSON = (data) => {
-    return data ? JSON.stringify(data) : "N/A";
+    return data ? JSON.stringify(data, null, 2) : "N/A";
   };
 
   // Fetch properties from API
@@ -77,9 +78,21 @@ const Properties = () => {
     }
   };
 
+  // Fetch invoices from API
+  const fetchInvoices = async () => {
+    try {
+      const response = await api.get("/invoices"); // Ensure this endpoint exists in your backend
+      setInvoices(response.data);
+    } catch (error) {
+      console.error("Error fetching invoices:", error);
+      setErrorMessage("Failed to fetch invoices.");
+    }
+  };
+
   useEffect(() => {
     fetchProperties();
     fetchLeases();
+    fetchInvoices(); // Fetch invoices on component mount
   }, []);
 
   // Update greeting based on time of day
@@ -114,37 +127,69 @@ const Properties = () => {
     }
   };
 
-  // Upload lease document to backend
-  const handleUploadLease = async () => {
+  // Handle document upload based on selected document type
+  const handleUploadDocument = async () => {
     if (!file || !selectedDocType || !selectedProperty) {
       setErrorMessage("Please upload a file, select a document type, and select a property.");
       return;
     }
-  
-    const formData = new FormData();
-    formData.append("file", file);
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("file", file);
     const documentType = selectedDocType === "Other" ? customDocType : selectedDocType;
-    formData.append("document_type", documentType);
-    formData.append("property_id", parseInt(selectedProperty, 10));
-  
+    formDataToSend.append("document_type", documentType);
+    formDataToSend.append("property_id", parseInt(selectedProperty, 10));
+
+    // Determine the correct endpoint based on document type
+    let uploadEndpoint = "";
+    switch (documentType.toLowerCase()) {
+      case "lease":
+        uploadEndpoint = "/leases/upload";
+        break;
+      case "invoice":
+        uploadEndpoint = "/invoices/upload";
+        break;
+      case "contract":
+        uploadEndpoint = "/contracts/upload";
+        break;
+      case "legal":
+        uploadEndpoint = "/legals/upload";
+        break;
+      default:
+        uploadEndpoint = "/others/upload"; // Ensure this endpoint exists
+    }
+
     try {
       setUploading(true);
       setErrorMessage("");
-  
-      // Remove the headers object to let Axios set the Content-Type automatically
-      const response = await api.post("/leases/upload", formData);
-  
-      console.log("Lease document uploaded successfully:", response.data);
+
+      const response = await api.post(uploadEndpoint, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
+      console.log(`${documentType} document uploaded successfully:`, response.data);
       setIsUploaded(true);
       setFile(null);
 
-      // Refetch leases to include the newly uploaded lease
-      await fetchLeases();
-  
+      // Refetch the relevant data based on document type
+      switch (documentType.toLowerCase()) {
+        case "lease":
+          await fetchLeases();
+          break;
+        case "invoice":
+          await fetchInvoices();
+          break;
+        // Add cases for other document types if needed
+        default:
+          break;
+      }
+
     } catch (error) {
-      console.error("Error uploading lease document:", error);
+      console.error(`Error uploading ${documentType} document:`, error);
       setErrorMessage(
-        error.response?.data?.detail || "Failed to upload document. Please try again."
+        error.response?.data?.detail || `Failed to upload ${documentType} document. Please try again.`
       );
     } finally {
       setUploading(false);
@@ -270,7 +315,7 @@ const Properties = () => {
 
         {/* File Upload Area */}
         <div
-          className="file-drop-area"
+          className={`file-drop-area ${file ? "active" : ""}`}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
@@ -301,7 +346,7 @@ const Properties = () => {
         )}
 
         {/* Upload Button */}
-        <button onClick={handleUploadLease} className="upload-button" disabled={uploading}>
+        <button onClick={handleUploadDocument} className="upload-button" disabled={uploading}>
           {uploading ? "Uploading..." : "Upload Document"}
         </button>
 
@@ -309,7 +354,7 @@ const Properties = () => {
         {isUploaded && <p className="success-message">Document uploaded successfully!</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        {/* Lease Details Section */}
+        {/* Leases List Section */}
         <div className="leases-list">
           <h2 className="leases-title">Leases</h2>
           {leases.length > 0 ? (
@@ -348,6 +393,59 @@ const Properties = () => {
             </ul>
           ) : (
             <p>No leases available.</p>
+          )}
+        </div>
+
+        {/* Invoices List Section */}
+        <div className="invoices-list">
+          <h2 className="invoices-title">Invoices</h2>
+          {invoices.length > 0 ? (
+            <ul className="invoices-items">
+              {invoices.map((invoice) => (
+                <li key={invoice.id} className="invoice-item">
+                  <h3>Invoice ID: {invoice.id}</h3>
+                  <p>
+                    <strong>Property Address:</strong>{" "}
+                    {
+                      properties.find((prop) => prop.id === invoice.property_id)?.address ||
+                      "Unknown Property"
+                    }
+                  </p>
+                  <p><strong>Invoice Number:</strong> {invoice.invoice_number || "N/A"}</p>
+                  <p><strong>Amount:</strong> {formatCurrency(invoice.amount)}</p>
+                  <p><strong>Paid Amount:</strong> {formatCurrency(invoice.paid_amount)}</p>
+                  <p><strong>Remaining Balance:</strong> {formatCurrency(invoice.remaining_balance)}</p>
+                  <p>
+                    <strong>Invoice Date:</strong> {formatDate(invoice.invoice_date)}
+                  </p>
+                  <p>
+                    <strong>Due Date:</strong> {formatDate(invoice.due_date)}
+                  </p>
+                  <p><strong>Status:</strong> {invoice.status || "N/A"}</p>
+                  <p><strong>Description:</strong> {invoice.description || "N/A"}</p>
+                  <p><strong>Vendor Info:</strong> {formatJSON(invoice.vendor_info)}</p>
+                  <div>
+                    <strong>Line Items:</strong>
+                    {invoice.line_items && invoice.line_items.length > 0 ? (
+                      <ul className="line-items">
+                        {invoice.line_items.map((item, index) => (
+                          <li key={index} className="line-item">
+                            <p><strong>Description:</strong> {item.description}</p>
+                            <p><strong>Quantity:</strong> {item.quantity}</p>
+                            <p><strong>Unit Price:</strong> {formatCurrency(item.unit_price)}</p>
+                            <p><strong>Total Price:</strong> {formatCurrency(item.total_price)}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>No line items available.</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No invoices available.</p>
           )}
         </div>
 

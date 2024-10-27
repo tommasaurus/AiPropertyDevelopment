@@ -9,7 +9,8 @@ from .lease import Lease, LeaseCreate, LeaseUpdate
 from .payment import Payment, PaymentCreate, PaymentUpdate
 from .expense import Expense, ExpenseCreate, ExpenseUpdate
 from .income import Income, IncomeCreate, IncomeUpdate
-from .invoice import Invoice, InvoiceCreate, InvoiceUpdate
+from .invoice.invoice import Invoice, InvoiceCreate, InvoiceUpdate
+from .invoice.invoice_item import InvoiceItem, InvoiceItemCreate, InvoiceItemUpdate
 from .vendor import Vendor, VendorCreate, VendorUpdate
 from .contract import Contract, ContractCreate, ContractUpdate
 from .document import Document, DocumentCreate, DocumentUpdate
@@ -46,6 +47,9 @@ __all__ = [
     "Invoice",
     "InvoiceCreate",
     "InvoiceUpdate",
+    "InvoiceItem",
+    "InvoiceItemCreate",
+    "InvoiceItemUpdate",
     "Vendor",
     "VendorCreate",
     "VendorUpdate",

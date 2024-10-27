@@ -7,9 +7,11 @@ from app.db.database import Base
 class Expense(Base):
     __tablename__ = 'expenses'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)
     vendor_id = Column(Integer, ForeignKey('vendors.id'), nullable=True)
+    invoice_id = Column(Integer, ForeignKey('invoices.id'), unique=True, nullable=True)
+
     category = Column(String(50), nullable=False)
     amount = Column(Float, nullable=False)
     date_incurred = Column(Date, nullable=False)
@@ -21,4 +23,5 @@ class Expense(Base):
     # Relationships
     property = relationship('Property', back_populates='expenses')
     vendor = relationship('Vendor', back_populates='expenses')
+    invoice = relationship('Invoice', back_populates='expense')
     documents = relationship('Document', back_populates='expense')
