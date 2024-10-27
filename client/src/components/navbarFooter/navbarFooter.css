@@ -1,24 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap");
 
-/* Global styles */
-body {
-  background-color: #f5f8ff;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 /* Navbar styles */
 .navbar {
   font-family: "Outfit", sans-serif;
-  background-color: #f5f8ff;
-  padding: 1rem 0;
+  background-color: #eeece2;
+  padding: 0.5rem 0;
 }
 
 .navbar-container {
-  max-width: 1500px;
+  max-width: 1425px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -44,7 +34,7 @@ body {
 }
 
 .nav-item {
-  margin-left: 3rem;
+  margin-left: 2rem;
 }
 
 .nav-link {
@@ -56,14 +46,14 @@ body {
 }
 
 .nav-link:hover {
-  color: #007bff;
+  color: #e17b50;
 }
 
 .login-button {
   padding: 0.5rem 1.3rem;
   font-size: 1.3rem;
-  background-color: #f5f8ff;
-  color: #136dff;
+  background-color: #eeece2;
+  color: #000000;
   border: 1px solid #000000;
   border-radius: 6px;
   cursor: pointer;
@@ -76,7 +66,7 @@ body {
 }
 
 .login-button:hover {
-  background-color: #d3d3d3;
+  background-color: #e0ded5;
   top: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -106,7 +96,7 @@ body {
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #ffffff;
+  background-color: #eeece2;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   padding: 1rem;
@@ -119,9 +109,9 @@ body {
 
 /* Footer styles */
 .navbar-footer {
-  background-color: #f5f8ff;
+  background-color: #eeece2;
   padding: 2rem 0;
-  color: #333;
+  color: #82817a;
   font-weight: 600;
   margin-top: auto;
 }
@@ -164,7 +154,7 @@ body {
 .footer-section h4 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
-  color: #0066ff;
+  color: #e17b50;
 }
 
 .footer-section ul {
@@ -177,20 +167,20 @@ body {
 }
 
 .footer-section ul li a {
-  color: #555;
+  color: #82817a;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-  color: #007bff;
+  color: #e17b50;
 }
 
 .footer-bottom {
   flex: 0 0 100%;
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #007bff;
+  border-top: 1px solid #e17b50;
   text-align: center;
 }
 
@@ -200,7 +190,7 @@ body {
 
 .social-links a {
   margin: 0 0.5rem;
-  color: #007bff;
+  color: #e17b50;
   text-decoration: none;
 }
 

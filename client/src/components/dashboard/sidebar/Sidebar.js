@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
-import dwellexLogo from "../../../images/dwellexLogo.png";
-import tabLogo from "../../../images/tabLogo.png";
+import logo from "../../../images/logo.png";
+import tabLogo from "../../../images/tabLogoBlack.png";
 
 const Sidebar = () => {
   const [isPinned, setPinned] = useState(false);
@@ -144,7 +144,7 @@ const Sidebar = () => {
       <div className='sidebar-header'>
         <div className='logo-container'>
           <img src={tabLogo} className='tab-logo' alt='Tab Logo' />
-          <img src={dwellexLogo} className='logo' alt='Dwellex Logo' />
+          <img src={logo} className='logo' alt='Dwellex Logo' />
         </div>
         <button
           className={`pin-button ${isPinned ? "pinned" : ""}`}

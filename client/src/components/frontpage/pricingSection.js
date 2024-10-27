@@ -1,62 +1,67 @@
 import React from "react";
+import { Check } from "lucide-react";
 
 const PricingSection = () => {
   return (
     <div className='pricing-container'>
+      <div className='pricing-header'>
+        <h2 className='pricing-title-main'>Simple, Transparent Pricing</h2>
+        <p className='pricing-subtitle-main'>
+          Choose the perfect plan for your property management needs
+        </p>
+      </div>
+
       <div className='pricing-grid'>
         <div className='pricing-card'>
-          <div className='plan-label'>Basic Plan</div>
-          <div className='price-container'>
-            <span className='price-text'>Free</span>
-            <span className='duration'>/7 days</span>
-            <span className='plus'>+</span>
-            <span className='price-amount'>$14.99</span>
-            <span className='period'>/mo</span>
-          </div>
-          <div className='billing-text'>Billed Monthly</div>
-          <p className='plan-description'>
-            Get all current features with the basic plan, and kickstart your
-            journey with a 7-day free trial! Pricing starts at 14.99 per month
-            for the first 15 properties, with a $0.99 charge for each additional
-            property. Experience the full power of Propaya and elevate your
-            property management game!
+          <h3 className='pricing-title'>Starter</h3>
+          <div className='pricing-price'>$14.99</div>
+          <div className='pricing-duration'>per month</div>
+          <p className='pricing-description'>
+            Perfect for individual property managers just getting started
           </p>
           <ul className='feature-list'>
             <li>My Properties Data Page</li>
             <li>Lease PDF to Data Extraction</li>
             <li>Automated Calendar</li>
-            <li>Automated Expense Report</li>
-            <li>More Features to Come!</li>
+            <li>Basic Expense Reports</li>
+            <li>Email Support</li>
           </ul>
-          <div className='additional-info'>
-            $0.99 per month extra for each property after the first 15
-          </div>
-          <button className='pricing-button'>Get Started For Free!</button>
+          <button className='pricing-button hollow'>Start Free Trial</button>
+        </div>
+
+        <div className='pricing-card popular'>
+          <div className='popular-badge'>Popular</div>
+          <h3 className='pricing-title'>Professional</h3>
+          <div className='pricing-price'>$29.99</div>
+          <div className='pricing-duration'>per month</div>
+          <p className='pricing-description'>
+            Ideal for growing property management businesses
+          </p>
+          <ul className='feature-list'>
+            <li>All Starter Features</li>
+            <li>Advanced Analytics</li>
+            <li>AI Tenant Chatbot</li>
+            <li>Custom Report Builder</li>
+            <li>Priority Support</li>
+          </ul>
+          <button className='pricing-button'>Get Started</button>
         </div>
 
         <div className='pricing-card'>
-          <div className='plan-label'>Enterprise Plan</div>
-          <div className='enterprise-title'>
-            A <span className='highlight'>Custom</span> Plan to
-            <br />
-            Suit Your Needs
-          </div>
-          <p className='plan-description'>
-            Have a team of property managers that work collaboratively? Need a
-            custom feature to boost your efficiency and streamline your
-            workflow? Contact us directly and our team will find a solution that
-            works for you! Prices will vary depending on services provided.
+          <h3 className='pricing-title'>Enterprise</h3>
+          <div className='pricing-price'>Custom</div>
+          <div className='pricing-duration'>tailored solutions</div>
+          <p className='pricing-description'>
+            Custom solutions for large property portfolios
           </p>
           <ul className='feature-list'>
-            <li>My Properties Data Page</li>
-            <li>Lease PDF to Data Extraction</li>
-            <li>Automated Calendar</li>
-            <li>Automated Expense Report</li>
-            <li>More Features to Come!</li>
-            <li>Ideal for Teams of Property Managers or Realtors</li>
-            <li>Flexible Plans and Custom Features Tailored to Your Needs</li>
+            <li>All Professional Features</li>
+            <li>Custom Integrations</li>
+            <li>Dedicated Account Manager</li>
+            <li>Custom AI Training</li>
+            <li>24/7 Phone Support</li>
           </ul>
-          <button className='pricing-button'>Learn More</button>
+          <button className='pricing-button hollow'>Contact Sales</button>
         </div>
       </div>
     </div>

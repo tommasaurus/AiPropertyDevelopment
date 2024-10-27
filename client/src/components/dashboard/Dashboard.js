@@ -3,7 +3,7 @@ import { PlusCircle, Bell, Search } from "lucide-react";
 import Sidebar from "./sidebar/Sidebar";
 import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
 import api from "../../services/api";
-import dwellexLogo from "../../images/dwellexLogo.png";
+import logo from "../../images/logo.png";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -12,26 +12,26 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // TODO: Replace with actual API call to get user/business name
-  const businessName = "Jason";
+  const businessName = "Jason.";
 
   useEffect(() => {
     const updateGreeting = () => {
       const hour = new Date().getHours();
       if (hour >= 5 && hour < 12) {
-        setGreeting("Good morning");
+        setGreeting("Good morning,");
       } else if (hour >= 12 && hour < 17) {
-        setGreeting("Good afternoon");
+        setGreeting("Good afternoon,");
       } else {
-        setGreeting("Good evening");
+        setGreeting("Good evening,");
       }
     };
-  
+
     // Set initial greeting
     updateGreeting();
-  
+
     // Update greeting every minute
     const timer = setInterval(updateGreeting, 60000);
-  
+
     // Cleanup on component unmount
     return () => clearInterval(timer);
   }, []);
@@ -63,7 +63,7 @@ const Dashboard = () => {
   return (
     <div className='dashboard-layout'>
       {/* Sidebar with imported logo */}
-      <Sidebar logo={dwellexLogo} />
+      <Sidebar logo={logo} />
 
       <main className='dashboard-main'>
         {/* Greeting Section */}

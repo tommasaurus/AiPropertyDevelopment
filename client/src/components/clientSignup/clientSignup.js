@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { loginWithGoogle } from "../../services/login";
 import signupUser from "../../services/signup";
 import "./clientSignup.css";
-import dwellexLogo from "../../images/dwellexLogo.png";
+import logo from "../../images/logo.png";
 
 const ClientSignup = () => {
   const [email, setEmail] = useState("");
@@ -37,15 +37,21 @@ const ClientSignup = () => {
     loginWithGoogle();
   };
 
+  const handleLogoClick = () => {
+    navigate("/");
+  };
+
   return (
-    <div className='modern-signup-container'>
-      <div className='modern-signup-card'>
-        <img src={dwellexLogo} alt='Dwellex Logo' className='modern-logo' />
-        <p className='logo-subtitle'>
+    <div className='container'>
+      <div className='card'>
+        <button onClick={handleLogoClick} className='logo-button'>
+          <img src={logo} alt='Dwellex Logo' className='logo' />
+        </button>
+        <p className='subtitle'>
           <strong>Create Your Account</strong>
         </p>
 
-        <button onClick={handleGoogleSignup} className='btn-google-signup'>
+        <button onClick={handleGoogleSignup} className='google-button'>
           <svg
             className='google-icon'
             width='18'
@@ -72,13 +78,13 @@ const ClientSignup = () => {
           Continue with Google
         </button>
 
-        <div className='separator'>
+        <div className='divider'>
           <span>or</span>
         </div>
 
-        <form onSubmit={handleSignup} className='modern-signup-form'>
-          <div className='modern-input-group'>
-            <label className='input-label'>Email</label>
+        <form onSubmit={handleSignup} className='form'>
+          <div className='input-group'>
+            <label className='label'>Email</label>
             <input
               type='email'
               placeholder='Enter your email'
@@ -87,8 +93,8 @@ const ClientSignup = () => {
               required
             />
           </div>
-          <div className='modern-input-group'>
-            <label className='input-label'>Password</label>
+          <div className='input-group'>
+            <label className='label'>Password</label>
             <input
               type={showPassword ? "text" : "password"}
               placeholder='Enter your password'
@@ -105,8 +111,8 @@ const ClientSignup = () => {
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </button>
           </div>
-          <div className='modern-input-group'>
-            <label className='input-label'>Confirm Password</label>
+          <div className='input-group'>
+            <label className='label'>Confirm Password</label>
             <input
               type={showConfirmPassword ? "text" : "password"}
               placeholder='Confirm your password'
@@ -126,18 +132,18 @@ const ClientSignup = () => {
             </button>
           </div>
           {error && <div className='error-message'>{error}</div>}
-          <button type='submit' className='modern-btn modern-btn-primary'>
+          <button type='submit' className='button'>
             Create Account
           </button>
         </form>
 
-        <div className='modern-links'>
+        <div className='links'>
           <span>
             Already have an account? <Link to='/login'>Sign in</Link>
           </span>
         </div>
 
-        <div className='privacy-terms'>
+        <div className='footer'>
           <p>
             By creating an account, you agree to our{" "}
             <a href='/privacy-policy'>Privacy Policy</a> and{" "}

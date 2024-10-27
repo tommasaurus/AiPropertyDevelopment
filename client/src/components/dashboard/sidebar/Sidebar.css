@@ -37,12 +37,12 @@
 }
 
 .dashboard-sidebar .logo {
-  height: 25px;
+  height: 33px;
   width: auto;
   object-fit: contain;
   padding-left: 0.25rem;
   position: absolute;
-  left: 0.5rem;
+  left: 0.55rem;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -52,8 +52,8 @@
 }
 
 .dashboard-sidebar .tab-logo {
-  height: 32px;
-  width: 32px;
+  height: 30px;
+  width: 36px;
   object-fit: contain;
   opacity: 1;
   transition: opacity 0.2s ease;
@@ -85,12 +85,11 @@
 
 .dashboard-sidebar .pin-button.pinned {
   opacity: 1;
-  color: #2563eb;
+  color: #e17b50;
   transform: rotate(0deg);
 }
 
 .dashboard-sidebar .pin-button:hover {
-  background-color: #f1f5f9;
   color: #0f172a;
 }
 
@@ -121,7 +120,7 @@
 .dashboard-sidebar .nav-item {
   display: flex;
   align-items: center;
-  padding: 1rem 0.45rem;
+  padding: 0.75rem 0.45rem; /* Reduced padding */
   margin: 0 0.8rem;
   border-radius: 0.5rem;
   color: #2e3643;
@@ -139,8 +138,7 @@
 }
 
 .dashboard-sidebar .nav-item.active {
-  background-color: #eff6ff;
-  color: #2563eb;
+  color: #e17b50;
 }
 
 .dashboard-sidebar .nav-item-content {

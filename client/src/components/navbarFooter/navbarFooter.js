@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./navbarFooter.css";
-import dwellexLogo from "../../images/dwellexLogo.png";
+import logo from "../../images/logo.png";
 
 export const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -26,13 +26,10 @@ export const Navbar = () => {
 
     switch (section) {
       case "features":
-        scrollAmount = window.innerHeight * 0.1; // Slight scroll (10% of viewport height)
+        scrollAmount = window.innerHeight * 0.8;
         break;
       case "pricing":
-        scrollAmount = window.innerHeight * 0.5; // Medium scroll (40% of viewport height)
-        break;
-      case "contact":
-        scrollAmount = window.innerHeight * 1.3; // Large scroll (80% of viewport height)
+        scrollAmount = window.innerHeight * 1.8;
         break;
       default:
         return;
@@ -48,7 +45,7 @@ export const Navbar = () => {
     <nav className='navbar'>
       <div className='navbar-container'>
         <Link to='/' className='navbar-logo'>
-          <img src={dwellexLogo} alt='Dwellex Logo' />
+          <img src={logo} alt='Dwellex Logo' />
         </Link>
         {isCollapsed ? (
           <div className='mobile-menu'>
@@ -137,7 +134,7 @@ export const Footer = () => {
       <div className='footer-container'>
         <div className='footer-logo'>
           <Link to='/'>
-            <img src={dwellexLogo} alt='Company Logo' />
+            <img src={logo} alt='Company Logo' />
           </Link>
         </div>
         <div className='footer-links'>
@@ -201,25 +198,6 @@ export const Footer = () => {
       </div>
       <div className='footer-bottom'>
         <p>&copy; 2024 Dwellex. All rights reserved.</p>
-        <div className='social-links'>
-          <a
-            href='https://facebook.com'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Facebook
-          </a>
-          <a href='https://x.com' target='_blank' rel='noopener noreferrer'>
-            X
-          </a>
-          <a
-            href='https://linkedin.com'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            LinkedIn
-          </a>
-        </div>
       </div>
     </footer>
   );

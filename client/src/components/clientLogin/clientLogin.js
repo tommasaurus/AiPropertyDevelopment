@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginUser, loginWithGoogle } from "../../services/login";
 import "./clientLogin.css";
-import dwellexLogo from "../../images/dwellexLogo.png";
+import logo from "../../images/logo.png";
 
 const ClientLogin = () => {
   const [email, setEmail] = useState("");
@@ -26,15 +26,21 @@ const ClientLogin = () => {
     loginWithGoogle();
   };
 
+  const handleLogoClick = () => {
+    navigate("/");
+  };
+
   return (
-    <div className='modern-login-container'>
-      <div className='modern-login-card'>
-        <img src={dwellexLogo} alt='Dwellex Logo' className='modern-logo' />
-        <p className='logo-subtitle'>
+    <div className='container'>
+      <div className='card'>
+        <button onClick={handleLogoClick} className='logo-button'>
+          <img src={logo} alt='Dwellex Logo' className='logo' />
+        </button>
+        <p className='subtitle'>
           <strong>Welcome Back!</strong>
         </p>
 
-        <button onClick={handleGoogleLogin} className='btn-google-login'>
+        <button onClick={handleGoogleLogin} className='google-button'>
           <svg
             className='google-icon'
             width='18'
@@ -61,13 +67,13 @@ const ClientLogin = () => {
           Continue with Google
         </button>
 
-        <div className='separator'>
+        <div className='divider'>
           <span>or</span>
         </div>
 
-        <form onSubmit={handleLogin} className='modern-login-form'>
-          <div className='modern-input-group'>
-            <label className='input-label'>Email</label>
+        <form onSubmit={handleLogin} className='form'>
+          <div className='input-group'>
+            <label className='label'>Email</label>
             <input
               type='email'
               placeholder='Enter your email'
@@ -76,8 +82,8 @@ const ClientLogin = () => {
               required
             />
           </div>
-          <div className='modern-input-group'>
-            <label className='input-label'>Password</label>
+          <div className='input-group'>
+            <label className='label'>Password</label>
             <input
               type={showPassword ? "text" : "password"}
               placeholder='Enter your password'
@@ -94,19 +100,19 @@ const ClientLogin = () => {
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </button>
           </div>
-          <button type='submit' className='modern-btn modern-btn-primary'>
+          <button type='submit' className='button'>
             Login
           </button>
         </form>
 
-        <div className='modern-links'>
+        <div className='links'>
           <span>
-            Don't have an account? <Link to='/signup'> Sign up</Link>
+            Don't have an account? <Link to='/signup'>Sign up</Link>
           </span>
           <Link to='/forgot-password'>Forgot your password?</Link>
         </div>
 
-        <div className='privacy-terms'>
+        <div className='footer'>
           <p>
             By logging in, you agree to our{" "}
             <a href='/privacy-policy'>Privacy Policy</a> and{" "}
