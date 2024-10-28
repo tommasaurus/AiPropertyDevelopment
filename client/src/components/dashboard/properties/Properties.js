@@ -1,14 +1,15 @@
+// src/components/properties/Properties.js
+
 import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../sidebar/Sidebar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
+import AllDataTables from "../allDataTables/AllDataTables"; // Import the new component
 import "./Properties.css";
 
 const Properties = () => {
-  // State variables for properties, leases, and invoices
+  // State variables for properties (Leases and Invoices are now handled by AllDataTables)
   const [properties, setProperties] = useState([]);
-  const [leases, setLeases] = useState([]);
-  const [invoices, setInvoices] = useState([]); // New state for invoices
 
   // State variables for UI and form handling
   const [greeting, setGreeting] = useState("");
@@ -67,32 +68,8 @@ const Properties = () => {
     }
   };
 
-  // Fetch leases from API
-  const fetchLeases = async () => {
-    try {
-      const response = await api.get("/leases");
-      setLeases(response.data);
-    } catch (error) {
-      console.error("Error fetching leases:", error);
-      setErrorMessage("Failed to fetch leases.");
-    }
-  };
-
-  // Fetch invoices from API
-  const fetchInvoices = async () => {
-    try {
-      const response = await api.get("/invoices"); // Ensure this endpoint exists in your backend
-      setInvoices(response.data);
-    } catch (error) {
-      console.error("Error fetching invoices:", error);
-      setErrorMessage("Failed to fetch invoices.");
-    }
-  };
-
   useEffect(() => {
     fetchProperties();
-    fetchLeases();
-    fetchInvoices(); // Fetch invoices on component mount
   }, []);
 
   // Update greeting based on time of day
@@ -173,19 +150,9 @@ const Properties = () => {
       setIsUploaded(true);
       setFile(null);
 
-      // Refetch the relevant data based on document type
-      switch (documentType.toLowerCase()) {
-        case "lease":
-          await fetchLeases();
-          break;
-        case "invoice":
-          await fetchInvoices();
-          break;
-        // Add cases for other document types if needed
-        default:
-          break;
-      }
-
+      // Optionally, you can trigger a refetch of AllDataTables data here if needed
+      // For example, emit an event or use a state management library
+      // This implementation assumes AllDataTables fetches data independently
     } catch (error) {
       console.error(`Error uploading ${documentType} document:`, error);
       setErrorMessage(
@@ -354,101 +321,6 @@ const Properties = () => {
         {isUploaded && <p className="success-message">Document uploaded successfully!</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        {/* Leases List Section */}
-        <div className="leases-list">
-          <h2 className="leases-title">Leases</h2>
-          {leases.length > 0 ? (
-            <ul className="leases-items">
-              {leases.map((lease) => (
-                <li key={lease.id} className="lease-item">
-                  <h3>Lease ID: {lease.id}</h3>
-                  <p>
-                    <strong>Property Address:</strong>{" "}
-                    {
-                      properties.find((prop) => prop.id === lease.property_id)?.address ||
-                      "Unknown Property"
-                    }
-                  </p>
-                  <p><strong>Lease Type:</strong> {lease.lease_type}</p>
-                  <p>
-                    <strong>Rent Amount Total:</strong> {formatCurrency(lease.rent_amount_total)}
-                  </p>
-                  <p>
-                    <strong>Rent Amount Monthly:</strong> {formatCurrency(lease.rent_amount_monthly)}
-                  </p>
-                  <p><strong>Security Deposit Amount:</strong> {lease.security_deposit_amount || "N/A"}</p>
-                  <p><strong>Security Deposit Held By:</strong> {lease.security_deposit_held_by || "N/A"}</p>
-                  <p>
-                    <strong>Start Date:</strong> {formatDate(lease.start_date)}
-                  </p>
-                  <p>
-                    <strong>End Date:</strong> {formatDate(lease.end_date)}
-                  </p>
-                  <p><strong>Payment Frequency:</strong> {lease.payment_frequency || "N/A"}</p>
-                  <p><strong>Tenant Info:</strong> {formatJSON(lease.tenant_info)}</p>
-                  <p><strong>Special Lease Terms:</strong> {formatJSON(lease.special_lease_terms)}</p>
-                  <p><strong>Is Active:</strong> {lease.is_active ? 'Yes' : 'No'}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No leases available.</p>
-          )}
-        </div>
-
-        {/* Invoices List Section */}
-        <div className="invoices-list">
-          <h2 className="invoices-title">Invoices</h2>
-          {invoices.length > 0 ? (
-            <ul className="invoices-items">
-              {invoices.map((invoice) => (
-                <li key={invoice.id} className="invoice-item">
-                  <h3>Invoice ID: {invoice.id}</h3>
-                  <p>
-                    <strong>Property Address:</strong>{" "}
-                    {
-                      properties.find((prop) => prop.id === invoice.property_id)?.address ||
-                      "Unknown Property"
-                    }
-                  </p>
-                  <p><strong>Invoice Number:</strong> {invoice.invoice_number || "N/A"}</p>
-                  <p><strong>Amount:</strong> {formatCurrency(invoice.amount)}</p>
-                  <p><strong>Paid Amount:</strong> {formatCurrency(invoice.paid_amount)}</p>
-                  <p><strong>Remaining Balance:</strong> {formatCurrency(invoice.remaining_balance)}</p>
-                  <p>
-                    <strong>Invoice Date:</strong> {formatDate(invoice.invoice_date)}
-                  </p>
-                  <p>
-                    <strong>Due Date:</strong> {formatDate(invoice.due_date)}
-                  </p>
-                  <p><strong>Status:</strong> {invoice.status || "N/A"}</p>
-                  <p><strong>Description:</strong> {invoice.description || "N/A"}</p>
-                  <p><strong>Vendor Info:</strong> {formatJSON(invoice.vendor_info)}</p>
-                  <div>
-                    <strong>Line Items:</strong>
-                    {invoice.line_items && invoice.line_items.length > 0 ? (
-                      <ul className="line-items">
-                        {invoice.line_items.map((item, index) => (
-                          <li key={index} className="line-item">
-                            <p><strong>Description:</strong> {item.description}</p>
-                            <p><strong>Quantity:</strong> {item.quantity}</p>
-                            <p><strong>Unit Price:</strong> {formatCurrency(item.unit_price)}</p>
-                            <p><strong>Total Price:</strong> {formatCurrency(item.total_price)}</p>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>No line items available.</p>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No invoices available.</p>
-          )}
-        </div>
-
         {/* Properties List Section */}
         <div className="properties-list">
           <h2 className="properties-title">Properties</h2>
@@ -536,6 +408,9 @@ const Properties = () => {
             </div>
           </div>
         )}
+
+        {/* Insert AllDataTables component here */}
+        <AllDataTables />
       </main>
     </div>
   );
