@@ -1,3 +1,5 @@
+# app/core/security.py
+
 from fastapi import Request, Depends, HTTPException, status
 from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,20 +11,21 @@ from app.core.auth.models import TokenData
 from typing import Optional
 
 async def get_current_user(
-    request: Request, 
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
     )
 
     try:
-        # Retrieve the JWT token from the cookies
-        token = request.cookies.get("jwt_token")
-        if not token:
+        # Retrieve the JWT token from the Authorization header
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
             raise credentials_exception
+
+        token = auth_header.split(" ")[1]
 
         # Decode the JWT token to get the email
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
@@ -41,3 +44,13 @@ async def get_current_user(
         raise credentials_exception
 
     return user
+
+async def get_admin_user(
+    current_user: User = Depends(get_current_user)
+) -> User:
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Insufficient permissions",
+        )
+    return current_user

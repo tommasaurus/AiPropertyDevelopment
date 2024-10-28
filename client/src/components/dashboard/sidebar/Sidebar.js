@@ -23,11 +23,16 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
+      // Call the logout API endpoint to clear the HTTP-only refresh token cookie
       await api.post("/auth/logout");
 
-      // Optionally clear any localStorage/sessionStorage if used for other data
-      localStorage.removeItem("userData");
+      // Clear any localStorage or sessionStorage data
+      localStorage.removeItem("access_token"); // Clear access token if stored
+      localStorage.removeItem("userData"); // Clear any user-related data
       sessionStorage.clear();
+
+      // Clear Axios default Authorization header
+      delete api.defaults.headers.common["Authorization"];
 
       // Redirect to login page
       navigate("/login");
@@ -127,9 +132,9 @@ const Sidebar = () => {
         onClick={() => handleNavigation(item.path, item.action)}
         title={!isExpanded ? item.label : ""}
       >
-        <div className='nav-item-content'>
+        <div className="nav-item-content">
           <Icon size={24} />
-          <span className='nav-label'>{item.label}</span>
+          <span className="nav-label">{item.label}</span>
         </div>
       </button>
     );
@@ -141,10 +146,10 @@ const Sidebar = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className='sidebar-header'>
-        <div className='logo-container'>
-          <img src={tabLogo} className='tab-logo' alt='Tab Logo' />
-          <img src={logo} className='logo' alt='Dwellex Logo' />
+      <div className="sidebar-header">
+        <div className="logo-container">
+          <img src={tabLogo} className="tab-logo" alt="Tab Logo" />
+          <img src={logo} className="logo" alt="Dwellex Logo" />
         </div>
         <button
           className={`pin-button ${isPinned ? "pinned" : ""}`}
@@ -154,9 +159,9 @@ const Sidebar = () => {
         </button>
       </div>
 
-      <nav className='sidebar-nav'>
-        <div className='nav-section'>{navItems.map(renderNavItem)}</div>
-        <div className='nav-section bottom'>
+      <nav className="sidebar-nav">
+        <div className="nav-section">{navItems.map(renderNavItem)}</div>
+        <div className="nav-section bottom">
           {bottomNavItems.map(renderNavItem)}
         </div>
       </nav>

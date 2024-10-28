@@ -12,11 +12,18 @@ class UserLogin(BaseModel):
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+    name: Optional[str] = None
+    is_admin: Optional[bool] = False  # Only settable by admin users
 
-# Token response model
+# Token response model (for login and OAuth)
 class Token(BaseModel):
     access_token: str
     refresh_token: str
+    token_type: str
+
+# Access token response model (for /refresh endpoint)
+class AccessToken(BaseModel):
+    access_token: str
     token_type: str
 
 # Token data model (for token verification)

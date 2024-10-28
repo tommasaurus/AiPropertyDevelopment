@@ -26,10 +26,10 @@ class IncomeInDBBase(IncomeBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Income(IncomeInDBBase):
     property: PropertySummary
 
     class Config:
-        orm_mode = True
+        from_attributes = True

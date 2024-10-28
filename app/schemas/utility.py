@@ -25,9 +25,9 @@ class UtilityInDBBase(UtilityBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Utility(UtilityInDBBase):
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -4,7 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException, status
 from app.models.user import User
-from .jwt import create_access_token
+from .jwt import create_access_token, create_refresh_token
+from app.core.auth.utils import get_password_hash
+from jose import JWTError
 
 async def authenticate_oauth_user(db: AsyncSession, token: dict):
     # Extract user info
@@ -51,7 +53,12 @@ async def authenticate_oauth_user(db: AsyncSession, token: dict):
         await db.commit()
         await db.refresh(new_user)
 
-    # Generate a JWT access token
-    jwt_token = create_access_token(data={"sub": email})
+    # Generate both access and refresh tokens
+    access_token = create_access_token(data={"sub": email})
+    refresh_token = create_refresh_token(data={"sub": email})
 
-    return jwt_token
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer"
+    }

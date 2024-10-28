@@ -2,12 +2,7 @@
 
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
 from app.core.config import settings
-from .models import TokenData  # Assuming TokenData is defined in models.py
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 # Function to create a JWT access token
 def create_access_token(data: dict):
@@ -31,10 +26,10 @@ def decode_access_token(token: str):
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+            raise JWTError("Invalid token: subject missing")
         return email
-    except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+    except JWTError as e:
+        raise JWTError(f"Token validation error: {str(e)}")
 
 # Function to decode and verify a refresh token
 def decode_refresh_token(refresh_token: str):
@@ -42,7 +37,7 @@ def decode_refresh_token(refresh_token: str):
         payload = jwt.decode(refresh_token, settings.REFRESH_SECRET_KEY, algorithms=[settings.ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+            raise JWTError("Invalid refresh token: subject missing")
         return email
-    except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+    except JWTError as e:
+        raise JWTError(f"Refresh token validation error: {str(e)}")

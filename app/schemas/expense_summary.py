@@ -11,4 +11,4 @@ class ExpenseSummary(BaseModel):
     date_incurred: date
 
     class Config:
-        orm_mode = True
+        from_attributes = True

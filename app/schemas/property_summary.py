@@ -11,4 +11,4 @@ class PropertySummary(BaseModel):
     is_commercial: Optional[bool] = False
 
     class Config:
-        orm_mode = True
+        from_attributes = True

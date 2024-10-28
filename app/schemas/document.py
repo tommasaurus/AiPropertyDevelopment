@@ -38,7 +38,7 @@ class DocumentInDBBase(DocumentBase):
     upload_date: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Document(DocumentInDBBase):
     property: Optional[PropertySummary] = None
@@ -49,4 +49,4 @@ class Document(DocumentInDBBase):
     contract: Optional[ContractSummary] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

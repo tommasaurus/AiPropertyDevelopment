@@ -20,7 +20,7 @@ class InvoiceBase(BaseModel):
     line_items: Optional[List[InvoiceItemCreate]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         extra = Extra.allow
 
 class InvoiceCreate(InvoiceBase):
@@ -39,14 +39,14 @@ class InvoiceUpdate(BaseModel):
     line_items: Optional[List[InvoiceItemCreate]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         extra = Extra.allow
 
 class InvoiceInDBBase(InvoiceBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Invoice(InvoiceInDBBase):
     line_items: Optional[List[InvoiceItem]] = []

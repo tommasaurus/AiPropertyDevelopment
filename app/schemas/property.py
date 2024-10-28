@@ -26,7 +26,7 @@ class PropertyBase(BaseModel):
     property_type: Optional[str] = None
 
     class Config:
-        orm_mode = True  # Include orm_mode to ensure compatibility with ORM models
+        from_attributes = True  
 
 class PropertyCreate(PropertyBase):
     pass
@@ -39,7 +39,7 @@ class PropertyInDBBase(PropertyBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Property(PropertyInDBBase):
     owner: UserSummary
@@ -52,4 +52,4 @@ class Property(PropertyInDBBase):
     documents: Optional[List[DocumentSummary]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True

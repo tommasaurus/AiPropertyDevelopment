@@ -1,6 +1,6 @@
 # app/api/endpoints/contract.py
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from app import schemas, crud
@@ -16,7 +16,11 @@ async def create_contract(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return await crud.crud_contract.create_contract(db=db, contract_in=contract_in)
+    try:
+        contract = await crud.crud_contract.create_contract(db=db, contract_in=contract_in, owner_id=current_user.id)
+        return contract
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/", response_model=List[schemas.Contract])
 async def read_contracts(
@@ -25,7 +29,7 @@ async def read_contracts(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    contracts = await crud.crud_contract.get_contracts(db=db, skip=skip, limit=limit)
+    contracts = await crud.crud_contract.get_contracts(db=db, owner_id=current_user.id, skip=skip, limit=limit)
     return contracts
 
 @router.get("/{contract_id}", response_model=schemas.Contract)
@@ -34,7 +38,7 @@ async def read_contract(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    contract = await crud.crud_contract.get_contract(db=db, contract_id=contract_id)
+    contract = await crud.crud_contract.get_contract(db=db, contract_id=contract_id, owner_id=current_user.id)
     if contract is None:
         raise HTTPException(status_code=404, detail="Contract not found")
     return contract
@@ -46,10 +50,14 @@ async def update_contract(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    contract = await crud.crud_contract.get_contract(db=db, contract_id=contract_id)
+    contract = await crud.crud_contract.get_contract(db=db, contract_id=contract_id, owner_id=current_user.id)
     if contract is None:
         raise HTTPException(status_code=404, detail="Contract not found")
-    return await crud.crud_contract.update_contract(db=db, contract=contract, contract_in=contract_in)
+    try:
+        updated_contract = await crud.crud_contract.update_contract(db=db, db_contract=contract, contract_in=contract_in)
+        return updated_contract
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.delete("/{contract_id}", response_model=schemas.Contract)
 async def delete_contract(
@@ -57,7 +65,7 @@ async def delete_contract(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    contract = await crud.crud_contract.delete_contract(db=db, contract_id=contract_id)
+    contract = await crud.crud_contract.delete_contract(db=db, contract_id=contract_id, owner_id=current_user.id)
     if contract is None:
         raise HTTPException(status_code=404, detail="Contract not found")
     return contract

@@ -10,7 +10,7 @@ class InvoiceItemBase(BaseModel):
     total_price: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class InvoiceItemCreate(InvoiceItemBase):
     pass

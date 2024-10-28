@@ -19,7 +19,7 @@ class LeaseBase(BaseModel):
     is_active: Optional[bool] = True
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         extra = Extra.allow
 
 class LeaseCreate(LeaseBase):
@@ -39,15 +39,15 @@ class LeaseUpdate(BaseModel):
     is_active: Optional[bool] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         extra = Extra.allow
 
 class LeaseInDBBase(LeaseBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Lease(LeaseInDBBase):
     class Config:
-        orm_mode = True
+        from_attributes = True

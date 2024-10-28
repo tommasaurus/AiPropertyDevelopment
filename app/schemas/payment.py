@@ -29,10 +29,10 @@ class PaymentInDBBase(PaymentBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Payment(PaymentInDBBase):
     lease: LeaseSummary
 
     class Config:
-        orm_mode = True
+        from_attributes = True

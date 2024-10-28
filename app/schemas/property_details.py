@@ -39,11 +39,11 @@ class PropertyDetailsInDBBase(PropertyDetailsBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PropertyDetails(PropertyDetailsInDBBase):
     property: PropertySummary
     utilities: Optional[List[UtilitySummary]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True

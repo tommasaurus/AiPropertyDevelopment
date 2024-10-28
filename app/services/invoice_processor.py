@@ -90,7 +90,8 @@ async def process_invoice_upload(
     )
     document = await crud.crud_document.create_document(
         db=db,
-        document_in=document_in
+        document_in=document_in,
+        owner_id=owner_id
     )
 
     # Optionally create an expense entry
@@ -105,7 +106,8 @@ async def process_invoice_upload(
     )
     expense = await crud.crud_expense.create_expense(
         db=db,
-        expense_in=expense_in
+        expense_in=expense_in,
+        owner_id=owner_id
     )
 
     # Link the invoice to the document and expense

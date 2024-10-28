@@ -1,35 +1,51 @@
-// RequireAuth.js
+// src/components/RequireAuth.js
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import api from '../services/api'; // Use the updated api.js that handles cookies
+import { Navigate, useLocation } from 'react-router-dom';
+import api from '../services/api';
 
 const RequireAuth = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const location = useLocation();
 
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        await api.get('/auth/check'); // You might need to implement this route to check user status
-        setIsAuthenticated(true);
-      } catch (error) {
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
+    useEffect(() => {
+        let isMounted = true; // To prevent state updates if component is unmounted
+
+        async function checkAuth() {
+            try {
+                // Make a request to verify authentication
+                await api.get('/auth/check');
+                if (isMounted) {
+                    setIsAuthenticated(true);
+                }
+            } catch (error) {
+                if (isMounted) {
+                    setIsAuthenticated(false);
+                }
+                // The api.js interceptor will handle token refresh and potential redirection
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        }
+
+        checkAuth();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [location.pathname]);
+
+    if (loading) {
+        return <div>Loading...</div>; // Show loading state
     }
-    checkAuth();
-  }, []);
 
-  if (loading) {
-    return <div>Loading...</div>; // Show loading state
-  }
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace state={{ from: location }} />;
+    }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return children; // If authenticated, render the child component (Dashboard)
+    return children; // If authenticated, render the child component
 };
 
 export default RequireAuth;

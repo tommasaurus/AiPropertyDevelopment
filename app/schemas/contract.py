@@ -31,11 +31,11 @@ class ContractInDBBase(ContractBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Contract(ContractInDBBase):
     property: PropertySummary
     vendor: VendorSummary
 
     class Config:
-        orm_mode = True
+        from_attributes = True

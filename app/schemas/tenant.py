@@ -26,10 +26,10 @@ class TenantInDBBase(TenantBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Tenant(TenantInDBBase):
     leases: Optional[List[LeaseSummary]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True

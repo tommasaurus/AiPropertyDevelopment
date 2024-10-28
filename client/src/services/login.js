@@ -1,10 +1,15 @@
-// login.js
+// src/services/login.js
 import api from './api';
 
 // Function for logging in with email and password
 export async function loginUser(email, password) {
     try {
-        const response = await api.post('/auth/login', { email, password });        
+        const response = await api.post('/auth/login', { email, password });
+        const { access_token } = response.data;
+        // Store access token in localStorage
+        localStorage.setItem('access_token', access_token);
+        // Set default Authorization header
+        api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
         console.log('User logged in successfully');
         return response.data;
     } catch (error) {
@@ -14,29 +19,24 @@ export async function loginUser(email, password) {
 }
 
 // Function for OAuth login with Google
-export async function loginWithGoogle() {
-    try {
-        // Redirect to OAuth endpoint for Google login
-        window.location.href = 'http://localhost:8000/auth/login/google';
-    } catch (error) {
-        console.error('OAuth login error:', error);
-        throw error;
-    }
+export function loginWithGoogle() {
+    // Redirect to OAuth endpoint for Google login
+    window.location.href = 'http://localhost:8000/auth/login/google';
 }
 
 // Function to handle OAuth callback and store tokens
 export async function handleOAuthCallback() {
     try {
-        // Assuming the backend redirects with tokens in query params
-        const urlParams = new URLSearchParams(window.location.search);
-        const accessToken = urlParams.get('access_token');
-        const refreshToken = urlParams.get('refresh_token');
-
-        if (accessToken && refreshToken) {            
-            console.log('OAuth login successful');
-        } else {
-            throw new Error('OAuth tokens not found in the response');
-        }
+        // Since the access token isn't included in the redirect,
+        // call the refresh endpoint to get a new access token
+        const response = await api.post('/auth/refresh');
+        const { access_token } = response.data;
+        // Store access token in localStorage
+        localStorage.setItem('access_token', access_token);
+        // Set default Authorization header
+        api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        console.log('OAuth login successful');
+        return response.data;
     } catch (error) {
         console.error('OAuth callback handling error:', error);
         throw error;
