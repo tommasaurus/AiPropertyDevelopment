@@ -8,7 +8,7 @@ class InvoiceSummary(BaseModel):
     id: int
     invoice_number: Optional[str] = None
     amount: float
-    invoice_date: date
+    invoice_date: Optional[date] = None
     status: str
 
     class Config:

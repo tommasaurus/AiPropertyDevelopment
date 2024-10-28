@@ -49,4 +49,7 @@ class InvoiceInDBBase(InvoiceBase):
         from_attributes = True
 
 class Invoice(InvoiceInDBBase):
-    line_items: Optional[List[InvoiceItem]] = []
+    line_items: Optional[List[InvoiceItem]] = []  
+
+    class Config:
+        from_attributes = True
