@@ -10,13 +10,11 @@ const AllDataTables = () => {
   const [documents, setDocuments] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
-  const [invoiceItems, setInvoiceItems] = useState([]);
-  const [invoices, setInvoices] = useState([]);
-  const [leaseTenants, setLeaseTenants] = useState([]);
+  const [invoices, setInvoices] = useState([]);  
   const [leases, setLeases] = useState([]);
   const [payments, setPayments] = useState([]);
   const [properties, setProperties] = useState([]);
-  const [propertyDetails, setPropertyDetails] = useState([]);
+  // const [propertyDetails, setPropertyDetails] = useState([]);
   const [tenants, setTenants] = useState([]);
   const [utilities, setUtilities] = useState([]);
   const [vendors, setVendors] = useState([]);
@@ -65,16 +63,6 @@ const AllDataTables = () => {
     }
   };
 
-  const fetchInvoiceItems = async () => {
-    try {
-      const response = await api.get("/invoice_items");
-      setInvoiceItems(response.data);
-    } catch (error) {
-      console.error("Error fetching invoice items:", error);
-      setErrorMessage("Failed to fetch invoice items.");
-    }
-  };
-
   const fetchInvoices = async () => {
     try {
       const response = await api.get("/invoices");
@@ -82,16 +70,6 @@ const AllDataTables = () => {
     } catch (error) {
       console.error("Error fetching invoices:", error);
       setErrorMessage("Failed to fetch invoices.");
-    }
-  };
-
-  const fetchLeaseTenants = async () => {
-    try {
-      const response = await api.get("/lease_tenants");
-      setLeaseTenants(response.data);
-    } catch (error) {
-      console.error("Error fetching lease tenants:", error);
-      setErrorMessage("Failed to fetch lease tenants.");
     }
   };
 
@@ -125,15 +103,15 @@ const AllDataTables = () => {
     }
   };
 
-  const fetchPropertyDetails = async () => {
-    try {
-      const response = await api.get("/property_details");
-      setPropertyDetails(response.data);
-    } catch (error) {
-      console.error("Error fetching property details:", error);
-      setErrorMessage("Failed to fetch property details.");
-    }
-  };
+  // const fetchPropertyDetails = async () => {
+  //   try {
+  //     const response = await api.get("/property_details");
+  //     setPropertyDetails(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching property details:", error);
+  //     setErrorMessage("Failed to fetch property details.");
+  //   }
+  // };
 
   const fetchTenants = async () => {
     try {
@@ -171,13 +149,12 @@ const AllDataTables = () => {
     fetchDocuments();
     fetchExpenses();
     fetchIncomes();
-    fetchInvoiceItems();
+    // fetchInvoiceItems();
     fetchInvoices();
-    fetchLeaseTenants();
     fetchLeases();
     fetchPayments();
     fetchProperties();
-    fetchPropertyDetails();
+    // fetchPropertyDetails();
     fetchTenants();
     fetchUtilities();
     fetchVendors();
@@ -374,7 +351,7 @@ const AllDataTables = () => {
       </section>
 
       {/* Invoice Items Table */}
-      <section>
+      {/* <section>
         <h2>Invoice Items</h2>
         {invoiceItems.length > 0 ? (
           <table>
@@ -404,7 +381,7 @@ const AllDataTables = () => {
         ) : (
           <p>No invoice items available.</p>
         )}
-      </section>
+      </section> */}
 
       {/* Invoices Table */}
       <section>
@@ -446,37 +423,6 @@ const AllDataTables = () => {
           </table>
         ) : (
           <p>No invoices available.</p>
-        )}
-      </section>
-
-      {/* Lease Tenants Table */}
-      <section>
-        <h2>Lease Tenants</h2>
-        {leaseTenants.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Lease ID</th>
-                <th>Tenant ID</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leaseTenants.map((lt) => (
-                <tr key={lt.id}>
-                  <td>{lt.id}</td>
-                  <td>{lt.lease_id}</td>
-                  <td>{lt.tenant_id || "N/A"}</td>
-                  <td>{formatDate(lt.start_date)}</td>
-                  <td>{formatDate(lt.end_date)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No lease tenants available.</p>
         )}
       </section>
 
@@ -561,7 +507,7 @@ const AllDataTables = () => {
       </section>
 
       {/* Property Details Table */}
-      <section>
+      {/* <section>
         <h2>Property Details</h2>
         {propertyDetails.length > 0 ? (
           <table>
@@ -613,7 +559,7 @@ const AllDataTables = () => {
         ) : (
           <p>No property details available.</p>
         )}
-      </section>
+      </section> */}
 
       {/* Tenants Table */}
       <section>

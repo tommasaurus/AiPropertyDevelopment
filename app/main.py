@@ -58,7 +58,7 @@ app.include_router(income.router, prefix="/incomes", tags=["incomes"])
 app.include_router(invoice.router, prefix="/invoices", tags=["invoices"])
 app.include_router(vendor.router, prefix="/vendors", tags=["vendors"])
 app.include_router(contract.router, prefix="/contracts", tags=["contracts"])
-# app.include_router(document.router, prefix="/documents", tags=["documents"])
+app.include_router(document.router, prefix="/documents", tags=["documents"])
 app.include_router(property_details.router, prefix="/property-details", tags=["property_details"])
 app.include_router(utility.router, prefix="/utilities", tags=["utilities"])
 

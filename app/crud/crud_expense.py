@@ -2,6 +2,7 @@
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import IntegrityError
 from typing import List, Optional
 from app.models.expense import Expense
@@ -12,6 +13,10 @@ class CRUDExpense:
     async def get_expense(self, db: AsyncSession, expense_id: int, owner_id: int) -> Optional[Expense]:
         result = await db.execute(
             select(Expense)
+            .options(
+                selectinload(Expense.property),
+                selectinload(Expense.vendor)
+            )
             .join(Property)
             .filter(Expense.id == expense_id)
             .filter(Property.owner_id == owner_id)
@@ -21,6 +26,10 @@ class CRUDExpense:
     async def get_expenses(self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100) -> List[Expense]:
         result = await db.execute(
             select(Expense)
+            .options(
+                selectinload(Expense.property),
+                selectinload(Expense.vendor)
+            )
             .join(Property)
             .filter(Property.owner_id == owner_id)
             .offset(skip)
@@ -31,7 +40,8 @@ class CRUDExpense:
     async def create_expense(self, db: AsyncSession, expense_in: ExpenseCreate, owner_id: int) -> Expense:
         # Verify that the property exists and belongs to the owner
         result = await db.execute(
-            select(Property).filter(Property.id == expense_in.property_id, Property.owner_id == owner_id)
+            select(Property)
+            .filter(Property.id == expense_in.property_id, Property.owner_id == owner_id)
         )
         property = result.scalars().first()
         if not property:
@@ -41,7 +51,7 @@ class CRUDExpense:
         db.add(db_expense)
         try:
             await db.commit()
-            await db.refresh(db_expense)
+            await db.refresh(db_expense, attribute_names=["property", "vendor"])  # Eagerly load relationships
         except IntegrityError as e:
             await db.rollback()
             raise ValueError("An error occurred while creating the expense: " + str(e))
@@ -53,7 +63,7 @@ class CRUDExpense:
             setattr(db_expense, key, value)
         try:
             await db.commit()
-            await db.refresh(db_expense)
+            await db.refresh(db_expense, attribute_names=["property", "vendor"])  # Eagerly load relationships
         except IntegrityError as e:
             await db.rollback()
             raise ValueError("An error occurred while updating the expense: " + str(e))
