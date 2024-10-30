@@ -11,9 +11,11 @@ class Lease(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)  # Auto-incrementing primary key
     property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)
+    tenant_id = Column(Integer, ForeignKey('tenants.id'), nullable=True)
     
     # Main fields
     lease_type = Column(String(50), nullable=False)
+    description = Column(String(200), nullable=True)
     rent_amount_total = Column(Float, nullable=True)
     rent_amount_monthly = Column(Float, nullable=True)
     security_deposit_amount = Column(String(50), nullable=True)
@@ -27,6 +29,6 @@ class Lease(Base):
 
     # Relationships
     property = relationship('Property', back_populates='leases')
-    tenants = relationship('Tenant', secondary=lease_tenants, back_populates='leases')  # Use direct reference
+    tenants = relationship('Tenant', back_populates='leases')  # Use direct reference
     payments = relationship('Payment', back_populates='lease')
     documents = relationship('Document', back_populates='lease')

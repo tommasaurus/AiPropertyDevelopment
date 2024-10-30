@@ -88,6 +88,29 @@ def parse_json(raw_json: str) -> dict:
     parsed_data = normalize_keys(extracted_data)
     return parsed_data
 
+def map_tenant_data(tenant_info: list) -> list:
+    """
+    Maps parsed tenant data to the Tenant model fields for a single tenant.
+
+    Args:
+        tenant_info (Dict[str, Any]): Tenant information dictionary parsed from JSON.
+
+    Returns:
+        Dict[str, Any]: Mapped tenant data ready for Tenant creation.
+    """
+               
+    tenant_data = {
+        "first_name": tenant_info.get("first_name", "Not Found").split()[0] if tenant_info.get("first_name") else "Not Found",
+        "last_name": tenant_info.get("last_name", "Not Found").split()[-1] if tenant_info.get("last_name") else "Not Found",
+        "email": tenant_info.get("email", None) if tenant_info.get("email") != "Not Found" else None,
+        "phone_number": tenant_info.get("phone_number", None),
+        "date_of_birth": parse_date(tenant_info.get("date_of_birth", None)),
+        "landlord": tenant_info.get("landlord", None),
+        "address": tenant_info.get("address", None)
+    }        
+
+    return tenant_data
+
 def map_lease_data(parsed_data: dict) -> dict:
     """
     Maps the parsed data to the Lease model fields.
@@ -101,6 +124,7 @@ def map_lease_data(parsed_data: dict) -> dict:
 
     lease_data = {
         "lease_type": parsed_data.get("lease_type", "Not Found"),
+        "description": parsed_data.get("description", "Not Found"),
         "rent_amount_total": clean_currency(get_nested_value(parsed_data, ["rent_amount", "total"], "0")),
         "rent_amount_monthly": clean_currency(get_nested_value(parsed_data, ["rent_amount", "monthly_installment"], "0")),
         "security_deposit_amount": get_nested_value(parsed_data, ["security_deposit", "amount"], "Not Found"),
@@ -108,7 +132,7 @@ def map_lease_data(parsed_data: dict) -> dict:
         "start_date": parse_date(parsed_data.get("start_date", "1900-01-01")),
         "end_date": parse_date(parsed_data.get("end_date", "1900-01-01")),
         "payment_frequency": parsed_data.get("payment_frequency", "Monthly"),
-        "tenant_info": parsed_data.get("tenant_information", {}),
+        "tenant_info": map_tenant_data(parsed_data.get("tenant_information", {})),
         "special_lease_terms": parsed_data.get("special_lease_terms", {}),
         "is_active": True  # Default value; adjust if necessary
     }

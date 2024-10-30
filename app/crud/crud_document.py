@@ -11,7 +11,7 @@ from app.models.property import Property
 from app.schemas.document import DocumentCreate, DocumentUpdate
 
 class CRUDDocument:
-    async def get_document(self, db: AsyncSession, document_id: int, user_id: int) -> Optional[Document]:
+    async def get_document(self, db: AsyncSession, document_id: int, owner_id: int) -> Optional[Document]:
         """
         Retrieve a single document by its ID, ensuring it belongs to the specified user.
         Eagerly loads related relationships to prevent lazy loading during serialization.
@@ -27,11 +27,11 @@ class CRUDDocument:
             )
             .join(Property)
             .filter(Document.id == document_id)
-            .filter(Property.owner_id == user_id)
+            .filter(Property.owner_id == owner_id)
         )
         return result.scalars().first()
 
-    async def get_documents(self, db: AsyncSession, user_id: int, skip: int = 0, limit: int = 100) -> List[Document]:
+    async def get_documents(self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100) -> List[Document]:
         """
         Retrieve a list of documents belonging to the specified user.
         Eagerly loads related relationships to prevent lazy loading during serialization.
@@ -46,13 +46,13 @@ class CRUDDocument:
                 selectinload(Document.contract)
             )
             .join(Property)
-            .filter(Property.owner_id == user_id)
+            .filter(Property.owner_id == owner_id)
             .offset(skip)
             .limit(limit)
         )
         return result.scalars().all()
 
-    async def create_document(self, db: AsyncSession, document_in: DocumentCreate, user_id: int) -> Document:
+    async def create_document(self, db: AsyncSession, document_in: DocumentCreate, owner_id: int) -> Document:
         """
         Create a new document after verifying ownership of the associated property.
         Eagerly loads related relationships after creation.
@@ -61,7 +61,7 @@ class CRUDDocument:
         if document_in.property_id:
             result = await db.execute(
                 select(Property)
-                .filter(Property.id == document_in.property_id, Property.owner_id == user_id)
+                .filter(Property.id == document_in.property_id, Property.owner_id == owner_id)
             )
             property = result.scalars().first()
             if not property:
@@ -103,11 +103,11 @@ class CRUDDocument:
             raise ValueError("An error occurred while updating the document: " + str(e))
         return db_document
 
-    async def delete_document(self, db: AsyncSession, document_id: int, user_id: int) -> Optional[Document]:
+    async def delete_document(self, db: AsyncSession, document_id: int, owner_id: int) -> Optional[Document]:
         """
         Delete a document by its ID after verifying ownership.
         """
-        db_document = await self.get_document(db, document_id, user_id)
+        db_document = await self.get_document(db, document_id, owner_id)
         if db_document:
             await db.delete(db_document)
             try:

@@ -9,8 +9,7 @@ class Document(Base):
     __tablename__ = 'documents'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    property_id = Column(Integer, ForeignKey('properties.id'), nullable=True)
-    tenant_id = Column(Integer, ForeignKey('tenants.id'), nullable=True)
+    property_id = Column(Integer, ForeignKey('properties.id'), nullable=True)    
     lease_id = Column(Integer, ForeignKey('leases.id'), nullable=True)
     expense_id = Column(Integer, ForeignKey('expenses.id'), nullable=True)
     invoice_id = Column(Integer, ForeignKey('invoices.id'), unique=True, nullable=True)
@@ -20,8 +19,7 @@ class Document(Base):
     description = Column(Text, nullable=True)
 
     # Relationships
-    property = relationship('Property', back_populates='documents')
-    tenant = relationship('Tenant', back_populates='documents')
+    property = relationship('Property', back_populates='documents')    
     lease = relationship('Lease', back_populates='documents')
     expense = relationship('Expense', back_populates='documents')
     invoice = relationship('Invoice', back_populates='document')

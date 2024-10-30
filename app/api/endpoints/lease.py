@@ -10,9 +10,12 @@ from app.models.user import User
 from app.services.document_processor import extract_text_from_file
 from app.services.openai.openai_document import OpenAIService
 from app.services.mapping_functions import parse_json, map_lease_data
+from app.services.lease_processor import process_lease_upload
 from io import BytesIO
 import json
 import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -42,53 +45,27 @@ async def upload_lease(
 
     # Read the file content
     file_content = await file.read()
-    file_like = BytesIO(file_content)
-
-    # Extract text from the file
-    text = extract_text_from_file(file_like, file.filename)
-    if not text:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Could not extract text from the document."
-        )
-
-    # Initialize OpenAIService
-    openai_service = OpenAIService()
-    extracted_data = await openai_service.extract_information(text, document_type)
-
-    if not extracted_data:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Could not extract information from the document."
-        )
-
-    # Parse and map data
-    parsed_data = parse_json(json.dumps(extracted_data))    
-    mapped_data = map_lease_data(parsed_data)
-
-    # Include property_id in mapped_data
-    mapped_data['property_id'] = property_id
-
-    # Create LeaseCreate schema
-    try:        
-        lease_in = schemas.LeaseCreate(**mapped_data)        
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Error creating lease data: {str(e)}"
-        )
-
-    # Create the lease in the database
-    try:     
-        lease = await crud.crud_lease.create_lease(
+    
+    try:
+        lease = await process_lease_upload(
+            file_content=file_content,
+            filename=file.filename,
+            property_id=property_id,
+            document_type=document_type,
             db=db,
-            lease_in=lease_in,
             owner_id=current_user.id
         )
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
+        )
+    except Exception as e:
+        # Log the exception for debugging
+        logger.exception("Unexpected error during lease processing.")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected error occurred."
         )
 
     return lease

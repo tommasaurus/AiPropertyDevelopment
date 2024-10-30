@@ -10,7 +10,9 @@ class TenantBase(BaseModel):
     last_name: str
     email: Optional[EmailStr] = None
     phone_number: Optional[str] = None
-    date_of_birth: Optional[date] = None
+    date_of_birth: Optional[date] = None    
+    landlord: Optional[str] = None  
+    address: Optional[str] = None  
 
 class TenantCreate(TenantBase):
     pass
@@ -21,6 +23,8 @@ class TenantUpdate(BaseModel):
     email: Optional[EmailStr] = None
     phone_number: Optional[str] = None
     date_of_birth: Optional[date] = None
+    landlord: Optional[str] = None 
+    address: Optional[str] = None  
 
 class TenantInDBBase(TenantBase):
     id: int

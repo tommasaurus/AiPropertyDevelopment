@@ -6,7 +6,10 @@ from datetime import date
 
 class LeaseBase(BaseModel):
     property_id: int
+    tenant_id: Optional[int] = None
+
     lease_type: str
+    description:Optional[str] = None
     rent_amount_total: Optional[float] = None
     rent_amount_monthly: Optional[float] = None
     security_deposit_amount: Optional[str] = "Not specified in extract"
@@ -26,7 +29,9 @@ class LeaseCreate(LeaseBase):
     pass
 
 class LeaseUpdate(BaseModel):
+    tenant_id: Optional[int] = None
     lease_type: Optional[str] = None
+    description:Optional[str] = None
     rent_amount_total: Optional[float] = None
     rent_amount_monthly: Optional[float] = None
     security_deposit_amount: Optional[str] = None
