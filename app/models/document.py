@@ -20,7 +20,7 @@ class Document(Base):
 
     # Relationships
     property = relationship('Property', back_populates='documents')    
-    lease = relationship('Lease', back_populates='documents')
+    lease = relationship('Lease', uselist=False, back_populates='document')
     expense = relationship('Expense', back_populates='documents')
     invoice = relationship('Invoice', back_populates='document')
     contract = relationship('Contract', back_populates='documents')

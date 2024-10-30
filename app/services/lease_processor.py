@@ -39,7 +39,8 @@ async def process_lease_upload(
     mapped_data = map_lease_data(parsed_data)    
 
     # Extract tenant_info if present
-    tenant_info = mapped_data.get('tenant_info', None)        
+    tenant_info = mapped_data.get('tenant_info', None)   
+    tenant_info['property_id'] = property_id     
 
     # Handle tenant creation or retrieval
     tenant_id = None
@@ -115,9 +116,26 @@ async def process_lease_upload(
         owner_id=owner_id
     )
 
-    # Link the lease to the document and tenant
+
+    property = await crud.crud_property.get_property_by_id(
+        db=db,
+        property_id=property_id,
+        owner_id=owner_id
+    )
+    if not property:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Property not found or you do not have access to this property."
+        )
+
+    # Link the lease to the document, tenant, and property
+    lease.property = property
     lease.document = document
-    lease.tenant = tenant
+    lease.tenants = tenant
+    tenant.lease = lease
+    tenant.property = property
+    document.lease = lease
+    document.property = property    
     await db.commit()
 
     # Refresh the lease to ensure all relationships are loaded

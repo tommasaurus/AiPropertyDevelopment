@@ -146,7 +146,7 @@ const AllDataTables = () => {
   // Fetch all data on component mount
   useEffect(() => {
     fetchContracts();
-    fetchDocuments();
+    // fetchDocuments();
     fetchExpenses();
     fetchIncomes();
     // fetchInvoiceItems();
@@ -569,22 +569,22 @@ const AllDataTables = () => {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Landlord</th>
                 <th>Email</th>
-                <th>Phone</th>
-                <th>Move-In Date</th>
-                <th>Move-Out Date</th>
+                <th>Phone</th>                
               </tr>
             </thead>
             <tbody>
               {tenants.map((tenant) => (
                 <tr key={tenant.id}>
                   <td>{tenant.id}</td>
-                  <td>{tenant.name || "N/A"}</td>
+                  <td>{tenant.first_name || "N/A"}</td>
+                  <td>{tenant.last_name || "N/A"}</td>
+                  <td>{tenant.landlord || "N/A"}</td>
                   <td>{tenant.email || "N/A"}</td>
-                  <td>{tenant.phone || "N/A"}</td>
-                  <td>{formatDate(tenant.move_in_date)}</td>
-                  <td>{formatDate(tenant.move_out_date)}</td>
+                  <td>{tenant.phone || "N/A"}</td>                  
                 </tr>
               ))}
             </tbody>

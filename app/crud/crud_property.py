@@ -46,6 +46,14 @@ async def get_property_by_owner(db: AsyncSession, property_id: int, owner_id: in
     )
     return result.scalars().first()
 
+async def get_property_by_id(db: AsyncSession, property_id: int, owner_id: int) -> Optional[Property]:
+    result = await db.execute(
+        select(Property)
+        .filter(Property.id == property_id)
+        .filter(Property.owner_id == owner_id)
+    )
+    return result.scalars().first()
+
 # Update a property
 async def update_property(db: AsyncSession, property: Property, property_in: PropertyUpdate) -> Property:
     for key, value in property_in.dict(exclude_unset=True).items():

@@ -31,3 +31,4 @@ class Property(Base):
     contracts = relationship('Contract', back_populates='property', lazy='selectin')
     documents = relationship('Document', back_populates='property', lazy='selectin')
     details = relationship('PropertyDetails', back_populates='property', uselist=False, lazy='selectin')
+    tenants = relationship('Tenant', back_populates='property', lazy='selectin')

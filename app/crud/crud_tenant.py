@@ -15,7 +15,7 @@ class CRUDTenant:
     ) -> Optional[Tenant]:
         result = await db.execute(
             select(Tenant)
-            .join(Tenant.leases)
+            .join(Tenant.lease)
             .join(Property)
             .filter(Tenant.id == tenant_id)
             .filter(Property.owner_id == owner_id)
@@ -23,13 +23,11 @@ class CRUDTenant:
         return result.scalars().first()
 
     async def get_tenants(
-        self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100
-    ) -> List[Tenant]:
+    self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100) -> List[Tenant]:
         result = await db.execute(
             select(Tenant)
-            .join(Tenant.leases)
-            .join(Property)
-            .filter(Property.owner_id == owner_id)
+            .join(Tenant.property)  # Join Tenant with Property through the relationship
+            .filter(Property.owner_id == owner_id)  # Filter by the owner's ID
             .offset(skip)
             .limit(limit)
         )
@@ -56,7 +54,7 @@ class CRUDTenant:
 
         result = await db.execute(
             select(Tenant)
-            .join(Tenant.leases)
+            .join(Tenant.lease)
             .join(Property)
             .filter(Property.owner_id == owner_id)
             .filter(normalized_first_name == normalized_input_first_name)

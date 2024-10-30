@@ -29,6 +29,6 @@ class Lease(Base):
 
     # Relationships
     property = relationship('Property', back_populates='leases')
-    tenants = relationship('Tenant', back_populates='leases')  # Use direct reference
+    tenants = relationship('Tenant', back_populates='lease')
     payments = relationship('Payment', back_populates='lease')
-    documents = relationship('Document', back_populates='lease')
+    document = relationship('Document', uselist=False, back_populates='lease')

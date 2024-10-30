@@ -6,6 +6,7 @@ from datetime import date
 from app.schemas.lease_summary import LeaseSummary
 
 class TenantBase(BaseModel):
+    property_id: int
     first_name: str
     last_name: str
     email: Optional[EmailStr] = None
@@ -18,6 +19,7 @@ class TenantCreate(TenantBase):
     pass
 
 class TenantUpdate(BaseModel):
+    property_id: int = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     email: Optional[EmailStr] = None
