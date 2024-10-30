@@ -146,7 +146,7 @@ const AllDataTables = () => {
   // Fetch all data on component mount
   useEffect(() => {
     fetchContracts();
-    // fetchDocuments();
+    fetchDocuments();
     fetchExpenses();
     fetchIncomes();
     // fetchInvoiceItems();

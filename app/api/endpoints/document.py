@@ -141,7 +141,7 @@ async def read_documents(
     logger.info(f"User {current_user.id} is requesting documents with skip={skip} and limit={limit}")
 
     try:
-        documents = await crud.crud_document.get_documents(db=db, user_id=current_user.id, skip=skip, limit=limit)
+        documents = await crud.crud_document.get_documents(db=db, owner_id=current_user.id, skip=skip, limit=limit)
         logger.info(f"Fetched {len(documents)} documents for user {current_user.id}")
     except Exception as e:
         logger.error(f"Failed to fetch documents for user {current_user.id}: {e}")
