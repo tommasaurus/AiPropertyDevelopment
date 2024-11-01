@@ -1,14 +1,37 @@
 # app/api/endpoints/contract.py
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from app import schemas, crud
 from app.db.database import get_db
 from app.core.security import get_current_user
 from app.models.user import User
+from app.services.contract_processor import process_contract_upload
 
 router = APIRouter()
+
+@router.post("/upload", response_model=schemas.Contract)
+async def upload_contract(
+    property_id: int = Form(...),
+    document_type: str = Form(...),
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    try:
+        file_content = await file.read()
+        contract = await process_contract_upload(
+            file_content=file_content,
+            filename=file.filename,
+            property_id=property_id,
+            document_type=document_type,
+            db=db,
+            owner_id=current_user.id
+        )
+        return contract
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/", response_model=schemas.Contract)
 async def create_contract(
