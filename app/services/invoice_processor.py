@@ -1,6 +1,7 @@
 # app/services/invoice_processor.py
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import HTTPException, status
 from app import schemas, crud
 from app.services.document_processor import extract_text_from_file
 from app.services.openai.openai_document import OpenAIService
@@ -120,5 +121,12 @@ async def process_invoice_upload(
     if not invoice:
         raise ValueError("Failed to load invoice after creation.")
 
-    invoice_schema = schemas.Invoice.model_validate(invoice)
-    return invoice_schema
+    try:
+            invoice_schema = schemas.Invoice.model_validate(invoice, from_attributes=True)
+            return invoice_schema
+    except Exception as e:
+        logger.error(f"Error serializing invoice: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while serializing the invoice data."
+        )

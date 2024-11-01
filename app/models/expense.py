@@ -14,7 +14,7 @@ class Expense(Base):
 
     category = Column(String(50), nullable=False)
     amount = Column(Float, nullable=False)
-    date_incurred = Column(Date, nullable=False)
+    date_incurred = Column(Date, nullable=True)
     description = Column(Text, nullable=True)
     receipt_url = Column(String(255), nullable=True)
     is_recurring = Column(Boolean, default=False)

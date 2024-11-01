@@ -11,7 +11,7 @@ class ExpenseBase(BaseModel):
     vendor_id: Optional[int] = None
     category: str
     amount: float
-    date_incurred: date
+    date_incurred: Optional[date] = None
     description: Optional[str] = None
     receipt_url: Optional[str] = None
     is_recurring: Optional[bool] = False

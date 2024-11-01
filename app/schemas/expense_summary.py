@@ -8,6 +8,6 @@ class ExpenseSummary(BaseModel):
     id: int
     category: str
     amount: float
-    date_incurred: date
+    date_incurred: Optional[date] = None
 
     model_config = ConfigDict(from_attributes=True)

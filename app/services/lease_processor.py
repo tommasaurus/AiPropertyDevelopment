@@ -141,5 +141,12 @@ async def process_lease_upload(
     await db.refresh(lease)
 
     # Map to Pydantic schema before returning
-    lease_schema = schemas.Lease.model_validate(lease)
-    return lease_schema
+    try:
+            lease_schema = schemas.Lease.model_validate(lease, from_attributes=True)
+            return lease_schema
+    except Exception as e:
+        logger.error(f"Error serializing lease: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while serializing the lease data."
+        )
