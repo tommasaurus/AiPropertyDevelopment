@@ -1,6 +1,6 @@
 # app/schemas/token.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class Token(BaseModel):
     access_token: str

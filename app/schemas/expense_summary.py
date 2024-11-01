@@ -1,6 +1,6 @@
 # app/schemas/expense_summary.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import date
 
@@ -10,5 +10,4 @@ class ExpenseSummary(BaseModel):
     amount: float
     date_incurred: date
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

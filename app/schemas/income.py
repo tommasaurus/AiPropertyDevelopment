@@ -1,6 +1,6 @@
 # app/schemas/income.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import date
 from app.schemas.property_summary import PropertySummary
@@ -25,11 +25,9 @@ class IncomeUpdate(BaseModel):
 class IncomeInDBBase(IncomeBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Income(IncomeInDBBase):
     property: PropertySummary
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

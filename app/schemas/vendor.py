@@ -1,6 +1,6 @@
 # app/schemas/vendor.py
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional
 
 class VendorBase(BaseModel):
@@ -28,8 +28,7 @@ class VendorInDBBase(VendorBase):
     id: int
     owner_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Vendor(VendorInDBBase):
     pass

@@ -1,6 +1,6 @@
 # app/schemas/document.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 from app.schemas.property_summary import PropertySummary
@@ -36,8 +36,7 @@ class DocumentInDBBase(DocumentBase):
     id: int
     upload_date: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Document(DocumentInDBBase):
     property: Optional[PropertySummary] = None    
@@ -46,5 +45,4 @@ class Document(DocumentInDBBase):
     invoice: Optional[InvoiceSummary] = None
     contract: Optional[ContractSummary] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

@@ -1,6 +1,6 @@
 # app/schemas/lease.py
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, ConfigDict, Extra
 from typing import Optional, List, Dict, Any
 from datetime import date
 
@@ -21,9 +21,7 @@ class LeaseBase(BaseModel):
     special_lease_terms: Optional[Dict[str, Any]] = None  # JSON for special lease terms
     is_active: Optional[bool] = True
 
-    class Config:
-        from_attributes = True
-        extra = Extra.allow
+    model_config = ConfigDict(from_attributes=True, extra='allow')     
 
 class LeaseCreate(LeaseBase):
     pass
@@ -43,16 +41,12 @@ class LeaseUpdate(BaseModel):
     special_lease_terms: Optional[Dict[str, Any]] = None
     is_active: Optional[bool] = None
 
-    class Config:
-        from_attributes = True
-        extra = Extra.allow
+    model_config = ConfigDict(from_attributes=True, extra='allow')
 
 class LeaseInDBBase(LeaseBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Lease(LeaseInDBBase):
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

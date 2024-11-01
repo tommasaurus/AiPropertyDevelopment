@@ -1,6 +1,6 @@
 # app/core/auth/models.py
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional
 
 # User login request model

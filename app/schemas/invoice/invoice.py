@@ -1,6 +1,6 @@
 # app/schemas/invoice/invoice.py
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from datetime import date
 from app.schemas.invoice.invoice_item import InvoiceItem, InvoiceItemCreate
@@ -19,9 +19,7 @@ class InvoiceBase(BaseModel):
     description: Optional[str] = None
     line_items: Optional[List[InvoiceItemCreate]] = []
 
-    class Config:
-        from_attributes = True
-        extra = Extra.allow
+    model_config = ConfigDict(from_attributes=True, extra='allow')
 
 class InvoiceCreate(InvoiceBase):
     pass
@@ -38,18 +36,14 @@ class InvoiceUpdate(BaseModel):
     description: Optional[str] = None
     line_items: Optional[List[InvoiceItemCreate]] = []
 
-    class Config:
-        from_attributes = True
-        extra = Extra.allow
+    model_config = ConfigDict(from_attributes=True, extra='allow')
 
 class InvoiceInDBBase(InvoiceBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Invoice(InvoiceInDBBase):
     line_items: Optional[List[InvoiceItem]] = []  
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

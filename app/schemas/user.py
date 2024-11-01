@@ -1,6 +1,6 @@
 # app/schemas/user.py
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional, List
 from app.schemas.property_summary import PropertySummary
 
@@ -24,11 +24,9 @@ class UserInDBBase(UserBase):
     id: int
     is_admin: bool  # Include is_admin in the base DB schema
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class User(UserInDBBase):
     properties: Optional[List[PropertySummary]] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

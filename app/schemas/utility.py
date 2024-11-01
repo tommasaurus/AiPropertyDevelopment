@@ -1,6 +1,6 @@
 # app/schemas/utility.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 class UtilityBase(BaseModel):    
@@ -25,10 +25,8 @@ class UtilityUpdate(BaseModel):
 class UtilityInDBBase(UtilityBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Utility(UtilityInDBBase):
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

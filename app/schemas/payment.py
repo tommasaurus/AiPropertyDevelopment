@@ -1,6 +1,6 @@
 # app/schemas/payment.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import date
 from app.schemas.lease_summary import LeaseSummary
@@ -28,11 +28,9 @@ class PaymentUpdate(BaseModel):
 class PaymentInDBBase(PaymentBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Payment(PaymentInDBBase):
     lease: LeaseSummary
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

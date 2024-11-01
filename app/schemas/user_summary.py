@@ -1,6 +1,6 @@
 # app/schemas/user_summary.py
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional
 
 class UserSummary(BaseModel):
@@ -8,5 +8,4 @@ class UserSummary(BaseModel):
     email: EmailStr
     name: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

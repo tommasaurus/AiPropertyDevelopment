@@ -1,6 +1,6 @@
 # app/schemas/expense.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from datetime import date
 from app.schemas.property_summary import PropertySummary
@@ -34,12 +34,10 @@ class ExpenseUpdate(BaseModel):
 class ExpenseInDBBase(ExpenseBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Expense(ExpenseInDBBase):
     property: PropertySummary
     vendor: Optional[VendorSummary] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

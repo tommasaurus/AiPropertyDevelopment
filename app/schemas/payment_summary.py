@@ -1,6 +1,6 @@
 # app/schemas/payment_summary.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import date
 
 class PaymentSummary(BaseModel):
@@ -10,5 +10,4 @@ class PaymentSummary(BaseModel):
     due_date: date
     status: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

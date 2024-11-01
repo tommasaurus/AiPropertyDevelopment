@@ -1,6 +1,6 @@
 # app/schemas/document_summary.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class DocumentSummary(BaseModel):
@@ -8,5 +8,4 @@ class DocumentSummary(BaseModel):
     document_type: str    
     upload_date: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

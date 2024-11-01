@@ -1,6 +1,6 @@
 # app/schemas/tenant.py
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional, List
 from datetime import date
 from app.schemas.lease_summary import LeaseSummary
@@ -31,11 +31,9 @@ class TenantUpdate(BaseModel):
 class TenantInDBBase(TenantBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Tenant(TenantInDBBase):
     leases: Optional[List[LeaseSummary]] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

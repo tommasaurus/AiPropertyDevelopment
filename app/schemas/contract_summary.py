@@ -1,6 +1,6 @@
 # app/schemas/contract_summary.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import date
 
@@ -11,5 +11,4 @@ class ContractSummary(BaseModel):
     end_date: Optional[date] = None
     is_active: bool
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

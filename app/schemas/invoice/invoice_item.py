@@ -1,6 +1,6 @@
 # app/schemas/invoice/invoice_item.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 class InvoiceItemBase(BaseModel):
@@ -9,8 +9,7 @@ class InvoiceItemBase(BaseModel):
     unit_price: float
     total_price: float
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class InvoiceItemCreate(InvoiceItemBase):
     pass
