@@ -2,7 +2,6 @@
 
 from .user import User, UserCreate, UserUpdate
 from .property import Property, PropertyCreate, PropertyUpdate
-from .property_details import PropertyDetails, PropertyDetailsCreate, PropertyDetailsUpdate
 from .utility import Utility, UtilityCreate, UtilityUpdate
 from .tenant import Tenant, TenantCreate, TenantUpdate
 from .lease import Lease, LeaseCreate, LeaseUpdate
@@ -23,9 +22,6 @@ __all__ = [
     "Property",
     "PropertyCreate",
     "PropertyUpdate",
-    "PropertyDetails",
-    "PropertyDetailsCreate",
-    "PropertyDetailsUpdate",
     "Utility",
     "UtilityCreate",
     "UtilityUpdate",

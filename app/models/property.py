@@ -30,5 +30,5 @@ class Property(Base):
     invoices = relationship('Invoice', back_populates='property', lazy='selectin')
     contracts = relationship('Contract', back_populates='property', lazy='selectin')
     documents = relationship('Document', back_populates='property', lazy='selectin')
-    details = relationship('PropertyDetails', back_populates='property', uselist=False, lazy='selectin')
     tenants = relationship('Tenant', back_populates='property', lazy='selectin')
+    utilities = relationship('Utility', back_populates='property', lazy='selectin', cascade="all, delete-orphan")

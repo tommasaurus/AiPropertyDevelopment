@@ -16,7 +16,7 @@ const AllDataTables = () => {
   const [properties, setProperties] = useState([]);
   // const [propertyDetails, setPropertyDetails] = useState([]);
   const [tenants, setTenants] = useState([]);
-  const [utilities, setUtilities] = useState([]);
+  // const [utilities, setUtilities] = useState([]);
   const [vendors, setVendors] = useState([]);
 
   // State for error messages
@@ -103,16 +103,6 @@ const AllDataTables = () => {
     }
   };
 
-  // const fetchPropertyDetails = async () => {
-  //   try {
-  //     const response = await api.get("/property_details");
-  //     setPropertyDetails(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching property details:", error);
-  //     setErrorMessage("Failed to fetch property details.");
-  //   }
-  // };
-
   const fetchTenants = async () => {
     try {
       const response = await api.get("/tenants");
@@ -123,15 +113,15 @@ const AllDataTables = () => {
     }
   };
 
-  const fetchUtilities = async () => {
-    try {
-      const response = await api.get("/utilities");
-      setUtilities(response.data);
-    } catch (error) {
-      console.error("Error fetching utilities:", error);
-      setErrorMessage("Failed to fetch utilities.");
-    }
-  };
+  // const fetchUtilities = async () => {
+  //   try {
+  //     const response = await api.get("/utilities");
+  //     setUtilities(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching utilities:", error);
+  //     setErrorMessage("Failed to fetch utilities.");
+  //   }
+  // };
 
   const fetchVendors = async () => {
     try {
@@ -156,7 +146,7 @@ const AllDataTables = () => {
     fetchProperties();
     // fetchPropertyDetails();
     fetchTenants();
-    fetchUtilities();
+    // fetchUtilities();
     fetchVendors();
   }, []);
 
@@ -599,7 +589,7 @@ const AllDataTables = () => {
       </section>
 
       {/* Utilities Table */}
-      <section>
+      {/* <section>
         <h2>Utilities</h2>
         {utilities.length > 0 ? (
           <table>
@@ -629,7 +619,7 @@ const AllDataTables = () => {
         ) : (
           <p>No utilities available.</p>
         )}
-      </section>
+      </section> */}
 
       {/* Vendors Table */}
       <section>

@@ -1,8 +1,7 @@
 # app/schemas/property_summary.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
-from datetime import date
 
 class PropertySummary(BaseModel):
     id: int
@@ -10,5 +9,4 @@ class PropertySummary(BaseModel):
     property_type: Optional[str] = None
     is_commercial: Optional[bool] = False
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

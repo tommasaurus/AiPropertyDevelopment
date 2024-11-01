@@ -7,7 +7,7 @@ from datetime import date
 class ContractSummary(BaseModel):
     id: int
     contract_type: str
-    start_date: date
+    start_date: Optional[date] = None
     end_date: Optional[date] = None
     is_active: bool
 

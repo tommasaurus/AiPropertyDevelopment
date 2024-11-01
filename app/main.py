@@ -11,7 +11,6 @@ from app.api.endpoints import (
     vendor,
     contract,
     document,
-    property_details,
     utility,
 )
 from app.api.endpoints.auth_routes import router as auth_router
@@ -32,7 +31,6 @@ from app.models import (
     vendor as vendor_model,
     contract as contract_model,
     document as document_model,
-    property_details as property_details_model,
     utility as utility_model,
 )
 from app.models.invoice import invoice as invoice_model
@@ -59,7 +57,6 @@ app.include_router(invoice.router, prefix="/invoices", tags=["invoices"])
 app.include_router(vendor.router, prefix="/vendors", tags=["vendors"])
 app.include_router(contract.router, prefix="/contracts", tags=["contracts"])
 app.include_router(document.router, prefix="/documents", tags=["documents"])
-app.include_router(property_details.router, prefix="/property-details", tags=["property_details"])
 app.include_router(utility.router, prefix="/utilities", tags=["utilities"])
 
 # Database initialization
