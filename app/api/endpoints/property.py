@@ -44,6 +44,37 @@ async def read_property(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Property not found or access denied")
     return property
 
+# Get expenses for a specific property
+@router.get("/{property_id}/expenses", response_model=List[schemas.Expense])
+async def read_property_expenses(
+    property_id: int,
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Verify that the property exists and belongs to the current user
+    property = await crud.crud_property.get_property_by_owner(
+        db=db,
+        property_id=property_id,
+        owner_id=current_user.id
+    )
+    if property is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Property not found or access denied"
+        )
+
+    # Fetch expenses associated with the property
+    expenses = await crud.crud_expense.get_expenses_by_property(
+        db=db,
+        property_id=property_id,
+        owner_id=current_user.id,
+        skip=skip,
+        limit=limit
+    )
+    return expenses
+
 # Update a property
 @router.put("/{property_id}", response_model=schemas.Property)
 async def update_property(

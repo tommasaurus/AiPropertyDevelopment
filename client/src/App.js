@@ -11,6 +11,7 @@ import Frontpage from "./components/frontpage/frontpage";
 import ClientSignup from "./components/clientSignup/clientSignup";
 import Dashboard from "./components/dashboard/Dashboard";
 import Properties from "./components/dashboard/properties/Properties";
+import Messages from "./components/dashboard/messages/Messages";
 import RequireAuth from "./components/RequireAuth";
 
 function LayoutWithNavbarFooter({ children }) {
@@ -42,7 +43,8 @@ function App() {
                 <RequireAuth>
                   <Routes>
                     <Route path="" element={<Dashboard />} />
-                    <Route path="properties" element={<Properties />} />                    
+                    <Route path="properties" element={<Properties />} /> 
+                    <Route path="messages" element={<Messages />} />                    
                   </Routes>
                 </RequireAuth>
               }

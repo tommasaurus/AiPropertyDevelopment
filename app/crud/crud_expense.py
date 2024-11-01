@@ -37,6 +37,28 @@ class CRUDExpense:
         )
         return result.scalars().all()
 
+    async def get_expenses_by_property(
+        self,
+        db: AsyncSession,
+        property_id: int,
+        owner_id: int,
+        skip: int = 0,
+        limit: int = 100
+    ) -> List[Expense]:
+        result = await db.execute(
+            select(Expense)
+            .options(
+                selectinload(Expense.property),
+                selectinload(Expense.vendor)
+            )
+            .join(Property, Expense.property_id == Property.id)
+            .filter(Property.id == property_id)
+            .filter(Property.owner_id == owner_id)
+            .offset(skip)
+            .limit(limit)
+        )
+        return result.scalars().all()
+
     async def create_expense(self, db: AsyncSession, expense_in: ExpenseCreate, owner_id: int) -> Expense:
         # Verify that the property exists and belongs to the owner
         result = await db.execute(
