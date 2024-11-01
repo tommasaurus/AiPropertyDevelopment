@@ -1,3 +1,5 @@
+// src/components/messages/Chat.js
+
 import React, { useState, useEffect, useRef } from "react";
 import "./Chat.css";
 import api from "../../../services/api";
@@ -10,7 +12,9 @@ const Chat = () => {
 
   // Scroll to bottom when new messages are added
   useEffect(() => {
-    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
   const handleSendMessage = async () => {
@@ -22,7 +26,7 @@ const Chat = () => {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      const response = await api.post("/chat/echo", { message: input });
+      const response = await api.post("/chat/copilot", { message: input });
       const botMessage = { sender: "bot", text: response.data.response };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
