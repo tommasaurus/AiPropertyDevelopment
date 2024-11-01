@@ -126,7 +126,7 @@ async def process_contract_upload(
 
         # Map to Pydantic schema before returning
         try:
-            contract_schema = schemas.Contract.model_validate(contract)            
+            contract_schema = schemas.Contract.model_validate(contract, from_attributes=True)  # Added from_attributes=True
             return contract_schema
         except Exception as e:
             logger.error(f"Error serializing contract: {e}")

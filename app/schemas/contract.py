@@ -1,6 +1,6 @@
 # app/schemas/contract.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, Dict, List, Any
 from datetime import date
 from app.schemas.property_summary import PropertySummary
@@ -34,12 +34,10 @@ class ContractUpdate(BaseModel):
 class ContractInDBBase(ContractBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)  
 
 class Contract(ContractInDBBase):
     property: PropertySummary
     vendor: VendorSummary
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)  

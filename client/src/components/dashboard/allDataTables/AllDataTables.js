@@ -191,6 +191,7 @@ const AllDataTables = () => {
                 <th>Contract Type</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>Parties Involved</th>
                 <th>Terms</th>
                 <th>Document URL</th>
                 <th>Is Active</th>
@@ -205,6 +206,7 @@ const AllDataTables = () => {
                   <td>{contract.contract_type || "N/A"}</td>
                   <td>{formatDate(contract.start_date)}</td>
                   <td>{formatDate(contract.end_date)}</td>
+                  <td>{contract.parties_involved ? JSON.stringify(contract.parties_involved) : "N/A"}</td>
                   <td>{contract.terms ? JSON.stringify(contract.terms) : "N/A"}</td>
                   <td>
                     {contract.document_url ? (
