@@ -12,6 +12,7 @@ from app.schemas.contract_summary import ContractSummary
 class DocumentBase(BaseModel):
     property_id: Optional[int] = None    
     lease_id: Optional[int] = None
+    tenant_id: Optional[int] = None
     expense_id: Optional[int] = None
     invoice_id: Optional[int] = None
     contract_id: Optional[int] = None
@@ -24,6 +25,7 @@ class DocumentCreate(DocumentBase):
 class DocumentUpdate(BaseModel):
     property_id: Optional[int] = None    
     lease_id: Optional[int] = None
+    tenant_id: Optional[int] = None
     expense_id: Optional[int] = None
     invoice_id: Optional[int] = None
     contract_id: Optional[int] = None

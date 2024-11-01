@@ -120,4 +120,5 @@ async def process_invoice_upload(
     if not invoice:
         raise ValueError("Failed to load invoice after creation.")
 
-    return invoice
+    invoice_schema = schemas.Invoice.model_validate(invoice)
+    return invoice_schema

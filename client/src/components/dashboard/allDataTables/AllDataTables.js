@@ -205,7 +205,7 @@ const AllDataTables = () => {
                   <td>{contract.contract_type || "N/A"}</td>
                   <td>{formatDate(contract.start_date)}</td>
                   <td>{formatDate(contract.end_date)}</td>
-                  <td>{contract.terms || "N/A"}</td>
+                  <td>{contract.terms ? JSON.stringify(contract.terms) : "N/A"}</td>
                   <td>
                     {contract.document_url ? (
                       <a href={contract.document_url} target="_blank" rel="noopener noreferrer">
@@ -435,6 +435,7 @@ const AllDataTables = () => {
               <tr>
                 <th>ID</th>
                 <th>Property ID</th>
+                <th>Tenant ID</th>
                 <th>Lease Type</th>
                 <th>Rent Amount Total</th>
                 <th>Rent Amount Monthly</th>
@@ -453,6 +454,7 @@ const AllDataTables = () => {
                 <tr key={lease.id}>
                   <td>{lease.id}</td>
                   <td>{lease.property_id}</td>
+                  <td>{lease.tenant_id}</td>
                   <td>{lease.lease_type || "N/A"}</td>
                   <td>{formatCurrency(lease.rent_amount_total)}</td>
                   <td>{formatCurrency(lease.rent_amount_monthly)}</td>

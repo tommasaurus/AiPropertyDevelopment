@@ -3,6 +3,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import selectinload
 from typing import List, Optional
 from app.models.contract import Contract
 from app.models.property import Property
@@ -12,6 +13,11 @@ class CRUDContract:
     async def get_contract(self, db: AsyncSession, contract_id: int, owner_id: int) -> Optional[Contract]:
         result = await db.execute(
             select(Contract)
+            .options(
+                selectinload(Contract.property),
+                selectinload(Contract.vendor),
+                selectinload(Contract.document)  
+            )
             .join(Property)
             .filter(Contract.id == contract_id)
             .filter(Property.owner_id == owner_id)
@@ -21,6 +27,11 @@ class CRUDContract:
     async def get_contracts(self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100) -> List[Contract]:
         result = await db.execute(
             select(Contract)
+            .options(
+                selectinload(Contract.property),
+                selectinload(Contract.vendor),
+                selectinload(Contract.document)  
+            )
             .join(Property)
             .filter(Property.owner_id == owner_id)
             .offset(skip)

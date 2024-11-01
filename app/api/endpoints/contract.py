@@ -19,6 +19,19 @@ async def upload_contract(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+
+    # Verify that the property exists and belongs to the owner
+    property = await crud.crud_property.get_property_by_owner(
+        db=db,
+        property_id=property_id,
+        owner_id=current_user.id
+    )
+    if not property:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Property not found or you do not have access to this property."
+        )
+        
     try:
         file_content = await file.read()
         contract = await process_contract_upload(

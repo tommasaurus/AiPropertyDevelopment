@@ -129,8 +129,8 @@ def map_lease_data(parsed_data: dict) -> dict:
         "rent_amount_monthly": clean_currency(get_nested_value(parsed_data, ["rent_amount", "monthly_installment"], "0")),
         "security_deposit_amount": get_nested_value(parsed_data, ["security_deposit", "amount"], "Not Found"),
         "security_deposit_held_by": get_nested_value(parsed_data, ["security_deposit", "held_by"], "Not Found"),
-        "start_date": parse_date(parsed_data.get("start_date", "1900-01-01")),
-        "end_date": parse_date(parsed_data.get("end_date", "1900-01-01")),
+        "start_date": parse_date(parsed_data.get("start_date", None)),
+        "end_date": parse_date(parsed_data.get("end_date", None)),
         "payment_frequency": parsed_data.get("payment_frequency", "Monthly"),
         "tenant_info": map_tenant_data(parsed_data.get("tenant_information", {})),
         "special_lease_terms": parsed_data.get("special_lease_terms", {}),
@@ -184,3 +184,61 @@ def map_invoice_data(parsed_data: dict) -> dict:
         logger.error(f"Error mapping invoice data: {e}")
         invoice_data = {}  # Return an empty dict in case of an error
     return invoice_data
+
+def map_contract_data(parsed_data: dict) -> dict:
+    """
+    Maps the parsed data to the Contract model fields, handling multiple parties.
+
+    Args:
+        parsed_data (dict): The data parsed by `parse_json`.
+
+    Returns:
+        dict: A dictionary of Contract fields ready to be used for creation.
+    """
+    try:
+        # Parse dates
+        start_date = parse_date(parsed_data.get("start_date"))
+        end_date = parse_date(parsed_data.get("end_date"))
+
+        # Handle multiple parties involved
+        parties_involved = parsed_data.get("parties_involved", [])
+        if not isinstance(parties_involved, list):
+            parties_involved = [parties_involved]
+
+        # Map vendor information
+        vendor_info = parsed_data.get("vendor_information", {})
+        vendor_data = {
+            "name": vendor_info.get("name", "Not Found"),
+            "address": vendor_info.get("address"),
+            "contact_person": vendor_info.get("contact_person"),
+            "phone_number": vendor_info.get("phone_number"),
+            "email": vendor_info.get("email") if vendor_info.get("email") != "Not Found" else None
+        }
+
+        # Map terms
+        terms = parsed_data.get("terms", {})
+
+        is_active = parsed_data.get("is_active", True)
+        if isinstance(is_active, str):
+            is_active = is_active.strip().lower() == "true"
+        elif isinstance(is_active, (int, float)):
+            is_active = bool(is_active)
+        elif not isinstance(is_active, bool):
+            is_active = True
+        else:
+            is_active = False
+
+        contract_data = {
+            "contract_type": parsed_data.get("contract_type", "Not Found"),
+            "description": parsed_data.get("description", "Not Found"),
+            "start_date": start_date,
+            "end_date": end_date,
+            "terms": terms,
+            "is_active": is_active,
+            "vendor_info": vendor_data,
+            "parties_involved": parties_involved  # Store as JSON
+        }
+    except Exception as e:
+        logger.error(f"Error mapping contract data: {e}")
+        contract_data = {}
+    return contract_data

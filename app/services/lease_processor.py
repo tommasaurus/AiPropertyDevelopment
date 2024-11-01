@@ -92,10 +92,7 @@ async def process_lease_upload(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
-        )
-
-    logger.info(mapped_data)
-    logger.info(tenant_info)
+        )    
 
     # Extract lease_type, description if present
     lease_type = mapped_data.get('lease_type', None)  
@@ -106,10 +103,12 @@ async def process_lease_upload(
     document_in = schemas.DocumentCreate(
         property_id=property_id,
         lease_id=lease_id,
+        tenant_id=tenant_id,
         document_type=lease_type,
         description=description
     )    
 
+    logger.info(document_in)
     document = await crud.crud_document.create_document(
         db=db,
         document_in=document_in,
@@ -142,5 +141,5 @@ async def process_lease_upload(
     await db.refresh(lease)
 
     # Map to Pydantic schema before returning
-    lease_schema = schemas.Lease.from_orm(lease)
-    return lease
+    lease_schema = schemas.Lease.model_validate(lease)
+    return lease_schema

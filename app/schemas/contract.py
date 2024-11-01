@@ -1,18 +1,20 @@
 # app/schemas/contract.py
 
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, Dict, List, Any
 from datetime import date
 from app.schemas.property_summary import PropertySummary
 from app.schemas.vendor_summary import VendorSummary
 
 class ContractBase(BaseModel):
     property_id: int
-    vendor_id: int
+    vendor_id: Optional[int] = None
     contract_type: str
-    start_date: date
+    start_date: Optional[date] = None
     end_date: Optional[date] = None
-    terms: Optional[str] = None
+    description: Optional[str] = None
+    terms: Optional[Dict[str, Any]] = None  # Changed to Any for nested JSON
+    parties_involved: Optional[List[Dict[str, Any]]] = None  # List of parties as dicts
     is_active: Optional[bool] = True
 
 class ContractCreate(ContractBase):
@@ -24,7 +26,9 @@ class ContractUpdate(BaseModel):
     contract_type: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
-    terms: Optional[str] = None
+    description: Optional[str] = None
+    terms: Optional[Dict[str, Any]] = None
+    parties_involved: Optional[List[Dict[str, Any]]] = None
     is_active: Optional[bool] = None
 
 class ContractInDBBase(ContractBase):

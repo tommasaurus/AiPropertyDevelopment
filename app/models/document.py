@@ -11,6 +11,7 @@ class Document(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     property_id = Column(Integer, ForeignKey('properties.id'), nullable=True)    
     lease_id = Column(Integer, ForeignKey('leases.id'), nullable=True)
+    tenant_id = Column(Integer, ForeignKey('tenants.id'), nullable=True)
     expense_id = Column(Integer, ForeignKey('expenses.id'), nullable=True)
     invoice_id = Column(Integer, ForeignKey('invoices.id'), unique=True, nullable=True)
     contract_id = Column(Integer, ForeignKey('contracts.id'), nullable=True)
@@ -23,4 +24,4 @@ class Document(Base):
     lease = relationship('Lease', uselist=False, back_populates='document')
     expense = relationship('Expense', back_populates='documents')
     invoice = relationship('Invoice', back_populates='document')
-    contract = relationship('Contract', back_populates='documents')
+    contract = relationship('Contract', uselist=False, back_populates='document')
