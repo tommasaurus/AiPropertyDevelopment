@@ -5,6 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
 import ExpensesTable from "./ExpenseTable"; 
+import Chat from "./Chat";
 import "./Messages.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -166,6 +167,9 @@ const Messages = () => {
 
         {/* Expenses Display */}
         {expenses.length > 0 && <ExpensesTable expenses={expenses} />}
+
+        {/* Chat Component */}
+        <Chat />
 
         {/* Toast Notifications */}
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar />

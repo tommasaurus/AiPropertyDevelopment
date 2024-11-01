@@ -80,6 +80,10 @@
   text-align: center;
 }
 
+.chat-container {
+  margin-top: 20px; /* Optional: Extra space specifically above chat */
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .greeting-title {
