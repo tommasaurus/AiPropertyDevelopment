@@ -5,11 +5,12 @@
   top: 0;
   bottom: 0;
   width: 73px;
-  background-color: white;
+  background-image: url("../../../images/dashboardBackground.jpg");
+
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid #e1d4c1;
   z-index: 50;
   overflow: hidden;
 }
@@ -25,7 +26,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e1d4c1;
 }
 
 .dashboard-sidebar .logo-container {
@@ -112,7 +113,7 @@
 }
 
 .dashboard-sidebar .nav-section.bottom {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e1d4c1;
   padding-top: 0.5rem;
   margin-top: auto;
   gap: 0rem;
@@ -134,7 +135,7 @@
 }
 
 .dashboard-sidebar .nav-item:hover {
-  background-color: #ffe8dd;
+  background-color: #7a666642;
   color: #0f172a;
 }
 
