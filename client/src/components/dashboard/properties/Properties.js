@@ -1,8 +1,11 @@
+// src/components/properties/Properties.js
+
 import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../sidebar/Sidebar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
 import Greeting from "../greeting/Greeting";
+import AddressAutocomplete from "../addressAutocomplete/AddressAutocomplete";
 import PropertyDetails from "./propertyDetails";
 import "./Properties.css";
 
@@ -31,10 +34,14 @@ const Properties = () => {
   const [selectedDocType, setSelectedDocType] = useState(null);
   const [customDocType, setCustomDocType] = useState("");
   const [uploadStep, setUploadStep] = useState(1);
+  const [addStep, setAddStep] = useState(1); // For Add Property Steps
 
   // State for form data when adding a new property
   const [formData, setFormData] = useState({
     address: "",
+    city: "",
+    state: "",
+    zipCode: "",
     num_bedrooms: "",
     num_bathrooms: "",
     num_floors: "",
@@ -171,7 +178,10 @@ const Properties = () => {
 
     const formDataToSend = new FormData();
     formDataToSend.append("file", file);
-    formDataToSend.append("document_type", selectedDocType);
+    formDataToSend.append(
+      "document_type",
+      selectedDocType === "Other" ? customDocType : selectedDocType
+    );
     formDataToSend.append("property_id", selectedProperty.id);
 
     try {
@@ -207,10 +217,50 @@ const Properties = () => {
     }));
   };
 
+  // Handle address selection from autocomplete
+  const handleSelectAddress = (addressData) => {
+    setFormData((prev) => ({
+      ...prev,
+      address: addressData.formattedAddress || "",
+      city: addressData.city || "",
+      state: addressData.state || "",
+      zipCode: addressData.zipCode || "",
+    }));
+  };
+
+  // Proceed to next step in Add Property modal
+  const handleNextAddStep = () => {
+    if (addStep === 1) {
+      // You can add validation for address fields here if needed
+      if (!formData.address || !formData.city || !formData.state || !formData.zipCode) {
+        setErrorMessage("Please fill in all address fields.");
+        return;
+      }
+      // Auto-fill property information with placeholder data
+      const randomInt = Math.floor(Math.random() * 5) + 1;   // Random integer between 1 and 5
+      const randomIntFloor = Math.floor(Math.random() * 3) + 2;
+      const propertyValue = randomInt * 417827;
+
+      setFormData((prev) => ({
+        ...prev,
+        num_bedrooms: randomInt,
+        num_bathrooms: randomInt,
+        num_floors: randomIntFloor,
+        purchase_price: propertyValue,
+        property_type: "Residential", // Example default value
+        is_commercial: true
+      }));
+
+      setErrorMessage("");
+      setAddStep(2);
+    }
+  };
+
   // Handle add property form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
     const formattedData = {
       ...formData,
       num_bedrooms: formData.num_bedrooms
@@ -235,6 +285,9 @@ const Properties = () => {
       setShowModal(false);
       setFormData({
         address: "",
+        city: "",
+        state: "",
+        zipCode: "",
         num_bedrooms: "",
         num_bathrooms: "",
         num_floors: "",
@@ -246,6 +299,7 @@ const Properties = () => {
         purchase_date: "",
         property_type: "",
       });
+      setAddStep(1);
       fetchAllData();
     } catch (error) {
       console.error("Error adding property:", error);
@@ -256,6 +310,30 @@ const Properties = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Reset add property modal states
+  const resetAddPropertyStates = () => {
+    setFormData({
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      num_bedrooms: "",
+      num_bathrooms: "",
+      num_floors: "",
+      is_commercial: false,
+      is_hoa: false,
+      hoa_fee: "",
+      is_nnn: false,
+      purchase_price: "",
+      purchase_date: "",
+      property_type: "",
+    });
+    setAddStep(1);
+    setErrorMessage("");
+    setIsSubmitting(false);
+    setShowModal(false);
   };
 
   // Reset upload states
@@ -270,24 +348,24 @@ const Properties = () => {
   };
 
   return (
-    <div className='dashboard-layout'>
+    <div className="dashboard-layout">
       <Sidebar logo={dwellexLogo} />
 
-      <main className='dashboard-main'>
+      <main className="dashboard-main">
         <Greeting />
         {/* Page Header */}
-        <div className='page-header'>
-          <div className='header-content'>
+        <div className="page-header">
+          <div className="header-content">
             <h1>Properties</h1>
-            <div className='header-actions'>
+            <div className="header-actions">
               <button
-                className='primary-button'
+                className="primary-button"
                 onClick={() => setShowModal(true)}
               >
                 Add Property
               </button>
               <button
-                className='primary-button'
+                className="primary-button"
                 onClick={() => setShowUploadModal(true)}
               >
                 Upload Document
@@ -297,8 +375,8 @@ const Properties = () => {
         </div>
 
         {/* Properties Table */}
-        <div className='properties-table-container'>
-          <table className='properties-table'>
+        <div className="properties-table-container">
+          <table className="properties-table">
             <thead>
               <tr>
                 <th>Address</th>
@@ -318,7 +396,7 @@ const Properties = () => {
                 <tr
                   key={property.id}
                   onClick={() => handlePropertyClick(property)}
-                  className='cursor-pointer hover:bg-gray-50'
+                  className="cursor-pointer hover:bg-gray-50"
                 >
                   <td>{property.address}</td>
                   <td>{property.property_type || "N/A"}</td>
@@ -328,9 +406,7 @@ const Properties = () => {
                   <td>{property.is_commercial ? "Yes" : "No"}</td>
                   <td>{property.is_hoa ? "Yes" : "No"}</td>
                   <td>
-                    {property.hoa_fee
-                      ? formatCurrency(property.hoa_fee)
-                      : "N/A"}
+                    {property.hoa_fee ? formatCurrency(property.hoa_fee) : "N/A"}
                   </td>
                   <td>{formatCurrency(property.purchase_price)}</td>
                   <td>{formatDate(property.purchase_date)}</td>
@@ -359,140 +435,209 @@ const Properties = () => {
 
         {/* Add Property Modal */}
         {showModal && (
-          <div className='modal'>
-            <div className='modal-content'>
-              <div className='modal-header'>
+          <div className="modal">
+            <div className="modal-content">
+              <div className="modal-header">
                 <h2>Add New Property</h2>
                 <button
-                  className='close-button'
-                  onClick={() => setShowModal(false)}
+                  className="close-button"
+                  onClick={() => {
+                    resetAddPropertyStates();
+                  }}
                 >
                   ×
                 </button>
               </div>
               <form onSubmit={handleSubmit}>
-                <div className='form-grid'>
-                  <div className='form-group'>
-                    <label>Address</label>
-                    <input
-                      type='text'
-                      name='address'
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      required
-                    />
+                <div className="steps-indicator-add">
+                  <div className={`step-add ${addStep >= 1 ? "active" : ""}`}>
+                    1. Address Information
                   </div>
-
-                  <div className='form-group'>
-                    <label>Property Type</label>
-                    <input
-                      type='text'
-                      name='property_type'
-                      value={formData.property_type}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className='form-group'>
-                    <label>Bedrooms</label>
-                    <input
-                      type='number'
-                      name='num_bedrooms'
-                      value={formData.num_bedrooms}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className='form-group'>
-                    <label>Bathrooms</label>
-                    <input
-                      type='number'
-                      name='num_bathrooms'
-                      value={formData.num_bathrooms}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className='form-group'>
-                    <label>Floors</label>
-                    <input
-                      type='number'
-                      name='num_floors'
-                      value={formData.num_floors}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className='form-group'>
-                    <label>Purchase Price</label>
-                    <input
-                      type='number'
-                      name='purchase_price'
-                      value={formData.purchase_price}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className='form-group'>
-                    <label>Purchase Date</label>
-                    <input
-                      type='date'
-                      name='purchase_date'
-                      value={formData.purchase_date}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className='form-group'>
-                    <label>HOA Fee</label>
-                    <input
-                      type='number'
-                      name='hoa_fee'
-                      value={formData.hoa_fee}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className='checkbox-group'>
-                    <label>
-                      <input
-                        type='checkbox'
-                        name='is_commercial'
-                        checked={formData.is_commercial}
-                        onChange={handleInputChange}
-                      />
-                      Commercial Property
-                    </label>
-                  </div>
-
-                  <div className='checkbox-group'>
-                    <label>
-                      <input
-                        type='checkbox'
-                        name='is_hoa'
-                        checked={formData.is_hoa}
-                        onChange={handleInputChange}
-                      />
-                      HOA Property
-                    </label>
+                  <div className={`step-add ${addStep >= 2 ? "active" : ""}`}>
+                    2. Property Details
                   </div>
                 </div>
 
-                <div className='modal-footer'>
-                  <button
-                    type='submit'
-                    className='submit-button'
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Adding..." : "Add Property"}
-                  </button>
-                </div>
+                {addStep === 1 && (
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Address</label>
+                      <AddressAutocomplete onSelectAddress={handleSelectAddress} />
+                    </div>
+
+                    <div className="form-group">
+                      <label>City</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>State</label>
+                      <input
+                        type="text"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Zip Code</label>
+                      <input
+                        type="text"
+                        name="zipCode"
+                        value={formData.zipCode}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+
+                    {errorMessage && (
+                      <p className="error-message">{errorMessage}</p>
+                    )}
+
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="primary-button"
+                        onClick={handleNextAddStep}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {addStep === 2 && (
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Bedrooms</label>
+                      <input
+                        type="number"
+                        name="num_bedrooms"
+                        value={formData.num_bedrooms}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Bathrooms</label>
+                      <input
+                        type="number"
+                        name="num_bathrooms"
+                        value={formData.num_bathrooms}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Floors</label>
+                      <input
+                        type="number"
+                        name="num_floors"
+                        value={formData.num_floors}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Purchase Price</label>
+                      <input
+                        type="number"
+                        name="purchase_price"
+                        value={formData.purchase_price}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Purchase Date</label>
+                      <input
+                        type="date"
+                        name="purchase_date"
+                        value={formData.purchase_date}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Property Type</label>
+                      <input
+                        type="text"
+                        name="property_type"
+                        value={formData.property_type}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="checkbox-group">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="is_commercial"
+                          checked={formData.is_commercial}
+                          onChange={handleInputChange}
+                        />
+                        Commercial Property
+                      </label>
+                    </div>
+
+                    <div className="checkbox-group">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="is_hoa"
+                          checked={formData.is_hoa}
+                          onChange={handleInputChange}
+                        />
+                        HOA Property
+                      </label>
+                    </div>
+
+                    <div className="form-group">
+                      <label>HOA Fee</label>
+                      <input
+                        type="number"
+                        name="hoa_fee"
+                        value={formData.hoa_fee}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    {errorMessage && (
+                      <p className="error-message">{errorMessage}</p>
+                    )}
+
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="secondary-button"
+                        onClick={() => setAddStep(1)}
+                      >
+                        Back
+                      </button>
+                      <button
+                        type="submit"
+                        className="primary-button"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? "Adding..." : "Add Property"}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </form>
             </div>
           </div>
         )}
 
-        {/* Upload Document Modal */}
+        {/* Upload Document Modal */}        
         {showUploadModal && (
           <div className='modal'>
             <div className='modal-content'>

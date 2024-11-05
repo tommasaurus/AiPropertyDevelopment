@@ -171,6 +171,43 @@
   border-color: #e17b50;
 }
 
+.steps-indicator-add {
+  display: flex;
+  justify-content: space-between;  
+  margin-bottom: 24px;
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.steps-indicator-add::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #f0f0f0;
+  z-index: 0;
+}
+
+.step-add {  
+  background-color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #000;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  border: 2px solid #f0f0f0;
+}
+
+.step-add.active {
+  background-color: #e17b50;
+  color: white;
+  border-color: #e17b50;
+}
+
 .upload-step {
   margin-top: 24px;
 }

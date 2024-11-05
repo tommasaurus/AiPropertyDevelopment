@@ -1,0 +1,17 @@
+/* src/components/dashboard/addressAutocomplete/AddressAutocomplete.css */
+
+.autocomplete-input {
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+  
+  .autocomplete-input:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
