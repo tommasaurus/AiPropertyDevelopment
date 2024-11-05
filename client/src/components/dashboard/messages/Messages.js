@@ -5,6 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
 import ExpensesTable from "./ExpenseTable"; 
+import Greeting from "../greeting/Greeting";
 import Chat from "./Chat";
 import "./Messages.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -15,10 +16,8 @@ const Messages = () => {
   // State variables for properties
   const [properties, setProperties] = useState([]);
 
-  // State variables for UI and form handling
-  const [greeting, setGreeting] = useState("");
-  const [selectedProperty, setSelectedProperty] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date());
+  // State variables for UI and form handling  ;
+  const [selectedProperty, setSelectedProperty] = useState("");  
   const [errorMessage, setErrorMessage] = useState("");
 
   // State variables for expenses
@@ -52,28 +51,6 @@ const Messages = () => {
 
   useEffect(() => {
     fetchProperties();
-  }, []);
-
-  // Update greeting based on time of day
-  useEffect(() => {
-    const updateGreeting = () => {
-      const hour = new Date().getHours();
-      setGreeting(
-        hour >= 5 && hour < 12
-          ? "Good morning"
-          : hour >= 12 && hour < 17
-          ? "Good afternoon"
-          : "Good evening"
-      );
-    };
-    updateGreeting();
-
-    const timer = setInterval(() => {
-      updateGreeting();
-      setCurrentTime(new Date());
-    }, 60000);
-
-    return () => clearInterval(timer);
   }, []);
 
   // Handler to fetch expenses
@@ -112,19 +89,7 @@ const Messages = () => {
 
       <main className="dashboard-main">
         {/* Greeting Section */}
-        <div className="greeting-section">
-          <h1 className="greeting-title">
-            {greeting}, {businessName}
-          </h1>
-          <p className="greeting-date">
-            {currentTime.toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </div>
+        <Greeting/>
 
         {/* Property Selection Dropdown */}
         <div className="property-selection">

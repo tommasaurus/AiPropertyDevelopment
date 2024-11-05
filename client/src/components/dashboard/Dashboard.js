@@ -5,12 +5,11 @@ import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
 import EmptyDashboard from "./emptyDashboard/emptyDashboard";
 import api from "../../services/api";
 import logo from "../../images/logo.png";
+import Greeting from "./greeting/Greeting";
 import "./Dashboard.css";
 
 const Dashboard = () => {
-  const [properties, setProperties] = useState([]);
-  const [greeting, setGreeting] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [properties, setProperties] = useState([]);  
   const [loading, setLoading] = useState(true);
 
   // TODO: Replace with actual API call to get user/business name
@@ -29,28 +28,6 @@ const Dashboard = () => {
     };
 
     fetchProperties();
-  }, []);
-
-  useEffect(() => {
-    const updateGreeting = () => {
-      const hour = new Date().getHours();
-      if (hour >= 5 && hour < 12) {
-        setGreeting("Good morning,");
-      } else if (hour >= 12 && hour < 17) {
-        setGreeting("Good afternoon,");
-      } else {
-        setGreeting("Good evening,");
-      }
-    };
-
-    // Set initial greeting
-    updateGreeting();
-
-    // Update greeting every minute
-    const timer = setInterval(updateGreeting, 60000);
-
-    // Cleanup on component unmount
-    return () => clearInterval(timer);
   }, []);
 
   // Handle sidebar expansion
@@ -94,21 +71,7 @@ const Dashboard = () => {
 
       <main className='dashboard-main'>
         {/* Greeting Section */}
-        <div className='greeting-section'>
-          <div>
-            <h1 className='greeting-title'>
-              {greeting} {businessName}
-            </h1>
-            <p className='greeting-date'>
-              {currentTime.toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </div>
-        </div>
+        <Greeting/>
 
         {/* Dashboard Metrics */}
         <DashboardMetrics properties={properties} />
