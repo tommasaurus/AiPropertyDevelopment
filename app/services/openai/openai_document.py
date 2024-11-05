@@ -2,6 +2,7 @@
 
 import logging
 import json
+from typing import Optional
 from openai import AsyncOpenAI
 from openai.types.chat import ChatCompletionMessage
 
@@ -55,6 +56,83 @@ class OpenAIService:
         except Exception as e:
             logger.error(f"An error occurred while extracting information: {e}")
             return {}
+
+    async def determine_document_type(self, text: str) -> Optional[str]:
+        """
+        Uses OpenAI's API to determine the type of document based on the text.
+        Args:
+            text (str): The text extracted from the document.
+        Returns:
+            str: Determined document type.
+        """
+        messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are an intelligent assistant trained to classify documents into one of the following categories: "
+                "'Lease', 'Contract', or 'Invoice'. You must strictly adhere to the definitions and instructions provided below."
+            )
+        },
+        {
+            "role": "user",
+            "content": (
+                "Based on the following document text, determine if it is a 'Lease', 'Contract', or 'Invoice'. "
+                "Please classify the document according to the definitions and examples provided below:\n\n"
+                "### Definitions:\n\n"
+                "1. **Lease**:\n"
+                "   - **Purpose**: A legally binding agreement specifically related to the rental of property or equipment.\n"
+                "   - **Key Terms**: 'tenant', 'landlord', 'rent amount', 'lease period', 'security deposit', 'start date', 'end date', 'premises', 'maintenance', 'occupancy terms'.\n"
+                "   - **Characteristics**: Includes detailed terms about the use of property, payment schedules, responsibilities for maintenance, and clauses about occupancy and termination specific to rental agreements.\n\n"
+                "2. **Contract**:\n"
+                "   - **Purpose**: A formal and legally binding agreement between two or more parties outlining mutual obligations, rights, and responsibilities.\n"
+                "   - **Key Terms**: 'agreement', 'party', 'signatures', 'terms and conditions', 'obligations', 'deliverables', 'service terms'.\n"
+                "   - **Characteristics**: Broad in scope and can pertain to various types of agreements such as service agreements, purchase agreements, employment contracts, etc. Unlike leases, contracts are not limited to property rentals and do not typically include rental-specific terms.\n\n"
+                "3. **Invoice**:\n"
+                "   - **Purpose**: A document issued by a seller to a buyer that specifies the products or services provided, along with the amount due.\n"
+                "   - **Key Terms**: 'invoice number', 'amount due', 'due date', 'line items', 'description of goods or services', 'vendor information', 'payment terms'.\n"
+                "   - **Characteristics**: Contains detailed billing information, including quantities, prices, and payment instructions. Primarily used for billing purposes.\n\n"
+                "### Examples:\n\n"
+                "**Lease Example**:\n\n"
+                "This Housing Contract (“Contract”) is made and entered into as of 09/20/2023 (“Effective Date”) by and between Landlord and Resident, upon the terms and conditions stated below. ... [Lease-specific content]\n\n"
+                "**Contract Example**:\n\n"
+                "This Service Agreement (“Agreement”) is entered into on 01/01/2024 by and between ABC Services (“Provider”) and XYZ Company (“Client”). ... [Contract-specific content]\n\n"
+                "**Invoice Example**:\n\n"
+                "Invoice Number: 12345\nDate: 10/01/2023\nDue Date: 10/15/2023\nDescription: Web Design Services\nAmount Due: $2,000.00\n... [Invoice-specific content]\n\n"
+                "### Instructions:\n\n"
+                "1. **Classification Priority**: If the document is a specific type of contract, such as a lease, it should be classified as 'Lease' rather than the more general 'Contract'.\n"
+                "2. **Response Format**: Please return your answer in JSON format as {'document_type': 'Lease'}, {'document_type': 'Contract'}, or {'document_type': 'Invoice'}.\n\n"
+                "### Document Text to Analyze:\n\n"
+                f"{text}"
+            )
+        }
+        ]
+        try:
+            response = await self.client.chat.completions.create(
+                messages=messages,
+                model="gpt-4o-mini",
+                temperature=0.0,
+            )
+            content = response.choices[0].message.content.strip()
+            # Clean the response
+            if content.startswith("```json"):
+                content = content[7:]
+            if content.endswith("```"):
+                content = content[:-3]
+            # Parse JSON
+            result = json.loads(content)
+            document_type = result.get('document_type', '').lower()
+            known_types = {'lease', 'contract', 'invoice'}
+            if document_type in known_types:
+                return document_type
+            else:
+                logger.warning(f"Unknown document type determined: {document_type}")
+                return None
+        except json.JSONDecodeError:
+            logger.error("Error decoding JSON from OpenAI response.")
+            return None
+        except Exception as e:
+            logger.error(f"An error occurred while determining document type: {e}")
+            return None
 
     def _generate_prompt_by_type(self, text: str, document_type: str) -> list[ChatCompletionMessage]:
         """

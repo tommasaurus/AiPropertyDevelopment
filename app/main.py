@@ -12,7 +12,8 @@ from app.api.endpoints import (
     contract,
     document,
     utility,
-    chat
+    chat,
+    processor
 )
 from app.api.endpoints.auth_routes import router as auth_router
 from app.db.database import engine, Base
@@ -60,6 +61,7 @@ app.include_router(contract.router, prefix="/contracts", tags=["contracts"])
 app.include_router(document.router, prefix="/documents", tags=["documents"])
 app.include_router(utility.router, prefix="/utilities", tags=["utilities"])
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
+app.include_router(processor.router, prefix="/processor", tags=["processor"])
 
 # Database initialization
 @app.on_event("startup")
