@@ -1,0 +1,13 @@
+.greeting-title {
+    font-size: 1.25rem;
+    margin-left: 0;
+  }
+  
+.greeting-date {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #666;
+    margin-left: -3rem;
+    color: #323232;
+    margin-left: -2.2rem;
+  }

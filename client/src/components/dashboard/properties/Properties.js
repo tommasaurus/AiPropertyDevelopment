@@ -4,7 +4,8 @@ import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../sidebar/Sidebar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
-import AllDataTables from "../allDataTables/AllDataTables"; // Import the new component
+import AllDataTables from "../allDataTables/AllDataTables"; 
+import Greeting from "../greeting/Greeting";
 import "./Properties.css";
 
 const Properties = () => {
@@ -12,10 +13,8 @@ const Properties = () => {
   const [properties, setProperties] = useState([]);
 
   // State variables for UI and form handling
-  const [greeting, setGreeting] = useState("");
   const [selectedDocType, setSelectedDocType] = useState(null);
-  const [selectedProperty, setSelectedProperty] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [selectedProperty, setSelectedProperty] = useState("");  
   const [customDocType, setCustomDocType] = useState("");
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -42,7 +41,6 @@ const Properties = () => {
   });
 
   const fileInputRef = useRef(null);
-  const businessName = "Jason";
   const documentTypes = ["Lease", "Contract", "Invoice", "Legal", "Other"];
 
   // Helper functions for formatting
@@ -53,11 +51,11 @@ const Properties = () => {
 
   const formatDate = (dateString) => {
     return dateString ? new Date(dateString).toLocaleDateString() : "N/A";
-  };
+    };
 
-  const formatJSON = (data) => {
+    const formatJSON = (data) => {
     return data ? JSON.stringify(data, null, 2) : "N/A";
-  };
+    };
 
   // Fetch properties from API
   const fetchProperties = async () => {
@@ -72,28 +70,6 @@ const Properties = () => {
 
   useEffect(() => {
     fetchProperties();
-  }, []);
-
-  // Update greeting based on time of day
-  useEffect(() => {
-    const updateGreeting = () => {
-      const hour = new Date().getHours();
-      setGreeting(
-        hour >= 5 && hour < 12
-          ? "Good morning"
-          : hour >= 12 && hour < 17
-          ? "Good afternoon"
-          : "Good evening"
-      );
-    };
-    updateGreeting();
-
-    const timer = setInterval(() => {
-      updateGreeting();
-      setCurrentTime(new Date());
-    }, 60000);
-
-    return () => clearInterval(timer);
   }, []);
 
   // Handle file selection
@@ -276,8 +252,9 @@ const Properties = () => {
       <Sidebar logo={dwellexLogo} />
 
       <main className="dashboard-main">
+        <Greeting/>
         {/* Page Header */}
-        <div className="page-header">
+        <div className="page-header">          
           <div className="header-content">
             <h1>Properties</h1>
             <div className="header-actions">
@@ -536,7 +513,7 @@ const Properties = () => {
         {/* Add Property Modal */}
         {showModal && (
           <div className="modal">
-            <div className="modal-content">
+            <div className="modal-content">              
               <div className="modal-header">
                 <h2>Add New Property</h2>
                 <button
