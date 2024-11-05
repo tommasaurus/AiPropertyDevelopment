@@ -123,7 +123,7 @@ class OpenAIService:
             document_type = result.get('document_type', '').lower()
             known_types = {'lease', 'contract', 'invoice'}
             if document_type in known_types:
-                return document_type
+                return document_type.capitalize()
             else:
                 logger.warning(f"Unknown document type determined: {document_type}")
                 return None
