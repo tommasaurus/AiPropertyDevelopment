@@ -13,10 +13,12 @@
   margin-left: 73px; /* Width of collapsed sidebar */
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 1rem 2rem;
-  width: calc(100% - 73px); /* Ensure main content takes remaining width */
+  width: calc(100% - 73px);
+  box-sizing: border-box;
 }
 
-.dashboard-main.sidebar-expanded {
+/* Updated selector to match the body class toggle in Sidebar.js */
+body.dashboard-sidebar-expanded .dashboard-main {
   margin-left: 230px; /* Width of expanded sidebar */
   width: calc(100% - 230px);
 }
@@ -33,28 +35,39 @@
   font-weight: 700;
   color: #fd2b2b;
   margin-bottom: 0.25rem;
-  margin-left: 1.5rem;
+  margin-left: 2rem;
 }
 
 .greeting-date {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #666;
-  margin-left: -3rem;
+  color: #323232;
+  margin-left: -2.2rem;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .dashboard-main {
     margin-left: 0;
+    width: 100%;
+    transform: translateX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .dashboard-main.sidebar-expanded {
+  body.dashboard-sidebar-expanded .dashboard-main {
     margin-left: 0;
+    width: 100%;
+    transform: translateX(230px);
   }
 
   .greeting-title {
     font-size: 1.25rem;
+    margin-left: 0;
+  }
+
+  .greeting-date {
+    font-size: 1rem;
+    margin-left: 0;
   }
 }
 

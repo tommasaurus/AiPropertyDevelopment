@@ -23,6 +23,8 @@ const Properties = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadStep, setUploadStep] = useState(1);
 
   // State for form data when adding a new property
   const [formData, setFormData] = useState({
@@ -36,7 +38,7 @@ const Properties = () => {
     is_nnn: false,
     purchase_price: "",
     purchase_date: "",
-    property_type: ""
+    property_type: "",
   });
 
   const fileInputRef = useRef(null);
@@ -107,13 +109,16 @@ const Properties = () => {
   // Handle document upload based on selected document type
   const handleUploadDocument = async () => {
     if (!file || !selectedDocType || !selectedProperty) {
-      setErrorMessage("Please upload a file, select a document type, and select a property.");
+      setErrorMessage(
+        "Please upload a file, select a document type, and select a property."
+      );
       return;
     }
 
     const formDataToSend = new FormData();
     formDataToSend.append("file", file);
-    const documentType = selectedDocType === "Other" ? customDocType : selectedDocType;
+    const documentType =
+      selectedDocType === "Other" ? customDocType : selectedDocType;
     formDataToSend.append("document_type", documentType);
     formDataToSend.append("property_id", parseInt(selectedProperty, 10));
 
@@ -142,11 +147,14 @@ const Properties = () => {
 
       const response = await api.post(uploadEndpoint, formDataToSend, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      console.log(`${documentType} document uploaded successfully:`, response.data);
+      console.log(
+        `${documentType} document uploaded successfully:`,
+        response.data
+      );
       setIsUploaded(true);
       setFile(null);
 
@@ -156,7 +164,8 @@ const Properties = () => {
     } catch (error) {
       console.error(`Error uploading ${documentType} document:`, error);
       setErrorMessage(
-        error.response?.data?.detail || `Failed to upload ${documentType} document. Please try again.`
+        error.response?.data?.detail ||
+          `Failed to upload ${documentType} document. Please try again.`
       );
     } finally {
       setUploading(false);
@@ -168,7 +177,7 @@ const Properties = () => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -178,13 +187,21 @@ const Properties = () => {
     setIsSubmitting(true);
     const formattedData = {
       ...formData,
-      num_bedrooms: formData.num_bedrooms ? parseInt(formData.num_bedrooms, 10) : null,
-      num_bathrooms: formData.num_bathrooms ? parseInt(formData.num_bathrooms, 10) : null,
-      num_floors: formData.num_floors ? parseInt(formData.num_floors, 10) : null,
+      num_bedrooms: formData.num_bedrooms
+        ? parseInt(formData.num_bedrooms, 10)
+        : null,
+      num_bathrooms: formData.num_bathrooms
+        ? parseInt(formData.num_bathrooms, 10)
+        : null,
+      num_floors: formData.num_floors
+        ? parseInt(formData.num_floors, 10)
+        : null,
       hoa_fee: formData.hoa_fee ? parseFloat(formData.hoa_fee) : null,
-      purchase_price: formData.purchase_price ? parseFloat(formData.purchase_price) : null,
+      purchase_price: formData.purchase_price
+        ? parseFloat(formData.purchase_price)
+        : null,
       purchase_date: formData.purchase_date || null,
-      property_type: formData.property_type || null
+      property_type: formData.property_type || null,
     };
 
     try {
@@ -202,206 +219,392 @@ const Properties = () => {
         is_nnn: false,
         purchase_price: "",
         purchase_date: "",
-        property_type: ""
+        property_type: "",
       });
       fetchProperties(); // Re-fetch properties after adding the new one
     } catch (error) {
       console.error("Error adding property:", error);
       setErrorMessage(
-        error.response?.data?.detail || "Failed to add property. Please try again."
+        error.response?.data?.detail ||
+          "Failed to add property. Please try again."
       );
     } finally {
       setIsSubmitting(false);
     }
   };
+  const resetUploadStates = () => {
+    setFile(null);
+    setSelectedDocType(null);
+    setSelectedProperty("");
+    setCustomDocType("");
+    setUploadStep(1);
+    setErrorMessage("");
+    setIsUploaded(false);
+  };
 
   return (
-    <div className="dashboard-layout">
+    <div className='dashboard-layout'>
       <Sidebar logo={dwellexLogo} />
 
-      <main className="dashboard-main">
-        {/* Greeting Section */}
-        <div className="greeting-section">
-          <h1 className="greeting-title">
-            {greeting} {businessName}
-          </h1>
-          <p className="greeting-date">
-            {currentTime.toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric"
-            })}
-          </p>
-        </div>
-
-        {/* Document Type Selection */}
-        <div className="document-type-section">
-          <h2>Select Document Type</h2>
-          <div className="document-type-boxes">
-            {documentTypes.map((type) => (
-              <div
-                key={type}
-                className={`document-type-box ${selectedDocType === type ? "selected" : ""}`}
-                onClick={() => {
-                  setSelectedDocType(type);
-                  if (type !== "Other") setCustomDocType("");
-                }}
+      <main className='dashboard-main'>
+        <div className='page-header'>
+          <div className='header-content'>
+            <h1>Properties</h1>
+            <div className='header-actions'>
+              <button
+                className='primary-button'
+                onClick={() => setShowModal(true)}
               >
-                {type}
-              </div>
-            ))}
+                Add Property
+              </button>
+              <button
+                className='primary-button'
+                onClick={() => setShowUploadModal(true)}
+              >
+                Upload Document
+              </button>
+            </div>
           </div>
-          {selectedDocType === "Other" && (
-            <input
-              type="text"
-              className="custom-doc-input"
-              placeholder="Enter custom document type"
-              value={customDocType}
-              onChange={(e) => setCustomDocType(e.target.value)}
-            />
-          )}
         </div>
 
-        {/* Property Selection Dropdown */}
-        <div className="property-selection">
-          <h2>Select Property</h2>
-          <select
-            value={selectedProperty}
-            onChange={(e) => setSelectedProperty(e.target.value)}
-            className="property-dropdown"
-          >
-            <option value="" disabled>Select a property</option>
-            {properties.map((property) => (
-              <option key={property.id} value={property.id}>
-                {property.address}
-              </option>
-            ))}
-          </select>
+        {/* Properties Table */}
+        <div className='properties-table-container'>
+          <table className='properties-table'>
+            <thead>
+              <tr>
+                <th>Address</th>
+                <th>Property Type</th>
+                <th>Bedrooms</th>
+                <th>Bathrooms</th>
+                <th>Floors</th>
+                <th>Commercial</th>
+                <th>HOA</th>
+                <th>HOA Fee</th>
+                <th>Purchase Price</th>
+                <th>Purchase Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {properties.map((property) => (
+                <tr key={property.id}>
+                  <td>{property.address}</td>
+                  <td>{property.property_type || "N/A"}</td>
+                  <td>{property.num_bedrooms || "N/A"}</td>
+                  <td>{property.num_bathrooms || "N/A"}</td>
+                  <td>{property.num_floors || "N/A"}</td>
+                  <td>{property.is_commercial ? "Yes" : "No"}</td>
+                  <td>{property.is_hoa ? "Yes" : "No"}</td>
+                  <td>
+                    {property.hoa_fee
+                      ? formatCurrency(property.hoa_fee)
+                      : "N/A"}
+                  </td>
+                  <td>{formatCurrency(property.purchase_price)}</td>
+                  <td>{formatDate(property.purchase_date)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* File Upload Area */}
-        <div
-          className={`file-drop-area ${file ? "active" : ""}`}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-              handleFileChange({ target: { files: e.dataTransfer.files } });
-            }
-          }}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            style={{ display: "none" }}
-            accept="image/*,.pdf,.doc,.docx"
-          />
-          <p>Drag & drop files here, or click to upload</p>
-        </div>
+        {/* Upload Document Modal */}
+        {showUploadModal && (
+          <div className='modal'>
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <h2>Upload Document</h2>
+                <button
+                  className='close-button'
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    resetUploadStates();
+                  }}
+                >
+                  ×
+                </button>
+              </div>
 
-        {/* Selected File Preview */}
-        {file && (
-          <div className="uploaded-file-preview">
-            <p>Selected file: {file.name}</p>
-            <button className="delete-file" onClick={() => { setFile(null); }}>
-              Remove
-            </button>
+              <div className='modal-body'>
+                <div className='steps-indicator'>
+                  <div className={`step ${uploadStep >= 1 ? "active" : ""}`}>
+                    1. Upload File
+                  </div>
+                  <div className={`step ${uploadStep >= 2 ? "active" : ""}`}>
+                    2. Document Type
+                  </div>
+                  <div className={`step ${uploadStep >= 3 ? "active" : ""}`}>
+                    3. Select Property
+                  </div>
+                </div>
+
+                {uploadStep === 1 && (
+                  <div className='upload-step'>
+                    <div
+                      className={`file-drop-area ${file ? "active" : ""}`}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          handleFileChange({
+                            target: { files: e.dataTransfer.files },
+                          });
+                        }
+                      }}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <input
+                        type='file'
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: "none" }}
+                        accept='image/*,.pdf,.doc,.docx'
+                      />
+                      <p>Drag & drop files here, or click to upload</p>
+                    </div>
+
+                    {file && (
+                      <div className='uploaded-file-preview'>
+                        <p>{file.name}</p>
+                        <button
+                          className='delete-file'
+                          onClick={() => setFile(null)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {uploadStep === 2 && (
+                  <div className='upload-step'>
+                    <div className='document-type-boxes'>
+                      {documentTypes.map((type) => (
+                        <div
+                          key={type}
+                          className={`document-type-box ${
+                            selectedDocType === type ? "selected" : ""
+                          }`}
+                          onClick={() => {
+                            setSelectedDocType(type);
+                            if (type !== "Other") setCustomDocType("");
+                          }}
+                        >
+                          {type}
+                        </div>
+                      ))}
+                    </div>
+                    {selectedDocType === "Other" && (
+                      <input
+                        type='text'
+                        className='custom-doc-input'
+                        placeholder='Enter custom document type'
+                        value={customDocType}
+                        onChange={(e) => setCustomDocType(e.target.value)}
+                      />
+                    )}
+                  </div>
+                )}
+
+                {uploadStep === 3 && (
+                  <div className='upload-step'>
+                    <select
+                      value={selectedProperty}
+                      onChange={(e) => setSelectedProperty(e.target.value)}
+                      className='property-dropdown'
+                    >
+                      <option value='' disabled>
+                        Select a property
+                      </option>
+                      {properties.map((property) => (
+                        <option key={property.id} value={property.id}>
+                          {property.address}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {errorMessage && (
+                  <p className='error-message'>{errorMessage}</p>
+                )}
+                {isUploaded && (
+                  <p className='success-message'>
+                    Document uploaded successfully!
+                  </p>
+                )}
+              </div>
+
+              <div className='modal-footer'>
+                {uploadStep > 1 && (
+                  <button
+                    className='secondary-button'
+                    onClick={() => setUploadStep((prev) => prev - 1)}
+                  >
+                    Back
+                  </button>
+                )}
+                {uploadStep < 3 && (
+                  <button
+                    className='primary-button'
+                    onClick={() => {
+                      if (uploadStep === 1 && !file) {
+                        setErrorMessage("Please select a file first");
+                        return;
+                      }
+                      if (uploadStep === 2 && !selectedDocType) {
+                        setErrorMessage("Please select a document type");
+                        return;
+                      }
+                      setErrorMessage("");
+                      setUploadStep((prev) => prev + 1);
+                    }}
+                  >
+                    Next
+                  </button>
+                )}
+                {uploadStep === 3 && (
+                  <button
+                    className='primary-button'
+                    onClick={handleUploadDocument}
+                    disabled={uploading}
+                  >
+                    {uploading ? "Uploading..." : "Upload Document"}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Upload Button */}
-        <button onClick={handleUploadDocument} className="upload-button" disabled={uploading}>
-          {uploading ? "Uploading..." : "Upload Document"}
-        </button>
-
-        {/* Success and Error Messages */}
-        {isUploaded && <p className="success-message">Document uploaded successfully!</p>}
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-        {/* Properties List Section */}
-        <div className="properties-list">
-          <h2 className="properties-title">Properties</h2>
-          {properties.length > 0 ? (
-            <ul className="properties-items">
-              {properties.map((property) => (
-                <li key={property.id} className="property-item">
-                  <h3>{property.address}</h3>
-                  {/* Add any additional property details here */}
-                  <p><strong>Bedrooms:</strong> {property.num_bedrooms}</p>
-                  <p><strong>Bathrooms:</strong> {property.num_bathrooms}</p>
-                  <p><strong>Floors:</strong> {property.num_floors}</p>
-                  <p><strong>Commercial:</strong> {property.is_commercial ? 'Yes' : 'No'}</p>
-                  <p><strong>HOA:</strong> {property.is_hoa ? 'Yes' : 'No'}</p>
-                  {property.is_hoa && <p><strong>HOA Fee:</strong> ${property.hoa_fee}</p>}
-                  <p><strong>Purchase Price:</strong> {formatCurrency(property.purchase_price)}</p>
-                  <p><strong>Purchase Date:</strong> {formatDate(property.purchase_date)}</p>
-                  <p><strong>Property Type:</strong> {property.property_type}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No properties available.</p>
-          )}
-          <button onClick={() => setShowModal(true)} className="add-property-button">
-            Add Property
-          </button>
-        </div>
-
         {/* Add Property Modal */}
         {showModal && (
-          <div className="modal">
-            <div className="modal-content">
-              <h2>Add New Property</h2>
+          <div className='modal'>
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <h2>Add New Property</h2>
+                <button
+                  className='close-button'
+                  onClick={() => setShowModal(false)}
+                >
+                  ×
+                </button>
+              </div>
               <form onSubmit={handleSubmit}>
-                <label>
-                  Address:
-                  <input type="text" name="address" value={formData.address} onChange={handleInputChange} required />
-                </label>
-                <label>
-                  Number of Bedrooms:
-                  <input type="number" name="num_bedrooms" value={formData.num_bedrooms} onChange={handleInputChange} />
-                </label>
-                <label>
-                  Number of Bathrooms:
-                  <input type="number" name="num_bathrooms" value={formData.num_bathrooms} onChange={handleInputChange} />
-                </label>
-                <label>
-                  Number of Floors:
-                  <input type="number" name="num_floors" value={formData.num_floors} onChange={handleInputChange} />
-                </label>
-                <label>
-                  Commercial Property:
-                  <input type="checkbox" name="is_commercial" checked={formData.is_commercial} onChange={handleInputChange} />
-                </label>
-                <label>
-                  HOA Property:
-                  <input type="checkbox" name="is_hoa" checked={formData.is_hoa} onChange={handleInputChange} />
-                </label>
-                <label>
-                  HOA Fee:
-                  <input type="number" name="hoa_fee" value={formData.hoa_fee} onChange={handleInputChange} />
-                </label>
-                <label>
-                  Purchase Price:
-                  <input type="number" name="purchase_price" value={formData.purchase_price} onChange={handleInputChange} />
-                </label>
-                <label>
-                  Purchase Date:
-                  <input type="date" name="purchase_date" value={formData.purchase_date} onChange={handleInputChange} />
-                </label>
-                <label>
-                  Property Type:
-                  <input type="text" name="property_type" value={formData.property_type} onChange={handleInputChange} />
-                </label>
-                <div className="modal-buttons">
-                  <button type="submit" disabled={isSubmitting}>
+                <div className='form-grid'>
+                  <div className='form-group'>
+                    <label>Address</label>
+                    <input
+                      type='text'
+                      name='address'
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Property Type</label>
+                    <input
+                      type='text'
+                      name='property_type'
+                      value={formData.property_type}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Bedrooms</label>
+                    <input
+                      type='number'
+                      name='num_bedrooms'
+                      value={formData.num_bedrooms}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Bathrooms</label>
+                    <input
+                      type='number'
+                      name='num_bathrooms'
+                      value={formData.num_bathrooms}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Floors</label>
+                    <input
+                      type='number'
+                      name='num_floors'
+                      value={formData.num_floors}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Purchase Price</label>
+                    <input
+                      type='number'
+                      name='purchase_price'
+                      value={formData.purchase_price}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Purchase Date</label>
+                    <input
+                      type='date'
+                      name='purchase_date'
+                      value={formData.purchase_date}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>HOA Fee</label>
+                    <input
+                      type='number'
+                      name='hoa_fee'
+                      value={formData.hoa_fee}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className='checkbox-group'>
+                    <label>
+                      <input
+                        type='checkbox'
+                        name='is_commercial'
+                        checked={formData.is_commercial}
+                        onChange={handleInputChange}
+                      />
+                      Commercial Property
+                    </label>
+                  </div>
+
+                  <div className='checkbox-group'>
+                    <label>
+                      <input
+                        type='checkbox'
+                        name='is_hoa'
+                        checked={formData.is_hoa}
+                        onChange={handleInputChange}
+                      />
+                      HOA Property
+                    </label>
+                  </div>
+                </div>
+
+                <div className='modal-footer'>
+                  <button
+                    type='submit'
+                    className='submit-button'
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? "Adding..." : "Add Property"}
-                  </button>
-                  <button type="button" onClick={() => setShowModal(false)}>
-                    Cancel
                   </button>
                 </div>
               </form>
@@ -409,7 +612,6 @@ const Properties = () => {
           </div>
         )}
 
-        {/* Insert AllDataTables component here */}
         <AllDataTables />
       </main>
     </div>

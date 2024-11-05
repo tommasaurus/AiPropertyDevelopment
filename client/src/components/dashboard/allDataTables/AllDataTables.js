@@ -10,7 +10,7 @@ const AllDataTables = () => {
   const [documents, setDocuments] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
-  const [invoices, setInvoices] = useState([]);  
+  const [invoices, setInvoices] = useState([]);
   const [leases, setLeases] = useState([]);
   const [payments, setPayments] = useState([]);
   const [properties, setProperties] = useState([]);
@@ -165,8 +165,8 @@ const AllDataTables = () => {
   };
 
   return (
-    <div className="all-data-tables">
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+    <div className='all-data-tables'>
+      {errorMessage && <p className='error-message'>{errorMessage}</p>}
 
       {/* Contracts Table */}
       <section>
@@ -196,11 +196,21 @@ const AllDataTables = () => {
                   <td>{contract.contract_type || "N/A"}</td>
                   <td>{formatDate(contract.start_date)}</td>
                   <td>{formatDate(contract.end_date)}</td>
-                  <td>{contract.parties_involved ? JSON.stringify(contract.parties_involved) : "N/A"}</td>
-                  <td>{contract.terms ? JSON.stringify(contract.terms) : "N/A"}</td>
+                  <td>
+                    {contract.parties_involved
+                      ? JSON.stringify(contract.parties_involved)
+                      : "N/A"}
+                  </td>
+                  <td>
+                    {contract.terms ? JSON.stringify(contract.terms) : "N/A"}
+                  </td>
                   <td>
                     {contract.document_url ? (
-                      <a href={contract.document_url} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={contract.document_url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
                         View Document
                       </a>
                     ) : (
@@ -291,7 +301,11 @@ const AllDataTables = () => {
                   <td>{expense.description || "N/A"}</td>
                   <td>
                     {expense.receipt_url ? (
-                      <a href={expense.receipt_url} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={expense.receipt_url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
                         View Receipt
                       </a>
                     ) : (
@@ -567,7 +581,7 @@ const AllDataTables = () => {
                 <th>Last Name</th>
                 <th>Landlord</th>
                 <th>Email</th>
-                <th>Phone</th>                
+                <th>Phone</th>
               </tr>
             </thead>
             <tbody>
@@ -578,7 +592,7 @@ const AllDataTables = () => {
                   <td>{tenant.last_name || "N/A"}</td>
                   <td>{tenant.landlord || "N/A"}</td>
                   <td>{tenant.email || "N/A"}</td>
-                  <td>{tenant.phone || "N/A"}</td>                  
+                  <td>{tenant.phone || "N/A"}</td>
                 </tr>
               ))}
             </tbody>

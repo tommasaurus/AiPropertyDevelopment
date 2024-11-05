@@ -52,8 +52,9 @@
 }
 
 .dashboard-sidebar .tab-logo {
-  height: 30px;
-  width: 36px;
+  height: 31px;
+  width: 37px;
+  margin-bottom: 0.2rem;
   object-fit: contain;
   opacity: 1;
   transition: opacity 0.2s ease;
@@ -133,7 +134,7 @@
 }
 
 .dashboard-sidebar .nav-item:hover {
-  background-color: #f1f5f9;
+  background-color: #ffe8dd;
   color: #0f172a;
 }
 
