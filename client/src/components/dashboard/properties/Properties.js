@@ -5,6 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
 import Greeting from "../greeting/Greeting";
+import SearchBar from "../searchBar/SearchBar";
 import AddressAutocomplete from "../addressAutocomplete/AddressAutocomplete";
 import PropertyDetails from "./propertyDetails";
 import "./Properties.css";
@@ -248,7 +249,7 @@ const Properties = () => {
         num_floors: randomIntFloor,
         purchase_price: propertyValue,
         property_type: "Residential", // Example default value
-        is_commercial: true
+        is_hoa: true
       }));
 
       setErrorMessage("");
@@ -352,6 +353,7 @@ const Properties = () => {
       <Sidebar logo={dwellexLogo} />
 
       <main className="dashboard-main">
+        <SearchBar />
         <Greeting />
         {/* Page Header */}
         <div className="page-header">
