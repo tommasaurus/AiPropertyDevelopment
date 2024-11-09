@@ -36,9 +36,7 @@ const ClientLogin = () => {
         <button onClick={handleLogoClick} className='logo-button'>
           <img src={logo} alt='Dwellex Logo' className='logo' />
         </button>
-        <p className='subtitle'>
-          <strong>Welcome Back!</strong>
-        </p>
+        <p className='subtitle'>Sign into your account</p>
 
         <button onClick={handleGoogleLogin} className='google-button'>
           <svg
