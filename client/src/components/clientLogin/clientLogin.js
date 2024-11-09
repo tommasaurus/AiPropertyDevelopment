@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { loginUser, loginWithGoogle } from "../../services/login";
 import "./clientLogin.css";
 import logo from "../../images/logo.png";
+import walkingUpStairs from "../../videos/WalkingUpStairsGIF.mp4";
 
 const ClientLogin = () => {
   const [email, setEmail] = useState("");
@@ -32,6 +33,13 @@ const ClientLogin = () => {
 
   return (
     <div className='container'>
+      <video
+        src={walkingUpStairs}
+        autoPlay
+        loop
+        muted
+        className='side-video'
+      ></video>
       <div className='card'>
         <button onClick={handleLogoClick} className='logo-button'>
           <img src={logo} alt='Dwellex Logo' className='logo' />

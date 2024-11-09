@@ -24,6 +24,16 @@
   align-items: center;
 }
 
+.side-video {
+  position: fixed;
+  left: 0;
+  width: 30vw; /* Adjust as needed to crop left and right */
+  height: 100%; /* Make it fill the height */
+  object-fit: cover; /* Ensures the video scales correctly */
+  object-position: center; /* Centers the cropped content */
+  z-index: -1; /* Keeps the video behind the card */
+}
+
 .logo-button {
   background: none;
   border: none;
