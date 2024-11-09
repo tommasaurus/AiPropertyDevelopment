@@ -11,7 +11,7 @@ from app.core.auth.auth_service import get_user_by_id, get_all_users, create_use
 
 router = APIRouter()
 
-@router.get("/me", response_model=schemas.User)
+@router.get("/me", response_model=schemas.UserMe)
 async def read_current_user(current_user: User = Depends(get_current_user)):
     return current_user
 

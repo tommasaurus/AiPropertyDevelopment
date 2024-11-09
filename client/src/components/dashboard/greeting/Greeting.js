@@ -1,13 +1,13 @@
 // src/components/dashboard/greeting/Greeting.js
 
 import React, { useEffect, useState } from "react";
+import api from "../../../services/api";
 import './Greeting.css';
 
 const Greeting = () => {
     const [greeting, setGreeting] = useState("");
     const [currentTime, setCurrentTime] = useState(new Date());
-
-    const businessName = "Jason";
+    const [userName, setUserName] = useState("");
 
     // Update greeting based on time of day
     useEffect(() => {
@@ -32,11 +32,24 @@ const Greeting = () => {
         return () => clearInterval(timer); // Cleanup on unmount
     }, []);
 
+    useEffect(() => {
+        const fetchUserName = async () => {
+            try {
+                const response = await api.get('/users/me');
+                setUserName(response.data.name);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUserName();
+    }, []);
+
     return (
         // Greeting Section
         <div className="greeting-section">
             <h1 className="greeting-title">
-                {greeting}, {businessName}
+                {greeting}, {userName || "User"}
             </h1>
             <p className="greeting-date">
                 {currentTime.toLocaleDateString("en-US", {

@@ -1,6 +1,6 @@
 # app/schemas/__init__.py
 
-from .user import User, UserCreate, UserUpdate
+from .user import User, UserCreate, UserUpdate, UserMe
 from .property import Property, PropertyCreate, PropertyUpdate
 from .utility import Utility, UtilityCreate, UtilityUpdate
 from .tenant import Tenant, TenantCreate, TenantUpdate
@@ -20,6 +20,7 @@ __all__ = [
     "User",
     "UserCreate",
     "UserUpdate",
+    "UserMe",
     "Property",
     "PropertyCreate",
     "PropertyUpdate",

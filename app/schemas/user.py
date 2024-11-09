@@ -30,3 +30,7 @@ class User(UserInDBBase):
     properties: Optional[List[PropertySummary]] = []
 
     model_config = ConfigDict(from_attributes=True)
+
+class UserMe(UserInDBBase):
+    """Schema for /users/me endpoint without properties."""
+    model_config = ConfigDict(from_attributes=True)
