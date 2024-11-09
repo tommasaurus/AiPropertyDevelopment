@@ -1,8 +1,9 @@
 // Calendar.jsx
 
 import React, { useState } from 'react';
-// import './Calendar.css'
+import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '../sidebar/Sidebar';
+import DayPanel from './DayPanel';
 import { Button } from "../../ui/button"
 import { Card } from "../../ui/card"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../ui/sheet";
@@ -22,19 +23,31 @@ const Calendar = () => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [isDayDetailsOpen, setIsDayDetailsOpen] = useState(false);
 
-  // Event types with their colors
+  // Modern AI/Art Deco color palette
   const eventTypes = {
-    meeting: { color: 'bg-purple-500', hover: 'hover:bg-purple-600' },
-    deadline: { color: 'bg-red-500', hover: 'hover:bg-red-600' },
-    social: { color: 'bg-green-500', hover: 'hover:bg-green-600' },
-    reminder: { color: 'bg-blue-500', hover: 'hover:bg-blue-600' }
+    meeting: { 
+      color: 'bg-gradient-to-r from-violet-600 to-purple-700',
+      hover: 'hover:from-violet-700 hover:to-purple-800'
+    },
+    deadline: { 
+      color: 'bg-gradient-to-r from-rose-500 to-pink-600',
+      hover: 'hover:from-rose-600 hover:to-pink-700'
+    },
+    social: { 
+      color: 'bg-gradient-to-r from-emerald-500 to-teal-600',
+      hover: 'hover:from-emerald-600 hover:to-teal-700'
+    },
+    reminder: { 
+      color: 'bg-gradient-to-r from-blue-500 to-indigo-600',
+      hover: 'hover:from-blue-600 hover:to-indigo-700'
+    }
   };
 
   const sampleEvents = [
-    { id: 1, title: 'Team Meeting', type: 'meeting', time: '9:00 AM', duration: '1h' },
-    { id: 2, title: 'Project Deadline', type: 'deadline', time: '2:00 PM', duration: '30m' },
-    { id: 3, title: 'Team Lunch', type: 'social', time: '12:00 PM', duration: '1h' },
-    { id: 4, title: 'Code Review', type: 'reminder', time: '4:00 PM', duration: '1h' }
+    { id: 1, title: 'Property Inspection', type: 'meeting', time: '9:00 AM', duration: '1h' },
+    { id: 2, title: 'Lease Renewal', type: 'deadline', time: '2:00 PM', duration: '30m' },
+    { id: 3, title: 'Tenant Meeting', type: 'social', time: '12:00 PM', duration: '1h' },
+    { id: 4, title: 'Maintenance Check', type: 'reminder', time: '4:00 PM', duration: '1h' }
   ];
 
   const getDaysInMonth = (date) => {
@@ -91,45 +104,69 @@ const Calendar = () => {
 
     return (
       <Sheet open={isDayDetailsOpen} onOpenChange={setIsDayDetailsOpen}>
-        <SheetContent className="w-96">
+        <SheetContent className="w-96 bg-gradient-to-br from-white to-violet-50">
           <SheetHeader>
-            <div className="flex items-center justify-between">
-              <SheetTitle className="text-xl font-bold">{formattedDate}</SheetTitle>
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center justify-between"
+            >
+              <SheetTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-purple-600">
+                {formattedDate}
+              </SheetTitle>
               <Button 
                 variant="ghost" 
                 size="icon"
                 onClick={() => setIsDayDetailsOpen(false)}
+                className="hover:bg-violet-100"
               >
                 <X className="h-4 w-4" />
               </Button>
-            </div>
+            </motion.div>
           </SheetHeader>
           
-          <div className="mt-6">
+          <motion.div 
+            className="mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-sm font-medium text-gray-500">SCHEDULE</h3>
-              <Button size="sm" className="bg-purple-500 hover:bg-purple-600">
+              <Button 
+                size="sm" 
+                className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white"
+              >
                 <Plus className="h-4 w-4 mr-2" /> Add Event
               </Button>
             </div>
 
             <div className="space-y-4">
-              {selectedDay.events.map((event, index) => (
-                <Card key={index} className="p-4 hover:shadow-md transition-all">
-                  <div className={`w-2 h-2 rounded-full ${eventTypes[event.type].color} mb-2`} />
-                  <div className="font-medium">{event.title}</div>
-                  <div className="text-sm text-gray-500">
-                    {event.time} · {event.duration}
-                  </div>
-                </Card>
-              ))}
+              <AnimatePresence>
+                {selectedDay.events.map((event, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card className="p-4 hover:shadow-lg hover:shadow-violet-100 transition-all duration-300 bg-white/80 backdrop-blur-sm">
+                      <div className={`w-2 h-2 rounded-full ${eventTypes[event.type].color} mb-2`} />
+                      <div className="font-medium">{event.title}</div>
+                      <div className="text-sm text-gray-500">
+                        {event.time} · {event.duration}
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
         </SheetContent>
       </Sheet>
     );
   };
-
   const renderTimelineView = () => {
     const today = new Date();
     const days = [];
@@ -253,133 +290,164 @@ const Calendar = () => {
     const days = getDaysInMonth(currentDate);
 
     return (
-      <div className="grid grid-cols-7 gap-4">
+      <motion.div 
+        className="grid grid-cols-7 gap-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="text-center text-sm font-medium text-gray-500">
+          <div key={day} className="text-center text-sm font-medium text-gray-400 uppercase tracking-wider">
             {day}
           </div>
         ))}
         {days.map((day, index) => (
-          <Card
+          <motion.div
             key={index}
-            className={`min-h-28 p-2 ${
-              day.empty ? 'bg-gray-50/50' : 'hover:shadow-md transition-all cursor-pointer'
-            }`}
-            onClick={() => handleDayClick(day)}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.01 }}
           >
-            {!day.empty && (
-              <>
-                <div className={`text-sm font-medium ${
-                  new Date().getDate() === day.day &&
-                  new Date().getMonth() === currentDate.getMonth()
-                    ? 'text-purple-600 bg-purple-100 w-6 h-6 rounded-full flex items-center justify-center'
-                    : ''
-                }`}>
-                  {day.day}
-                </div>
-                {day.events?.map((event, eventIndex) => (
-                  <div
-                    key={eventIndex}
-                    className={`mt-1 p-1.5 text-xs rounded-lg ${eventTypes[event.type].color} 
-                      ${eventTypes[event.type].hover} text-white transition-all`}
-                  >
-                    <div className="font-medium">{event.title}</div>
-                    <div className="text-xs opacity-90">{event.time}</div>
+            <Card
+              className={`min-h-28 p-2 border-0 ${
+                day.empty ? 'bg-gray-50/30' : 
+                'hover:shadow-lg hover:shadow-violet-100 transition-all cursor-pointer bg-white/80 backdrop-blur-sm'
+              }`}
+              onClick={() => handleDayClick(day)}
+            >
+              {!day.empty && (
+                <>
+                  <div className={`text-sm font-medium ${
+                    new Date().getDate() === day.day &&
+                    new Date().getMonth() === currentDate.getMonth()
+                      ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-lg'
+                      : ''
+                  }`}>
+                    {day.day}
                   </div>
-                ))}
-              </>
-            )}
-          </Card>
+                  <div className="mt-1 space-y-1">
+                    <AnimatePresence>
+                      {day.events?.map((event, eventIndex) => (
+                        <motion.div
+                          key={eventIndex}
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className={`p-1.5 text-xs rounded-md ${eventTypes[event.type].color} 
+                            ${eventTypes[event.type].hover} text-white shadow-md transition-all duration-300`}
+                        >
+                          <div className="font-medium">{event.title}</div>
+                          <div className="text-xs opacity-90">{event.time}</div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                </>
+              )}
+            </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     );
   };
 
-  return (
-    <div className="calendar flex h-screen bg-gray-50">
-      <div className="w-64">
+  return (    
+    <div className="calendar flex h-screen bg-gradient-to-br from-gray-50 via-violet-50 to-purple-50">
+      <div className="w-64 border-r border-violet-100 backdrop-blur-sm">
         <Sidebar />
       </div>
-
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="flex items-center justify-between p-6 bg-white border-b">
+      <DayPanel />
+      <motion.div 
+        className="flex-1 flex flex-col overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <header className="flex items-center justify-between p-6 bg-white/80 backdrop-blur-md border-b border-violet-100">
           <div className="flex items-center space-x-4">
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               onClick={prevMonth}
-              className="hover:bg-gray-100"
+              className="hover:bg-violet-50 transition-colors duration-200"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 text-violet-600" />
             </Button>
-            <h2 className="text-xl font-semibold">
+            <motion.h2 
+              className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-purple-600"
+              key={currentDate.getMonth()}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
               {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </h2>
+            </motion.h2>
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               onClick={nextMonth}
-              className="hover:bg-gray-100"
+              className="hover:bg-violet-50 transition-colors duration-200"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 text-violet-600" />
             </Button>
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button
-              variant={view === 'month' ? 'default' : 'outline'}
-              onClick={() => setView('month')}
-              className={view === 'month' ? 'bg-purple-500 hover:bg-purple-600' : ''}
-            >
-              Month
-            </Button>
-            <Button
-              variant={view === 'week' ? 'default' : 'outline'}
-              onClick={() => setView('week')}
-              className={view === 'week' ? 'bg-purple-500 hover:bg-purple-600' : ''}
-            >
-              Week
-            </Button>
-            <Button
-              variant={view === 'day' ? 'default' : 'outline'}
-              onClick={() => setView('day')}
-              className={view === 'day' ? 'bg-purple-500 hover:bg-purple-600' : ''}
-            >
-              Day
-            </Button>
-            <Button
-              variant={view === 'timeline' ? 'default' : 'outline'}
-              onClick={() => setView('timeline')}
-              className={view === 'timeline' ? 'bg-purple-500 hover:bg-purple-600' : ''}
-            >
-              Timeline
-            </Button>
+            {['month', 'week', 'day', 'timeline'].map((viewType) => (
+              <Button
+                key={viewType}
+                variant={view === viewType ? 'default' : 'outline'}
+                onClick={() => setView(viewType)}
+                className={`capitalize transition-all duration-300 ${
+                  view === viewType 
+                    ? 'bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white' 
+                    : 'hover:bg-violet-50'
+                }`}
+              >
+                {viewType}
+              </Button>
+            ))}
           </div>
 
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5 text-gray-500" />
+            <Button variant="ghost" size="icon" className="hover:bg-violet-50 transition-colors duration-200">
+              <Search className="h-5 w-5 text-violet-600" />
             </Button>
-            <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5 text-gray-500" />
+            <Button variant="ghost" size="icon" className="hover:bg-violet-50 transition-colors duration-200">
+              <Bell className="h-5 w-5 text-violet-600" />
             </Button>
-            <Button variant="ghost" size="icon">
-              <Users className="h-5 w-5 text-gray-500" />
+            <Button variant="ghost" size="icon" className="hover:bg-violet-50 transition-colors duration-200">
+              <Users className="h-5 w-5 text-violet-600" />
             </Button>
-            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-              <span className="text-sm font-medium text-purple-600">JD</span>
-            </div>
+            <motion.div 
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="text-sm font-medium text-white">JD</span>
+            </motion.div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto p-6">
-            {view === 'day' && renderDayView()}
-            {view === 'week' && renderWeekView()}
-            {view === 'month' && renderMonthView()}
-            {view === 'timeline' && renderTimelineView()}
-            {renderDayDetails()}
+        <main className="flex-1 overflow-auto p-6 bg-white/50 backdrop-blur-sm">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={view}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {view === 'day' && renderDayView()}
+              {view === 'week' && renderWeekView()}
+              {view === 'month' && renderMonthView()}
+              {view === 'timeline' && renderTimelineView()}
+              {renderDayDetails()}
+            </motion.div>
+          </AnimatePresence>
+          {renderDayDetails()}
         </main>
-      </div>
+      </motion.div>
     </div>
   );
 };
