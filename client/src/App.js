@@ -13,7 +13,8 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Properties from "./components/dashboard/properties/Properties";
 import Messages from "./components/dashboard/messages/Messages";
 import RequireAuth from "./components/RequireAuth";
-import Calendar from "./components/dashboard/calendar/Calendar";
+import CalendarPage from "./components/dashboard/calendar/Calendar";
+import TenantPage from "./components/dashboard/tenants/Tenant";
 
 function LayoutWithNavbarFooter({ children }) {
   const location = useLocation();
@@ -46,7 +47,8 @@ function App() {
                     <Route path="" element={<Dashboard />} />
                     <Route path="properties" element={<Properties />} /> 
                     <Route path="messages" element={<Messages />} />     
-                    <Route path="calendar" element={<Calendar />} />                    
+                    <Route path="calendar" element={<CalendarPage />} />   
+                    <Route path="tenants" element={<TenantPage />} />                    
                   </Routes>
                 </RequireAuth>
               }

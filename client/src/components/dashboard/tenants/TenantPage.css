@@ -1,0 +1,263 @@
+/* TenantPage.css */
+.dashboard-layout {
+  display: flex;
+}
+
+.dashboard-main {
+  flex-grow: 1;
+  min-height: 100vh;
+}
+
+/* Update your tenant-page class */
+.tenant-page {
+  padding: 2rem;
+  background: linear-gradient(135deg, #F9F6F2 0%, #F3EDE7 100%);
+  min-height: 100vh;
+}
+
+.tenant-page {
+  padding: 2rem;
+  background: linear-gradient(135deg, #F9F6F2 0%, #F3EDE7 100%);
+  min-height: 100vh;
+}
+
+.decorative-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.header-line {
+  height: 1px;
+  flex-grow: 1;
+  background: linear-gradient(90deg, transparent, #2c3e50 50%, transparent);
+  position: relative;
+  margin: 0 2rem;
+}
+
+.circle-ornament {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #2c3e50;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+}
+
+.decorative-header h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  margin: 0;
+  padding: 0 2rem;
+  white-space: nowrap;
+}
+
+.search-filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.search-input {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  width: 300px;
+  font-size: 0.9rem;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.filter-btn.active {
+  background: #2c3e50;
+  color: white;
+}
+
+.tenant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.tenant-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tenant-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FF6B6B, #4ECDC4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tenant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.tenant-card:hover::before {
+  opacity: 1;
+}
+
+.card-content {
+  padding: 2rem;
+}
+
+.tenant-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.tenant-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  margin-right: 1rem;
+}
+
+.tenant-title h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.unit-number {
+  font-size: 0.9rem;
+  color: #95a5a6;
+}
+
+.tenant-details {
+  background: #f8f9fe;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  margin-bottom: 0.3rem;
+}
+
+.value {
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-badge.current {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-badge.late {
+  background: #FEEBE6;
+  color: #D32F2F;
+}
+
+.card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.action-btn {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f8f9fe;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.action-btn:hover {
+  background: #2c3e50;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .tenant-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .search-filter-bar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
+  .decorative-header h1 {
+    font-size: 1.8rem;
+    letter-spacing: 0.3em;
+  }
+}
