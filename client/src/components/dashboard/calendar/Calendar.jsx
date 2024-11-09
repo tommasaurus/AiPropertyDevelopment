@@ -1,4 +1,7 @@
+// Calendar.jsx
+
 import React, { useState } from 'react';
+// import './Calendar.css'
 import Sidebar from '../sidebar/Sidebar';
 import { Button } from "../../ui/button"
 import { Card } from "../../ui/card"
@@ -293,7 +296,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="calendar flex h-screen bg-gray-50">
       <div className="w-64">
         <Sidebar />
       </div>
