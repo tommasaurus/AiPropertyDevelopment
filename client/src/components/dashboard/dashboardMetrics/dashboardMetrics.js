@@ -38,7 +38,7 @@ const DashboardMetrics = () => {
     },
     {
       title: "Incoming Rent",
-      value: "$24,680.00",
+      value: "$24.6k",
       icon: DollarSign,
       color: "bg-copper",
       iconColor: "icon-copper",
@@ -54,7 +54,7 @@ const DashboardMetrics = () => {
     },
     {
       title: "Occupancy Rate",
-      value: "92.00%",
+      value: "92%",
       icon: Percent,
       color: "bg-bronze",
       iconColor: "icon-bronze",
