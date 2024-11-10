@@ -17,18 +17,6 @@
   box-sizing: border-box;
 }
 
-.art-nouveau-border {
-  position: relative;
-  padding: 2rem;
-  border: 2px solid rgba(139, 109, 93, 0.3);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 
-    0 10px 30px rgba(139, 109, 93, 0.1),
-    0 0 0 1px rgba(139, 109, 93, 0.05);
-  backdrop-filter: blur(10px);
-}
-
 .nouveau-content-section {
   position: relative;
   padding: 2rem;
