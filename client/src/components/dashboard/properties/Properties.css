@@ -25,7 +25,7 @@
   border: 2px solid rgba(139, 109, 93, 0.3);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 
+  box-shadow:
     0 10px 30px rgba(139, 109, 93, 0.1),
     0 0 0 1px rgba(139, 109, 93, 0.05);
   backdrop-filter: blur(10px);
@@ -207,7 +207,7 @@
   border-bottom: 1px solid rgba(139, 109, 93, 0.1);
 }
 
-/* Property Details Modal (Image 2) */
+/* Property Details Modal */
 .property-details-modal {
   display: flex;
   align-items: center;
@@ -229,7 +229,7 @@
   padding: 2rem;
 }
 
-/* Generic Modal Styles (Add Property & Upload Document) */
+/* Common Modal Styles */
 .modal {
   position: fixed;
   top: 0;
@@ -295,155 +295,6 @@
   transform: rotate(90deg);
 }
 
-/* Next/Back Buttons Styling */
-.modal-footer button,
-.form-grid button {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  min-width: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.modal-footer .primary-button,
-.form-grid .primary-button {
-  background: linear-gradient(135deg, #C8977F, #8B6D5D);
-  color: white;
-  box-shadow: 0 4px 15px rgba(139, 109, 93, 0.2);
-}
-
-.modal-footer .secondary-button,
-.form-grid .secondary-button {
-  background: white;
-  color: #8B6D5D;
-  border: 2px solid #C8977F;
-}
-
-.modal-footer .primary-button:hover,
-.form-grid .primary-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 109, 93, 0.3);
-}
-
-.modal-footer .secondary-button:hover,
-.form-grid .secondary-button:hover {
-  background: rgba(139, 109, 93, 0.05);
-}
-
-/* Form Styles */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  padding: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  margin-bottom: 0.5rem;
-  color: #8B6D5D;
-  font-weight: 500;
-}
-
-.form-group input {
-  padding: 0.75rem 1rem;
-  border: 1px solid #C8977F;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  background: white;
-}
-
-.form-group input:focus {
-  border-color: #8B6D5D;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(139, 109, 93, 0.1);
-}
-
-/* Steps Styling */
-.steps-indicator,
-.steps-indicator-add {
-  display: flex;
-  justify-content: space-between;
-  padding: 1.5rem;
-  position: relative;
-  gap: 1rem;
-}
-
-.step,
-.step-add {
-  flex: 1;
-  padding: 1rem;
-  border-radius: 12px;
-  background: white;
-  color: #8B6D5D;
-  font-weight: 500;
-  text-align: center;
-  border: 2px solid #C8977F;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
-}
-
-.step.active,
-.step-add.active {
-  background: linear-gradient(135deg, #C8977F, #8B6D5D);
-  color: white;
-  border-color: transparent;
-}
-
-/* File Upload Area Styling */
-.file-drop-area {
-  border: 2px dashed #C8977F;
-  border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: rgba(139, 109, 93, 0.02);
-  margin: 1.5rem;
-}
-
-.file-drop-area:hover {
-  background: rgba(139, 109, 93, 0.05);
-  border-color: #8B6D5D;
-}
-
-.file-drop-area.active {
-  border-style: solid;
-  background: rgba(139, 109, 93, 0.08);
-}
-
-/* Property Dropdown Styling */
-.property-dropdown {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid #C8977F;
-  border-radius: 12px;
-  background: white;
-  color: #8B6D5D;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.property-dropdown:focus {
-  outline: none;
-  border-color: #8B6D5D;
-  box-shadow: 0 0 0 3px rgba(139, 109, 93, 0.1);
-}
-
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -480,21 +331,6 @@
   .header-actions {
     width: 100%;
     flex-direction: column;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .steps-indicator,
-  .steps-indicator-add {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .step,
-  .step-add {
-    width: 100%;
   }
 }
 

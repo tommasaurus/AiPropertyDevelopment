@@ -1,0 +1,226 @@
+/* src/components/properties/UploadDocument.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(139, 109, 93, 0.15);
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(139, 109, 93, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #8B6D5D;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #8B6D5D;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  transform: rotate(90deg);
+}
+
+/* Steps Indicator */
+.steps-indicator {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.step {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 12px;
+  background: white;
+  color: #8B6D5D;
+  font-weight: 500;
+  text-align: center;
+  border: 2px solid #C8977F;
+  transition: all 0.3s ease;
+}
+
+.step.active {
+  background: linear-gradient(135deg, #C8977F, #8B6D5D);
+  color: white;
+  border-color: transparent;
+}
+
+/* File Upload Area */
+.file-drop-area {
+  border: 2px dashed #C8977F;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 1.5rem;
+}
+
+.file-drop-area:hover {
+  background: rgba(139, 109, 93, 0.05);
+  border-color: #8B6D5D;
+}
+
+.file-drop-area.active {
+  border-style: solid;
+  background: rgba(139, 109, 93, 0.08);
+}
+
+/* Document Type Selection */
+.document-type-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.document-type-box {
+  flex: 1;
+  min-width: 100px;
+  padding: 1rem;
+  border-radius: 12px;
+  background: white;
+  color: #8B6D5D;
+  font-weight: 500;
+  text-align: center;
+  border: 2px solid #C8977F;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.document-type-box.selected,
+.document-type-box:hover {
+  background: linear-gradient(135deg, #C8977F, #8B6D5D);
+  color: white;
+  border-color: transparent;
+}
+
+/* Custom Document Type Input */
+.custom-doc-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #C8977F;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.custom-doc-input:focus {
+  border-color: #8B6D5D;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(139, 109, 93, 0.1);
+}
+
+/* Property Dropdown */
+.property-dropdown {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #C8977F;
+  border-radius: 12px;
+  background: white;
+  color: #8B6D5D;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.property-dropdown:focus {
+  outline: none;
+  border-color: #8B6D5D;
+  box-shadow: 0 0 0 3px rgba(139, 109, 93, 0.1);
+}
+
+/* Buttons */
+.modal-footer button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  margin: 0.5rem;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #C8977F, #8B6D5D);
+  color: white;
+}
+
+.secondary-button {
+  background: white;
+  color: #8B6D5D;
+  border: 2px solid #C8977F;
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+}
+
+.secondary-button:hover {
+  background: rgba(139, 109, 93, 0.05);
+}
+
+/* Messages */
+.success-message,
+.error-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.success-message {
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+}
+
+.error-message {
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .steps-indicator {
+    flex-direction: column;
+  }
+
+  .document-type-boxes {
+    flex-direction: column;
+  }
+}
