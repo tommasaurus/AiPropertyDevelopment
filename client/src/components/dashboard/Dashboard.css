@@ -1,11 +1,10 @@
 /* Dashboard.css */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(135deg, #F9F6F2 0%, #F3EDE7 100%);
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   position: relative;
 }
 
@@ -18,70 +17,9 @@
   box-sizing: border-box;
 }
 
-.art-nouveau-border {
-  position: relative;
-  padding: 2rem;
-  border: 2px solid rgba(139, 109, 93, 0.3);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 
-    0 10px 30px rgba(139, 109, 93, 0.1),
-    0 0 0 1px rgba(139, 109, 93, 0.05);
-  backdrop-filter: blur(10px);
-}
-
 body.dashboard-sidebar-expanded .dashboard-main {
   margin-left: 230px;
   width: calc(100% - 230px);
-}
-
-.greeting-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding: 1.5rem 2rem;
-  background: rgba(139, 109, 93, 0.03);
-  border-radius: 15px;
-  border: 1px solid rgba(139, 109, 93, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.greeting-title {
-  font-size: 2.75rem;
-  font-weight: 700;
-  color: #8B6D5D;
-  margin-bottom: 0.25rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  letter-spacing: -0.02em;
-}
-
-.greeting-date {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #A17A69;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  opacity: 0.9;
-}
-
-::-webkit-scrollbar {
-  width: 0.5rem;
-}
-
-::-webkit-scrollbar-track {
-  background: #F3EDE7;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #8B6D5D;
-  border-radius: 9999px;
-  border: 2px solid #F3EDE7;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #725B4D;
 }
 
 @media (max-width: 768px) {

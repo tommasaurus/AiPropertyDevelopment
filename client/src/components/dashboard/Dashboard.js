@@ -10,7 +10,7 @@ import Greeting from "./greeting/Greeting";
 import "./Dashboard.css";
 
 const Dashboard = () => {
-  const [properties, setProperties] = useState([]);  
+  const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const businessName = "Jason.";
 
@@ -62,12 +62,12 @@ const Dashboard = () => {
     <div className='dashboard-layout'>
       <Sidebar logo={logo} />
       <main className='dashboard-main'>
-        <div className="art-nouveau-border">
-          <div className="art-nouveau-corner top-left"></div>
-          <div className="art-nouveau-corner top-right"></div>
-          <div className="art-nouveau-corner bottom-left"></div>
-          <div className="art-nouveau-corner bottom-right"></div>
-          <Greeting/>
+        <div className='art-nouveau-border'>
+          <div className='art-nouveau-corner top-left'></div>
+          <div className='art-nouveau-corner top-right'></div>
+          <div className='art-nouveau-corner bottom-left'></div>
+          <div className='art-nouveau-corner bottom-right'></div>
+          <Greeting />
           <DashboardMetrics properties={properties} />
         </div>
       </main>
