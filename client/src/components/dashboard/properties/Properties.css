@@ -18,6 +18,15 @@
 .properties-container {
   padding: 1rem;
 }
+/* Art Nouveau Elements */
+
+.nouveau-content-section {
+  position: relative;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  overflow: hidden;
+}
 
 /* Header Styles */
 .properties-header {
