@@ -1,6 +1,7 @@
 // TenantPage.jsx
 import React, { useState } from 'react';
 import Sidebar from '../sidebar/Sidebar';
+import SearchBar from '../searchBar/SearchBar';
 import './TenantPage.css';
 
 const TenantPage = () => {
@@ -52,7 +53,8 @@ const TenantPage = () => {
     <div className="dashboard-layout">
       <Sidebar />
       <div className="dashboard-main">
-        <div className="tenant-page">
+        <SearchBar/>  
+        <div className="tenant-page">        
           <div className="decorative-header">
             <div className="header-line">
               <div className="circle-ornament"></div>

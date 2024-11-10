@@ -1,6 +1,5 @@
-// src/components/messages/Chat.js
-
 import React, { useState, useEffect, useRef } from "react";
+import { Send } from "lucide-react";
 import "./Chat.css";
 import api from "../../../services/api";
 import { toast } from "react-toastify";
@@ -8,9 +7,9 @@ import { toast } from "react-toastify";
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const chatContainerRef = useRef(null);
 
-  // Scroll to bottom when new messages are added
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -24,6 +23,8 @@ const Chat = () => {
 
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsTyping(true);
 
     try {
       const response = await api.post("/chat/copilot", { message: input });
@@ -31,21 +32,24 @@ const Chat = () => {
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error sending message:", error);
-      toast.error("Failed to send message.");
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsTyping(false);
     }
-
-    setInput("");
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
 
   return (
     <div className="chat-container">
-      <div className="chat-header">Spaceify Assistant</div>
+      <div className="chat-header">
+        Spaceify Assistant
+      </div>
       <div className="chat-history" ref={chatContainerRef}>
         {messages.map((msg, index) => (
           <div
@@ -55,6 +59,17 @@ const Chat = () => {
             <div className="message-text">{msg.text}</div>
           </div>
         ))}
+        {isTyping && (
+          <div className="chat-message bot-message">
+            <div className="message-text">
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="chat-input-container">
         <input
@@ -65,8 +80,13 @@ const Chat = () => {
           onKeyPress={handleKeyPress}
           className="chat-input"
         />
-        <button onClick={handleSendMessage} className="send-button" aria-label="Send Message">
-          Send
+        <button 
+          onClick={handleSendMessage} 
+          className="send-button" 
+          aria-label="Send Message"
+          disabled={isTyping || input.trim() === ""}
+        >
+          <Send size={18} className="send-icon" />
         </button>
       </div>
     </div>

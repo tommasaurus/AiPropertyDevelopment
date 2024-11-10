@@ -1,6 +1,7 @@
 // CalendarPage.jsx
 import React, { useState } from 'react';
 import Sidebar from '../sidebar/Sidebar';
+import SearchBar from '../searchBar/SearchBar';
 import './CalendarPage.css';
 
 const CalendarPage = () => {
@@ -309,7 +310,8 @@ const CalendarPage = () => {
     <div className="dashboard-layout">
       <Sidebar />
       <div className="dashboard-main">
-        <div className="calendar-page">
+        <div className="calendar-page">        
+          <SearchBar/>
           <div className="decorative-header">
             <div className="header-line">
               <div className="circle-ornament"></div>
@@ -319,7 +321,6 @@ const CalendarPage = () => {
               <div className="circle-ornament"></div>
             </div>
           </div>
-
           <div className="calendar-controls">
             <div className="view-controls">
               <button

@@ -1,11 +1,9 @@
-// src/components/messages/Messages.js
-
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/Sidebar";
+import SearchBar from "../searchBar/SearchBar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
 import ExpensesTable from "./ExpenseTable"; 
-import Greeting from "../greeting/Greeting";
 import Chat from "./Chat";
 import "./Messages.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,21 +11,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { ClipLoader } from "react-spinners";
 
 const Messages = () => {
-  // State variables for properties
   const [properties, setProperties] = useState([]);
-
-  // State variables for UI and form handling  ;
   const [selectedProperty, setSelectedProperty] = useState("");  
   const [errorMessage, setErrorMessage] = useState("");
-
-  // State variables for expenses
   const [expenses, setExpenses] = useState([]);
   const [loadingExpenses, setLoadingExpenses] = useState(false);
   const [expensesError, setExpensesError] = useState("");
 
   const businessName = "Jason";
 
-  // Helper functions for formatting
   const formatDate = (dateString) => {
     return dateString ? new Date(dateString).toLocaleDateString() : "N/A";
   };
@@ -37,7 +29,6 @@ const Messages = () => {
     return !isNaN(num) ? `$${num.toFixed(2)}` : "N/A";
   };
 
-  // Fetch properties from API
   const fetchProperties = async () => {
     try {
       const response = await api.get("/properties");
@@ -53,7 +44,6 @@ const Messages = () => {
     fetchProperties();
   }, []);
 
-  // Handler to fetch expenses
   const handleGetExpenses = async () => {
     if (!selectedProperty) {
       toast.error("Please select a property first.");
@@ -88,56 +78,71 @@ const Messages = () => {
       <Sidebar logo={dwellexLogo} />
 
       <main className="dashboard-main">
-        {/* Greeting Section */}
-        <Greeting/>
+        <div className="art-nouveau-border">
+          <div className="art-nouveau-corner top-left" />
+          <div className="art-nouveau-corner top-right" />
+          <div className="art-nouveau-corner bottom-left" />
+          <div className="art-nouveau-corner bottom-right" />
+          
+          <SearchBar />
 
-        {/* Property Selection Dropdown */}
-        <div className="property-selection">
-          <h2>Select Property</h2>
-          <select
-            value={selectedProperty}
-            onChange={(e) => setSelectedProperty(e.target.value)}
-            className="property-dropdown"
-            aria-label="Select a property"
-          >
-            <option value="" disabled>
-              Select a property
-            </option>
-            {properties.map((property) => (
-              <option key={property.id} value={property.id}>
-                {property.address}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="nouveau-content-section">
+            <div className="property-selection">
+              <h2>Messages & Expenses</h2>
+              <select
+                value={selectedProperty}
+                onChange={(e) => setSelectedProperty(e.target.value)}
+                className="property-dropdown"
+                aria-label="Select a property"
+              >
+                <option value="" disabled>
+                  Select a property
+                </option>
+                {properties.map((property) => (
+                  <option key={property.id} value={property.id}>
+                    {property.address}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        {/* Get Expenses Button */}
-        <div className="get-expenses-button">
-          <button
-            onClick={handleGetExpenses}
-            className="expenses-button"
-            disabled={loadingExpenses}
-            aria-label="Get Expenses"
-          >
-            {loadingExpenses ? "Fetching Expenses..." : "Get Expenses"}
-          </button>
-        </div>
+            <div className="get-expenses-button">
+              <button
+                onClick={handleGetExpenses}
+                className="expenses-button"
+                disabled={loadingExpenses}
+                aria-label="Get Expenses"
+              >
+                <span>{loadingExpenses ? "Fetching Expenses..." : "Get Expenses"}</span>
+              </button>
+            </div>
 
-        {/* Loading Spinner */}
-        {loadingExpenses && (
-          <div className="spinner-container">
-            <ClipLoader color="#28a745" loading={loadingExpenses} size={50} />
+            {loadingExpenses && (
+              <div className="spinner-container">
+                <ClipLoader color="#8B6D5D" loading={loadingExpenses} size={50} />
+              </div>
+            )}
+
+            {expenses.length > 0 && <ExpensesTable expenses={expenses} />}
+
+            <div className="chat-container">
+              <Chat />
+            </div>
           </div>
-        )}
+        </div>
 
-        {/* Expenses Display */}
-        {expenses.length > 0 && <ExpensesTable expenses={expenses} />}
-
-        {/* Chat Component */}
-        <Chat />
-
-        {/* Toast Notifications */}
-        <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
+        <ToastContainer 
+          position="top-right" 
+          autoClose={5000} 
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </main>
     </div>
   );

@@ -1,6 +1,7 @@
 // Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Bell, Search } from "lucide-react";
+import SearchBar from "./searchBar/SearchBar";
 import Sidebar from "./sidebar/Sidebar";
 import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
 import EmptyDashboard from "./emptyDashboard/emptyDashboard";
@@ -68,6 +69,7 @@ const Dashboard = () => {
           <div className="art-nouveau-corner bottom-left"></div>
           <div className="art-nouveau-corner bottom-right"></div>
           <Greeting/>
+          <SearchBar/>
           <DashboardMetrics properties={properties} />
         </div>
       </main>
