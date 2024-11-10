@@ -1,10 +1,10 @@
 // src/components/properties/Properties.js
 
 import React, { useEffect, useState, useRef } from "react";
+import { PlusCircle, Upload } from "lucide-react";
 import Sidebar from "../sidebar/Sidebar";
 import dwellexLogo from "../../../images/dwellexLogo.png";
 import api from "../../../services/api";
-import Greeting from "../greeting/Greeting";
 import SearchBar from "../searchBar/SearchBar";
 import AddressAutocomplete from "../addressAutocomplete/AddressAutocomplete";
 import PropertyDetails from "./propertyDetails";
@@ -351,72 +351,97 @@ const Properties = () => {
   return (
     <div className="dashboard-layout">
       <Sidebar logo={dwellexLogo} />
-
       <main className="dashboard-main">
-        <SearchBar />
-        <Greeting />
-        {/* Page Header */}
-        <div className="page-header">
-          <div className="header-content">
-            <h1>Properties</h1>
-            <div className="header-actions">
-              <button
-                className="primary-button"
-                onClick={() => setShowModal(true)}
-              >
-                Add Property
-              </button>
-              <button
-                className="primary-button"
-                onClick={() => setShowUploadModal(true)}
-              >
-                Upload Document
-              </button>
+        <div className="art-nouveau-border">
+          <div className="art-nouveau-corner top-left" />
+          <div className="art-nouveau-corner top-right" />
+          <div className="art-nouveau-corner bottom-left" />
+          <div className="art-nouveau-corner bottom-right" />
+          
+          <SearchBar />          
+  
+          <div className="nouveau-content-section">
+            <div className="header-content">
+              <div className="header-title-wrapper">
+                <h1 className="nouveau-title">Properties</h1>
+                <div className="title-underline">
+                  <div className="underline-ornament left" />
+                  <div className="underline-ornament right" />
+                </div>
+              </div>
+              <div className="header-actions">
+                <button
+                  className="nouveau-button primary-gradient"
+                  onClick={() => setShowModal(true)}
+                >
+                  <div className="button-ornament left" />
+                  <div className="button-content">
+                    <PlusCircle className="button-icon" />
+                    <span>Add Property</span>
+                  </div>
+                  <div className="button-ornament right" />
+                </button>
+                <button
+                  className="nouveau-button secondary-gradient"
+                  onClick={() => setShowUploadModal(true)}
+                >
+                  <div className="button-ornament left" />
+                  <div className="button-content">
+                    <Upload className="button-icon" />
+                    <span>Upload Document</span>
+                  </div>
+                  <div className="button-ornament right" />
+                </button>
+              </div>
+            </div>
+  
+            <div className="properties-table-container">
+              <div className="table-background-pattern" />
+              <div className="table-ornament top-left" />
+              <div className="table-ornament top-right" />
+              <div className="table-ornament bottom-left" />
+              <div className="table-ornament bottom-right" />
+              
+              <table className="properties-table">
+                <thead>
+                  <tr>
+                    <th>Address</th>
+                    <th>Property Type</th>
+                    <th>Bedrooms</th>
+                    <th>Bathrooms</th>
+                    <th>Floors</th>
+                    <th>Commercial</th>
+                    <th>HOA</th>
+                    <th>HOA Fee</th>
+                    <th>Purchase Price</th>
+                    <th>Purchase Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {properties.map((property) => (
+                    <tr
+                      key={property.id}
+                      onClick={() => handlePropertyClick(property)}
+                      className="property-row"
+                    >
+                      <td>{property.address}</td>
+                      <td>{property.property_type || "N/A"}</td>
+                      <td>{property.num_bedrooms || "N/A"}</td>
+                      <td>{property.num_bathrooms || "N/A"}</td>
+                      <td>{property.num_floors || "N/A"}</td>
+                      <td>{property.is_commercial ? "Yes" : "No"}</td>
+                      <td>{property.is_hoa ? "Yes" : "No"}</td>
+                      <td>
+                        {property.hoa_fee ? formatCurrency(property.hoa_fee) : "N/A"}
+                      </td>
+                      <td>{formatCurrency(property.purchase_price)}</td>
+                      <td>{formatDate(property.purchase_date)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-
-        {/* Properties Table */}
-        <div className="properties-table-container">
-          <table className="properties-table">
-            <thead>
-              <tr>
-                <th>Address</th>
-                <th>Property Type</th>
-                <th>Bedrooms</th>
-                <th>Bathrooms</th>
-                <th>Floors</th>
-                <th>Commercial</th>
-                <th>HOA</th>
-                <th>HOA Fee</th>
-                <th>Purchase Price</th>
-                <th>Purchase Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {properties.map((property) => (
-                <tr
-                  key={property.id}
-                  onClick={() => handlePropertyClick(property)}
-                  className="cursor-pointer hover:bg-gray-50"
-                >
-                  <td>{property.address}</td>
-                  <td>{property.property_type || "N/A"}</td>
-                  <td>{property.num_bedrooms || "N/A"}</td>
-                  <td>{property.num_bathrooms || "N/A"}</td>
-                  <td>{property.num_floors || "N/A"}</td>
-                  <td>{property.is_commercial ? "Yes" : "No"}</td>
-                  <td>{property.is_hoa ? "Yes" : "No"}</td>
-                  <td>
-                    {property.hoa_fee ? formatCurrency(property.hoa_fee) : "N/A"}
-                  </td>
-                  <td>{formatCurrency(property.purchase_price)}</td>
-                  <td>{formatDate(property.purchase_date)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
 
         {/* Property Details Modal */}
         {selectedProperty && (
@@ -437,7 +462,7 @@ const Properties = () => {
 
         {/* Add Property Modal */}
         {showModal && (
-          <div className="modal">
+          <div className="modal nouveau-modal">
             <div className="modal-content">
               <div className="modal-header">
                 <h2>Add New Property</h2>
@@ -641,7 +666,7 @@ const Properties = () => {
 
         {/* Upload Document Modal */}        
         {showUploadModal && (
-          <div className='modal'>
+          <div className='modal nouveau-modal'>
             <div className='modal-content'>
               <div className='modal-header'>
                 <h2>Upload Document</h2>
@@ -843,6 +868,7 @@ const Properties = () => {
             </div>
           </div>
         )}
+        </div>
       </main>
     </div>
   );
