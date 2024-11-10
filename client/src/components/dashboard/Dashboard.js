@@ -1,3 +1,4 @@
+// Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Bell, Search } from "lucide-react";
 import Sidebar from "./sidebar/Sidebar";
@@ -11,8 +12,6 @@ import "./Dashboard.css";
 const Dashboard = () => {
   const [properties, setProperties] = useState([]);  
   const [loading, setLoading] = useState(true);
-
-  // TODO: Replace with actual API call to get user/business name
   const businessName = "Jason.";
 
   useEffect(() => {
@@ -30,7 +29,6 @@ const Dashboard = () => {
     fetchProperties();
   }, []);
 
-  // Handle sidebar expansion
   useEffect(() => {
     const mainContent = document.querySelector(".dashboard-main");
     const handleSidebarChange = () => {
@@ -41,10 +39,8 @@ const Dashboard = () => {
       }
     };
 
-    // Initial check
     handleSidebarChange();
 
-    // Create observer to watch for class changes
     const observer = new MutationObserver(handleSidebarChange);
     observer.observe(document.body, {
       attributes: true,
@@ -55,26 +51,25 @@ const Dashboard = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Add proper loading component here
+    return <div>Loading...</div>;
   }
 
-  // If no properties, show empty dashboard
   if (properties.length === 0) {
     return <EmptyDashboard />;
   }
 
-  // Regular dashboard with properties
   return (
     <div className='dashboard-layout'>
-      {/* Sidebar with imported logo */}
       <Sidebar logo={logo} />
-
       <main className='dashboard-main'>
-        {/* Greeting Section */}
-        <Greeting/>
-
-        {/* Dashboard Metrics */}
-        <DashboardMetrics properties={properties} />
+        <div className="art-nouveau-border">
+          <div className="art-nouveau-corner top-left"></div>
+          <div className="art-nouveau-corner top-right"></div>
+          <div className="art-nouveau-corner bottom-left"></div>
+          <div className="art-nouveau-corner bottom-right"></div>
+          <Greeting/>
+          <DashboardMetrics properties={properties} />
+        </div>
       </main>
     </div>
   );

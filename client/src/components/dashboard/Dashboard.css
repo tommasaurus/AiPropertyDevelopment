@@ -1,25 +1,37 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap");
+/* Dashboard.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background-image: url("../../images/dashboardBackground.jpg");
-  font-family: "Outfit", sans-serif;
+  background: linear-gradient(135deg, #F9F6F2 0%, #F3EDE7 100%);
+  font-family: 'Plus Jakarta Sans', sans-serif;
   position: relative;
 }
 
 .dashboard-main {
   flex: 1;
-  margin-left: 73px; /* Width of collapsed sidebar */
+  margin-left: 73px;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 1rem 2rem;
+  padding: 2rem;
   width: calc(100% - 73px);
   box-sizing: border-box;
 }
 
-/* Updated selector to match the body class toggle in Sidebar.js */
+.art-nouveau-border {
+  position: relative;
+  padding: 2rem;
+  border: 2px solid rgba(139, 109, 93, 0.3);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 10px 30px rgba(139, 109, 93, 0.1),
+    0 0 0 1px rgba(139, 109, 93, 0.05);
+  backdrop-filter: blur(10px);
+}
+
 body.dashboard-sidebar-expanded .dashboard-main {
-  margin-left: 230px; /* Width of expanded sidebar */
+  margin-left: 230px;
   width: calc(100% - 230px);
 }
 
@@ -27,31 +39,58 @@ body.dashboard-sidebar-expanded .dashboard-main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 2rem;
+  background: rgba(139, 109, 93, 0.03);
+  border-radius: 15px;
+  border: 1px solid rgba(139, 109, 93, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .greeting-title {
-  font-size: 3rem;
+  font-size: 2.75rem;
   font-weight: 700;
-  color: #fd2b2b;
+  color: #8B6D5D;
   margin-bottom: 0.25rem;
-  margin-left: 2rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .greeting-date {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #323232;
-  margin-left: -2.2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #A17A69;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  opacity: 0.9;
 }
 
-/* Responsive Design */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #F3EDE7;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8B6D5D;
+  border-radius: 9999px;
+  border: 2px solid #F3EDE7;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #725B4D;
+}
+
 @media (max-width: 768px) {
   .dashboard-main {
     margin-left: 0;
     width: 100%;
     transform: translateX(0);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 1rem;
   }
 
   body.dashboard-sidebar-expanded .dashboard-main {
@@ -61,30 +100,15 @@ body.dashboard-sidebar-expanded .dashboard-main {
   }
 
   .greeting-title {
-    font-size: 1.25rem;
-    margin-left: 0;
+    font-size: 2rem;
   }
 
   .greeting-date {
     font-size: 1rem;
-    margin-left: 0;
   }
-}
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 0.5rem;
-}
-
-::-webkit-scrollbar-track {
-  background: #f3f4f6;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  .art-nouveau-corner {
+    width: 30px;
+    height: 30px;
+  }
 }

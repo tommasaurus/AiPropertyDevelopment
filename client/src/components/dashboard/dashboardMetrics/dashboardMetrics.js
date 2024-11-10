@@ -1,3 +1,4 @@
+// DashboardMetrics.jsx
 import React from "react";
 import {
   Bell,
@@ -15,58 +16,59 @@ const DashboardMetrics = () => {
       title: "Alerts",
       value: "3",
       icon: Bell,
-      color: "bg-red",
-      iconColor: "icon-red",
+      color: "bg-copper",
+      iconColor: "icon-copper",
       subtitle: "New notifications",
     },
     {
       title: "Calendar",
       value: "5",
       icon: Calendar,
-      color: "bg-blue",
-      iconColor: "icon-blue",
+      color: "bg-gold",
+      iconColor: "icon-gold",
       subtitle: "Upcoming events",
     },
     {
       title: "Documents",
       value: "12",
       icon: Upload,
-      color: "bg-purple",
-      iconColor: "icon-purple",
+      color: "bg-bronze",
+      iconColor: "icon-bronze",
       subtitle: "Files uploaded",
     },
     {
       title: "Incoming Rent",
       value: "$24,680.00",
       icon: DollarSign,
-      color: "bg-green",
-      iconColor: "icon-green",
+      color: "bg-copper",
+      iconColor: "icon-copper",
       subtitle: "August 2024",
     },
     {
       title: "Active Tenants",
       value: "32",
       icon: Users,
-      color: "bg-yellow",
-      iconColor: "icon-yellow",
+      color: "bg-gold",
+      iconColor: "icon-gold",
       subtitle: "Across properties",
     },
     {
       title: "Occupancy Rate",
       value: "92.00%",
       icon: Percent,
-      color: "bg-orange",
-      iconColor: "icon-orange",
+      color: "bg-bronze",
+      iconColor: "icon-bronze",
       subtitle: "Property utilization",
     },
   ];
 
   return (
     <div className='dashboard-metrics'>
-      {/* Metrics Grid */}
       <div className='metrics-grid'>
         {metrics.map((metric, index) => (
           <div key={index} className='metric-card'>
+            <div className='nouveau-ornament top'></div>
+            <div className='nouveau-ornament bottom'></div>
             <div className='metric-content'>
               <div className='metric-header'>
                 <div className={`metric-icon-wrapper ${metric.color}`}>
