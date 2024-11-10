@@ -68,8 +68,12 @@ const Dashboard = () => {
           <div className='art-nouveau-corner top-right'></div>
           <div className='art-nouveau-corner bottom-left'></div>
           <div className='art-nouveau-corner bottom-right'></div>
-          <Greeting />
-          <SearchBar />
+          <div className='header-container'>
+            <div className='greeting-search-wrapper'>
+              <Greeting />
+              <SearchBar />
+            </div>
+          </div>
           <DashboardMetrics properties={properties} />
         </div>
       </main>

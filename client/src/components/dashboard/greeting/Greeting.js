@@ -1,4 +1,3 @@
-// Greeting.js
 import React, { useEffect, useState } from "react";
 import api from "../../../services/api";
 import "./Greeting.css";
@@ -8,7 +7,6 @@ const Greeting = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [userName, setUserName] = useState("");
 
-  // Update greeting based on time of day
   useEffect(() => {
     const updateGreeting = () => {
       const hour = new Date().getHours();
@@ -35,7 +33,11 @@ const Greeting = () => {
     const fetchUserName = async () => {
       try {
         const response = await api.get("/users/me");
-        setUserName(response.data.name || "User");
+        // Extract first name from full name
+        const firstName = response.data.name
+          ? response.data.name.split(" ")[0]
+          : "User";
+        setUserName(firstName);
       } catch (error) {
         console.error("Error fetching user data:", error);
         setUserName("User");
@@ -55,11 +57,13 @@ const Greeting = () => {
   };
 
   return (
-    <div className='greeting-section'>
-      <h1 className='greeting-title'>
-        {greeting}, {userName}
-      </h1>
-      <p className='greeting-date'>{formatDate()}</p>
+    <div className='greeting-container'>
+      <div className='greeting-content'>
+        <h1 className='greeting-title'>
+          {greeting}, {userName}
+        </h1>
+        <p className='greeting-date'>{formatDate()}</p>
+      </div>
     </div>
   );
 };

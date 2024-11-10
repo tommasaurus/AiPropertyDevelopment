@@ -1,14 +1,72 @@
+/* Greeting.css */
+.greeting-container {
+  padding: 0rem 2.3rem;
+  animation: fadeSlideIn 0.8s ease-out;
+}
+
+.greeting-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .greeting-title {
-  font-size: 1.25rem;
-  margin-left: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+  animation: fadeSlideIn 0.8s ease-out;
 }
 
 .greeting-date {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.1rem;
   color: #666;
-  margin-left: -3rem;
-  color: #323232;
-  margin-left: -2.2rem;
-  margin-bottom: -0.5rem;
+  margin: 0;
+  font-weight: 500;
+  animation: fadeSlideUp 0.8s ease-out;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 1024px) {
+  .greeting-search-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar-container {
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .greeting-title {
+    font-size: 2rem;
+  }
+
+  .greeting-date {
+    font-size: 1rem;
+  }
 }

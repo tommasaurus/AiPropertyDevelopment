@@ -5,12 +5,11 @@
   top: 0;
   bottom: 0;
   width: 73px;
-  background-image: url("../../../images/dashboardBackground.jpg");
-
+  background: linear-gradient(135deg, #f9f6f2 0%, #f3ede7 100%);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #e1d4c1;
+  border-right: 1px solid #2d3748;
   z-index: 50;
   overflow: hidden;
 }
@@ -26,7 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e1d4c1;
+  border-bottom: 1px solid #2d3748;
 }
 
 .dashboard-sidebar .logo-container {
@@ -113,7 +112,7 @@
 }
 
 .dashboard-sidebar .nav-section.bottom {
-  border-top: 1px solid #e1d4c1;
+  border-top: 1px solid #2d3748;
   padding-top: 0.5rem;
   margin-top: auto;
   gap: 0rem;
@@ -125,7 +124,7 @@
   padding: 0.75rem 0.45rem; /* Reduced padding */
   margin: 0 0.8rem;
   border-radius: 0.5rem;
-  color: #2e3643;
+  color: #2d3748;
   transition: all 0.2s ease;
   border: none;
   background: none;
