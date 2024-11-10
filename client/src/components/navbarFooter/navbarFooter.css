@@ -3,8 +3,9 @@
 /* Navbar styles */
 .navbar {
   font-family: "Outfit", sans-serif;
-  background-color: #eeece2;
+  background-color: #f1efe7;
   padding: 0.5rem 0;
+  font-family: "Outfit", sans-serif;
 }
 
 .navbar-container {
@@ -52,7 +53,7 @@
 .login-button {
   padding: 0.5rem 1.3rem;
   font-size: 1.3rem;
-  background-color: #eeece2;
+  background-color: #f1efe7;
   color: #000000;
   border: 1px solid #000000;
   border-radius: 6px;
@@ -96,7 +97,7 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #eeece2;
+  background-color: #f1efe7;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   padding: 1rem;
@@ -109,11 +110,12 @@
 
 /* Footer styles */
 .navbar-footer {
-  background-color: #eeece2;
+  background-color: #f1efe7;
   padding: 2rem 0;
   color: #82817a;
   font-weight: 600;
   margin-top: auto;
+  font-family: "Outfit", sans-serif;
 }
 
 .footer-container {
