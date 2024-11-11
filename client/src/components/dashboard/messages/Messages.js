@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/Sidebar";
 import SearchBar from "../searchBar/SearchBar";
-import dwellexLogo from "../../../images/dwellexLogo.png";
+import dwellexLogo from "../../../assets/img/dwellexLogo.png";
 import api from "../../../services/api";
 import ExpensesTable from "./ExpenseTable"; 
 import Chat from "./Chat";

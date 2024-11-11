@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./frontpage.css";
 import PricingSection from "./pricingSection";
 import CapabilitiesSection from "./capabilitiesSection";
-import frontpage from "../../images/dashboardPic.png";
+import frontpage from "../../assets/img/dashboardPic.png";
 
 const Frontpage = () => {
   const navigate = useNavigate();

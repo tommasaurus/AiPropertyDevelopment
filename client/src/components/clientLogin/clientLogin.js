@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginUser, loginWithGoogle } from "../../services/login";
 import "./clientLogin.css";
-import logo from "../../images/logo.png";
-import walkingUpStairs from "../../videos/WalkingUpStairsGIF.mp4";
+import logo from "../../assets/img/logo.png";
+import walkingUpStairs from "../../assets/videos/WalkingUpStairsGIF.mp4";
 
 const ClientLogin = () => {
   const [email, setEmail] = useState("");

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Upload } from "lucide-react";
 import Sidebar from "../sidebar/Sidebar";
 import api from "../../../services/api";
-import logo from "../../../images/logo.png";
+import logo from "../../../assets/img/logo.png";
 import "./emptyDashboard.css";
 
 const EmptyDashboard = () => {

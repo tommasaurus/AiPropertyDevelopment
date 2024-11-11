@@ -4,8 +4,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { loginWithGoogle } from "../../services/login";
 import signupUser from "../../services/signup";
 import "./clientSignup.css";
-import walkingUpStairs from "../../videos/WalkingUpStairsGIF.mp4";
-import logo from "../../images/logo.png";
+import walkingUpStairs from "../../assets/videos/WalkingUpStairsGIF.mp4";
+import logo from '../../assets/img/logo.png'
 
 const ClientSignup = () => {
   const [email, setEmail] = useState("");

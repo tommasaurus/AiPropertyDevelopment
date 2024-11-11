@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
-import logo from "../../../images/logo.png";
-import tabLogo from "../../../images/tabLogoBlack.png";
+import logo from "../../../assets/img/logo.png";
+import tabLogo from "../../../assets/img/tabLogoBlack.png";
 
 const Sidebar = () => {
   const [isPinned, setPinned] = useState(false);

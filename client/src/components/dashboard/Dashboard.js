@@ -6,7 +6,7 @@ import Sidebar from "./sidebar/Sidebar";
 import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
 import EmptyDashboard from "./emptyDashboard/emptyDashboard";
 import api from "../../services/api";
-import logo from "../../images/logo.png";
+import logo from "../../assets/img/logo.png";
 import Greeting from "./greeting/Greeting";
 import "./Dashboard.css";
 
