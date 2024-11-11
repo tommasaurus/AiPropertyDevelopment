@@ -184,9 +184,10 @@ const Calendar = () => {
               onDateChange={(date) => setCurrentDate(date)}
             />
           ) : currentView === 'week' ? (
-            <WeekView 
+            <WeekView
               currentDate={currentDate}
               events={events}
+              onDateChange={(date) => setCurrentDate(date)}
             />
           ) : (
             <>
