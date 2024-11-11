@@ -1,13 +1,12 @@
 .top-navigation {
   position: fixed;
   top: 0;
-  left: 73px;
+  left: 80px;
   right: 0;
   height: 70px;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #f9f6f2 0%, #f3ede7 100%);
   z-index: 40;
-  border-bottom: 1px solid #2d3748;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.dashboard-sidebar-expanded .top-navigation {
@@ -135,7 +134,7 @@ body.dashboard-sidebar-expanded .top-navigation {
   border: 1px solid #2d3748;
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   max-height: 300px;
   overflow-y: auto;
   z-index: 1000;
@@ -192,7 +191,7 @@ body.dashboard-sidebar-expanded .top-navigation {
   .top-navigation {
     left: 0;
   }
-  
+
   body.dashboard-sidebar-expanded .top-navigation {
     left: 0;
   }
