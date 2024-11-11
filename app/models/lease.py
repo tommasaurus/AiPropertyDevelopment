@@ -4,7 +4,6 @@ from sqlalchemy import Column, Integer, String, Float, Date, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSONB
 from app.db.database import Base
-from app.models.lease_tenants import lease_tenants 
 
 class Lease(Base):
     __tablename__ = 'leases'

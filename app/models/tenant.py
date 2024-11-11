@@ -3,7 +3,6 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.database import Base
-from app.models.lease_tenants import lease_tenants  
 
 class Tenant(Base):
     __tablename__ = 'tenants'

@@ -39,7 +39,7 @@ from app.models.invoice import invoice as invoice_model
 from app.models.invoice import invoice_item as invoice_item_model
 
 app = FastAPI(
-    title="Property Management Application",
+    title="Spaceify",
     description="An API for managing properties, leases, tenants, and financials.",
     version="1.0.0"
 )
