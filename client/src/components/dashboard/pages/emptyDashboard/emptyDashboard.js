@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Upload } from "lucide-react";
-import Sidebar from "../sidebar/Sidebar";
-import api from "../../../services/api";
-import logo from "../../../assets/img/logo.png";
+import Sidebar from "../../sidebar/Sidebar";
+import api from "../../../../services/api";
+import logo from "../../../../assets/img/logo.png";
+import Chat from '../../chatBot/Chat'
 import "./emptyDashboard.css";
 
 const EmptyDashboard = () => {
@@ -98,6 +99,7 @@ const EmptyDashboard = () => {
   return (
     <div className='empty-dashboard-layout'>
       <Sidebar logo={logo} />
+      <Chat />
 
       <main className='empty-dashboard-main'>
         <div className='dashboard-header'>

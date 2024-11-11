@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './Calendar.css';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Sidebar from '../sidebar/Sidebar';
+import Sidebar from '../../sidebar/Sidebar';
 import DayView from './DayView';
+import WeekView from './WeekView';
+import Chat from '../../chatBot/Chat'
 
 const Calendar = () => {
   const [currentView, setCurrentView] = useState('month');
@@ -136,6 +138,7 @@ const Calendar = () => {
   return (
     <div className="calendar-layout">
       <Sidebar />
+      <Chat />
       
       <main className="calendar-main">
         <div className="calendar-content">
@@ -179,6 +182,11 @@ const Calendar = () => {
               currentDate={currentDate}
               events={events}
               onDateChange={(date) => setCurrentDate(date)}
+            />
+          ) : currentView === 'week' ? (
+            <WeekView 
+              currentDate={currentDate}
+              events={events}
             />
           ) : (
             <>

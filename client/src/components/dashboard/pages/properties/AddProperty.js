@@ -1,8 +1,8 @@
 // src/components/properties/AddProperty.js
 
 import React, { useState } from "react";
-import api from "../../../services/api";
-import AddressAutocomplete from "../addressAutocomplete/AddressAutocomplete";
+import api from "../../../../services/api";
+import AddressAutocomplete from "../../addressAutocomplete/AddressAutocomplete";
 import "./AddProperty.css";
 
 const AddProperty = ({ onClose, fetchAllData }) => {

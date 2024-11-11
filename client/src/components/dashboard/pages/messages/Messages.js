@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../sidebar/Sidebar";
-import SearchBar from "../searchBar/SearchBar";
-import dwellexLogo from "../../../assets/img/dwellexLogo.png";
-import api from "../../../services/api";
+import Sidebar from "../../sidebar/Sidebar";
+import SearchBar from "../../searchBar/SearchBar";
+import dwellexLogo from "../../../../assets/img/dwellexLogo.png";
+import api from "../../../../services/api";
 import ExpensesTable from "./ExpenseTable"; 
-import Chat from "./Chat";
+import Chat from "../../chatBot/Chat";
 import "./Messages.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -118,10 +118,8 @@ const Messages = () => {
             )}
 
             {expenses.length > 0 && <ExpensesTable expenses={expenses} />} */}
-
-            <div className="chat-container">
+            
               <Chat />
-            </div>
           </div>
         </div>
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Upload, Search } from "lucide-react";
-import Sidebar from "../sidebar/Sidebar";
-import api from "../../../services/api";
+import Sidebar from "../../sidebar/Sidebar";
+import api from "../../../../services/api";
 import PropertyDetails from "./propertyDetails";
 import UploadDocument from "./UploadDocument";
 import AddProperty from "./AddProperty";
+import Chat from '../../chatBot/Chat'
 import "./Properties.css";
 
 const Properties = () => {
@@ -109,6 +110,7 @@ const Properties = () => {
   return (
     <div className='dashboard-layout'>
       <Sidebar />
+      <Chat />
       <main className='dashboard-main'>
         <div className='properties-container'>
           <div className='properties-header'>

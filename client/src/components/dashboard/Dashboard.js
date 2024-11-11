@@ -4,10 +4,11 @@ import { PlusCircle, Bell, Search } from "lucide-react";
 import SearchBar from "./searchBar/SearchBar";
 import Sidebar from "./sidebar/Sidebar";
 import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
-import EmptyDashboard from "./emptyDashboard/emptyDashboard";
+import EmptyDashboard from "./pages/emptyDashboard/emptyDashboard";
 import api from "../../services/api";
 import logo from "../../assets/img/logo.png";
 import Greeting from "./greeting/Greeting";
+import Chat from "./chatBot/Chat";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -62,6 +63,7 @@ const Dashboard = () => {
   return (
     <div className='dashboard-layout'>
       <Sidebar logo={logo} />
+      <Chat />
       <main className='dashboard-main'>
         <div className='art-nouveau-border'>
           <div className='art-nouveau-corner top-left'></div>

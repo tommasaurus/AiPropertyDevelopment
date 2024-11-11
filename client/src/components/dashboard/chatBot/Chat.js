@@ -1,4 +1,4 @@
-// Chat.jsx
+// client/src/components/dashboard/chatBot/Chat.js
 import React, { useState, useEffect, useRef } from "react";
 import { Send, X, MessageCircle } from "lucide-react";
 import "./Chat.css";

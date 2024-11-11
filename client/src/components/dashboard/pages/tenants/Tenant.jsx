@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './Tenant.css';
-import Sidebar from '../sidebar/Sidebar';
+import Sidebar from '../../sidebar/Sidebar';
 import TenantPopup from './TenantPopup';
 import AddTenant from './AddTenant';
+import Chat from '../../chatBot/Chat'
 
 const TenantPage = () => {
   const [viewMode, setViewMode] = useState('grid');
@@ -73,6 +74,7 @@ const TenantPage = () => {
   return (
     <div className="tenant-page-container">
       <Sidebar/>
+      <Chat/>
       <div className="tenant-content">
         <div className="tenant-page-header">
           <div className="header-left">

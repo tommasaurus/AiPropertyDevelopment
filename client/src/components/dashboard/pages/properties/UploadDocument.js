@@ -1,7 +1,7 @@
 // src/components/properties/UploadDocument.js
 
 import React, { useState, useRef } from "react";
-import api from "../../../services/api";
+import api from "../../../../services/api";
 import "./UploadDocument.css";
 
 const UploadDocument = ({ properties, onClose, fetchAllData }) => {
