@@ -1,5 +1,66 @@
+/* Chat.css */
+.popup-chat-container {
+  position: fixed;
+  bottom: 8vh;
+  right: 4vh;
+  width: 400px;
+  height: 600px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+  transform-origin: bottom right;
+  /* Replace translateY with scale for expansion animation */
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.popup-chat-container.open {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.chat-trigger {
+  position: fixed;
+  bottom: 8vh;
+  right: 4vh;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #6418c3;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  z-index: 1000;
+  color: white;
+  font-weight: 600;
+}
+
+.chat-trigger:hover {
+  transform: translateY(-2px);
+}
+
+.trigger-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: white;
+}
+
+.trigger-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .modern-chat-container {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -8,28 +69,83 @@
 }
 
 .modern-chat-header {
-  padding: 1.5rem;
-  text-align: center;
+  padding: 1rem;
   background: #6418c3;
   position: relative;
 }
 
-.modern-chat-header h1 {
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.chat-close-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
   color: white;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.chat-close-button:hover {
+  opacity: 0.8;
+}
+
+.header-avatar {
+  width: 55px;
+  height: 55px;
+  position: relative;  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-avatar::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #f9f6ff, #ee33ff);
+}
+
+.header-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+}
+
+.modern-chat-header h1 {
+  color: rgb(255, 246, 252);
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 2rem;
+  font-weight: 1000;
+  text-align: left;
 }
 
 .header-line {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
+  left: 0;
+  width: 100%;
   height: 3px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
+  background: linear-gradient(225deg, rgb(100, 24, 195) 0%, rgb(171.06, 24, 195) 100%);
 }
 
 .modern-chat-history {
@@ -46,7 +162,7 @@
   display: flex;
   gap: 1rem;
   max-width: 80%;
-  animation: slideIn 0.3s ease;
+  animation: slideIn 1s ease;
 }
 
 .user-container {
@@ -64,7 +180,7 @@
   border-radius: 50%;
   background-color: #eee;
   flex-shrink: 0;
-  overflow: hidden; /* Add this to keep the image circular */
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,7 +242,7 @@
 .modern-chat-input input {
   flex: 1;
   padding: 0.875rem 1.25rem;
-  border: 1px solid #e0e0e0;
+  border: 2px solid #e0e0e0;
   border-radius: 12px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
@@ -212,6 +328,20 @@
 }
 
 @media (max-width: 768px) {
+  .popup-chat-container {
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+
+  .chat-trigger {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+  }
+
   .modern-message {
     max-width: 90%;
   }
@@ -223,5 +353,19 @@
   .message-avatar {
     width: 32px;
     height: 32px;
+  }
+  
+  .header-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .trigger-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .modern-chat-header h1 {
+    font-size: 1.25rem;
   }
 }
