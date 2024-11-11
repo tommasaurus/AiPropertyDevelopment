@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Calendar.css';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from '../../sidebar/Sidebar';
+import TopNavigation from '../../TopNavigation/TopNavigation';
 import DayView from './DayView';
 import WeekView from './WeekView';
 import Chat from '../../chatBot/Chat'
@@ -138,6 +139,7 @@ const Calendar = () => {
   return (
     <div className="calendar-layout">
       <Sidebar />
+      <TopNavigation />
       <Chat />
       
       <main className="calendar-main">

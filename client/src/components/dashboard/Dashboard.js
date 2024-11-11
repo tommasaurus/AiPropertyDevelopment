@@ -1,7 +1,7 @@
 // Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Bell, Search } from "lucide-react";
-import SearchBar from "./searchBar/SearchBar";
+import TopNavigation from './TopNavigation/TopNavigation'
 import Sidebar from "./sidebar/Sidebar";
 import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
 import EmptyDashboard from "./pages/emptyDashboard/emptyDashboard";
@@ -63,6 +63,7 @@ const Dashboard = () => {
   return (
     <div className='dashboard-layout'>
       <Sidebar logo={logo} />
+      <TopNavigation />
       <Chat />
       <main className='dashboard-main'>
         <div className='art-nouveau-border'>
@@ -70,11 +71,8 @@ const Dashboard = () => {
           <div className='art-nouveau-corner top-right'></div>
           <div className='art-nouveau-corner bottom-left'></div>
           <div className='art-nouveau-corner bottom-right'></div>
-          <div className='header-container'>
-            <div className='greeting-search-wrapper'>
-              <Greeting />
-              <SearchBar />
-            </div>
+          <div className='header-container'>            
+              <Greeting />                          
           </div>
           <DashboardMetrics properties={properties} />
         </div>

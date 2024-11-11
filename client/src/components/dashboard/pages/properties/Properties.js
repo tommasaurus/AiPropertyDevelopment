@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Upload, Search } from "lucide-react";
 import Sidebar from "../../sidebar/Sidebar";
+import TopNavigation from "../../TopNavigation/TopNavigation";
 import api from "../../../../services/api";
 import PropertyDetails from "./propertyDetails";
 import UploadDocument from "./UploadDocument";
@@ -110,6 +111,7 @@ const Properties = () => {
   return (
     <div className='dashboard-layout'>
       <Sidebar />
+      <TopNavigation />
       <Chat />
       <main className='dashboard-main'>
         <div className='properties-container'>

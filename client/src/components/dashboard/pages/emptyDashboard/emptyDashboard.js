@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Upload } from "lucide-react";
 import Sidebar from "../../sidebar/Sidebar";
+import TopNavigation from "../../TopNavigation/TopNavigation";
 import api from "../../../../services/api";
 import logo from "../../../../assets/img/logo.png";
 import Chat from '../../chatBot/Chat'
@@ -99,6 +100,7 @@ const EmptyDashboard = () => {
   return (
     <div className='empty-dashboard-layout'>
       <Sidebar logo={logo} />
+      <TopNavigation />
       <Chat />
 
       <main className='empty-dashboard-main'>

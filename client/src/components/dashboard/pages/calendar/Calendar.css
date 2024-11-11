@@ -9,6 +9,7 @@
 .calendar-main {
   flex: 1;
   margin-left: 73px;
+  margin-top: 70px;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 2rem;
   width: calc(100% - 73px);

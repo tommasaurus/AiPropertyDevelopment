@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Tenant.css';
 import Sidebar from '../../sidebar/Sidebar';
+import TopNavigation from '../../TopNavigation/TopNavigation';
 import TenantPopup from './TenantPopup';
 import AddTenant from './AddTenant';
 import Chat from '../../chatBot/Chat'
@@ -73,6 +74,7 @@ const TenantPage = () => {
 
   return (
     <div className="tenant-page-container">
+      <TopNavigation />
       <Sidebar/>
       <Chat/>
       <div className="tenant-content">

@@ -4,7 +4,7 @@ import { Send, X, MessageCircle } from "lucide-react";
 import "./Chat.css";
 import api from "../../../services/api";
 import { toast } from "react-toastify";
-import botAvatar from '../../../assets/img/SpaceifyBot.webp';
+import botAvatar from '../../../assets/img/SpaceifyBotAvatar.webp';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);

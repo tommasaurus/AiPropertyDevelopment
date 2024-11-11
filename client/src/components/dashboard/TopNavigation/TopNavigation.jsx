@@ -1,38 +1,35 @@
-// src/components/dashboard/searchBar/SearchBar.js
-
 import React, { useState, useEffect, useRef } from 'react';
-import api from '../../../services/api';
-import './SearchBar.css';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../services/api';
+import './TopNavigation.css';
 
-const customSuggestionsList = [
-  'Profile',
-  'Settings',
-  'Support',
-  'Notifications'
-  // Add more custom strings as needed
-];
-
-const sidebarSuggestionsList = [
-  { type: 'sidebar', label: 'Dashboard', path: '/dashboard' },
-  { type: 'sidebar', label: 'Properties', path: '/dashboard/properties' },
-  { type: 'sidebar', label: 'Calendar', path: '/dashboard/calendar' },
-  { type: 'sidebar', label: 'Tenants', path: '/dashboard/tenants' },
-  { type: 'sidebar', label: 'Messages', path: '/dashboard/messages' },
-];
-
-const SearchBar = () => {
+const TopNavigation = () => {
   const [query, setQuery] = useState('');
   const [properties, setProperties] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const [userName, setUserName] = useState("");
 
   const suggestionsRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
-  // Fetch properties owned by the user
+  const customSuggestionsList = [
+    'Profile',
+    'Settings',
+    'Support',
+    'Notifications'
+  ];
+
+  const sidebarSuggestionsList = [
+    { type: 'sidebar', label: 'Dashboard', path: '/dashboard' },
+    { type: 'sidebar', label: 'Properties', path: '/dashboard/properties' },
+    { type: 'sidebar', label: 'Calendar', path: '/dashboard/calendar' },
+    { type: 'sidebar', label: 'Tenants', path: '/dashboard/tenants' },
+    { type: 'sidebar', label: 'Messages', path: '/dashboard/messages' },
+  ];
+
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -46,7 +43,24 @@ const SearchBar = () => {
     fetchProperties();
   }, []);
 
-  // Update suggestions based on the query
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await api.get("/users/me");
+        // Extract first name from full name
+        const firstName = response.data.name
+          ? response.data.name.split(" ")[0]
+          : "User";
+        setUserName(firstName);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setUserName("User");
+      }
+    };
+
+      fetchUserName();
+  }, []);
+
   useEffect(() => {
     if (query.length === 0) {
       setSuggestions([]);
@@ -56,55 +70,33 @@ const SearchBar = () => {
 
     const lowerQuery = query.toLowerCase();
 
-    // Filter properties
     const propertySuggestions = properties
       .filter((property) =>
         property.address.toLowerCase().includes(lowerQuery)
       )
       .map((property) => ({ type: 'property', label: property.address, id: property.id }));
 
-    // Filter custom suggestions
     const customSuggestionsFiltered = customSuggestionsList
       .filter((suggestion) =>
         suggestion.toLowerCase().includes(lowerQuery)
       )
       .map((suggestion) => ({ type: 'custom', label: suggestion }));
 
-    // Filter sidebar suggestions
     const sidebarSuggestionsFiltered = sidebarSuggestionsList
       .filter((suggestion) =>
         suggestion.label.toLowerCase().includes(lowerQuery)
       );
 
-    // Combine and limit suggestions
     const combinedSuggestions = [
       ...customSuggestionsFiltered,
       ...sidebarSuggestionsFiltered,
       ...propertySuggestions,
-    ].slice(0, 10); // Limit to 10 suggestions
+    ].slice(0, 10);
 
     setSuggestions(combinedSuggestions);
     setActiveSuggestionIndex(-1);
   }, [query, properties]);
 
-  const getAllSuggestions = () => {
-    const propertySuggestions = properties.map((property) => ({
-      type: 'property',
-      label: property.address,
-      id: property.id,
-    }));
-
-    const customSuggestions = customSuggestionsList.map((suggestion) => ({
-      type: 'custom',
-      label: suggestion,
-    }));
-
-    const sidebarSuggestions = sidebarSuggestionsList;
-
-    return [...customSuggestions, ...sidebarSuggestions, ...propertySuggestions];
-  };
-
-  // Handle keyboard navigation
   const handleKeyDown = (e) => {
     if (suggestions.length > 0) {
       if (e.key === 'ArrowDown') {
@@ -129,20 +121,16 @@ const SearchBar = () => {
         setSuggestions([]);
         setActiveSuggestionIndex(-1);
       }
-    } else {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        performSearch();
-      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      performSearch();
     }
   };
 
-  // Handle suggestion selection
   const selectSuggestion = (suggestion) => {
     setQuery(suggestion.label);
     setSuggestions([]);
     setActiveSuggestionIndex(-1);
-    // Refocus on the search input
     inputRef.current.focus();
   };
 
@@ -152,7 +140,6 @@ const SearchBar = () => {
     } else if (suggestion.type === 'sidebar') {
       navigate(suggestion.path);
     } else if (suggestion.type === 'custom') {
-      // Handle custom suggestions
       switch (suggestion.label.toLowerCase()) {
         case 'profile':
           navigate('/profile');
@@ -172,24 +159,34 @@ const SearchBar = () => {
     }
   };
 
+  const getAllSuggestions = () => {
+    const propertySuggestions = properties.map((property) => ({
+      type: 'property',
+      label: property.address,
+      id: property.id,
+    }));
+
+    const customSuggestions = customSuggestionsList.map((suggestion) => ({
+      type: 'custom',
+      label: suggestion,
+    }));
+
+    return [...customSuggestions, ...sidebarSuggestionsList, ...propertySuggestions];
+  };
+
   const performSearch = () => {
     const lowerQuery = query.toLowerCase();
     const allSuggestions = getAllSuggestions();
 
-    // Try to find an exact match
     const matchedSuggestion = allSuggestions.find(
       (suggestion) => suggestion.label.toLowerCase() === lowerQuery
     );
 
     if (matchedSuggestion) {
       navigateToSuggestion(matchedSuggestion);
-    } else {
-      // No match found, you can display a message or handle it as needed
-      console.log('No matching suggestion found');
     }
   };
 
-  // Close suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -210,45 +207,64 @@ const SearchBar = () => {
   }, []);
 
   return (
-    <div className="search-bar-container">
-      <div className="search-icon">
-        <FaSearch />
+    <div className="top-navigation">
+      <div className="nav-content">
+        <div className="search-container">
+          <div className="search-wrapper">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search here"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              ref={inputRef}
+              aria-label="Search"
+              aria-autocomplete="list"
+              aria-controls="search-suggestions"
+              aria-activedescendant={
+                activeSuggestionIndex >= 0 ? `suggestion-${activeSuggestionIndex}` : undefined
+              }
+            />
+            <div className="search-icon">
+              <FaSearch />
+            </div>
+            {suggestions.length > 0 && (
+              <ul className="suggestions-list" id="search-suggestions" ref={suggestionsRef}>
+                {suggestions.map((item, index) => (
+                  <li
+                    key={index}
+                    id={`suggestion-${index}`}
+                    className={`suggestion-item ${
+                      index === activeSuggestionIndex ? 'active' : ''
+                    }`}
+                    onClick={() => selectSuggestion(item)}
+                    role="option"
+                    aria-selected={index === activeSuggestionIndex}
+                  >
+                    {item.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+        
+        <div className="nav-items">
+          <span className="other-menus">OTHER MENUS</span>
+          <span className="notification-count">1</span>
+          <div className="language-selector">
+            <img src="/api/placeholder/20/20" alt="Language flag" className="flag-icon" />
+            <span>ENGLISH</span>
+          </div>
+          <div className="user-profile">
+            <img src="" alt="User avatar" className="user-avatar" />
+            <span>{userName}</span>
+          </div>
+        </div>
       </div>
-      <input
-        type="text"
-        className="search-input"
-        placeholder="Search..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
-        ref={inputRef}
-        aria-label="Search"
-        aria-autocomplete="list"
-        aria-controls="search-suggestions"
-        aria-activedescendant={
-          activeSuggestionIndex >= 0 ? `suggestion-${activeSuggestionIndex}` : undefined
-        }
-      />
-      {suggestions.length > 0 && (
-        <ul className="suggestions-list" id="search-suggestions" ref={suggestionsRef}>
-          {suggestions.map((item, index) => (
-            <li
-              key={index}
-              id={`suggestion-${index}`}
-              className={`suggestion-item ${
-                index === activeSuggestionIndex ? 'active' : ''
-              }`}
-              onClick={() => selectSuggestion(item)}
-              role="option"
-              aria-selected={index === activeSuggestionIndex}
-            >
-              {item.label}
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 };
 
-export default SearchBar;
+export default TopNavigation;

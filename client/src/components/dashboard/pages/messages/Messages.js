@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../sidebar/Sidebar";
-import SearchBar from "../../searchBar/SearchBar";
+import TopNavigation from "../../TopNavigation/TopNavigation"
 import dwellexLogo from "../../../../assets/img/dwellexLogo.png";
 import api from "../../../../services/api";
 import ExpensesTable from "./ExpenseTable"; 
@@ -78,7 +78,7 @@ const Messages = () => {
           <div className="art-nouveau-corner bottom-left" />
           <div className="art-nouveau-corner bottom-right" />
           
-          <SearchBar />
+          <TopNavigation />
 
           <div className="nouveau-content-section">
             {/* <div className="property-selection">

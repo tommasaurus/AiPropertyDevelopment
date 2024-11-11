@@ -44,7 +44,7 @@ const Greeting = () => {
       }
     };
 
-    fetchUserName();
+      fetchUserName();
   }, []);
 
   const formatDate = () => {
