@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Calendar.css';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from '../sidebar/Sidebar';
+import DayView from './DayView';
 
 const Calendar = () => {
   const [currentView, setCurrentView] = useState('month');
@@ -12,23 +13,37 @@ const Calendar = () => {
   const events = [
     {
       id: 1,
-      title: 'New Event',
-      start: new Date(2020, 9, 8, 8, 4), // October 8
-      end: new Date(2020, 9, 8, 10, 23),
-      type: 'standard',
-    },
+      title: 'Weekly Meeting Projects',
+      start: new Date(2024, 9, 14, 8, 0),
+      end: new Date(2024, 9, 14, 9, 30),
+      location: 'Corner Rounded St, London, United Kingdom',
+      type: 'primary',
+      attendees: ['JD', 'AB', 'CD', 'EF', 'GH']
+    },    
     {
       id: 2,
-      title: 'Event',
-      start: new Date(2020, 9, 2), // October 2
-      type: 'standard',
+      title: 'Maintenance Server',
+      start: new Date(2024, 9, 14, 8, 30),
+      end: new Date(2024, 9, 14, 9, 30),
+      location: 'Corner Rounded St, London, United Kingdom',
+      type: 'dark'
     },
     {
       id: 3,
-      title: 'Event',
-      start: new Date(2020, 9, 3), // October 3
-      type: 'standard',
+      title: 'UI Design Weekly Workshop',
+      start: new Date(2024, 9, 14, 10, 0),
+      end: new Date(2024, 9, 14, 11, 30),
+      location: 'Corner Rounded St, London, United Kingdom',
+      type: 'success'
     },
+    {
+      id: 4,
+      title: 'Meet Mr.Yuan in Airport',
+      start: new Date(2024, 9, 14, 13, 0),
+      end: new Date(2024, 9, 14, 14, 0),
+      location: 'Corner Rounded St, London, United Kingdom',
+      type: 'warning'
+    }
   ];
 
   const getTodayDate = () => {
@@ -59,115 +74,114 @@ const Calendar = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
 
-    const renderCalendarDays = () => {
-        const totalDays = getDaysInMonth(currentDate);
-        const firstDay = getFirstDayOfMonth(currentDate);
-        const days = [];
+  const renderCalendarDays = () => {
+    const totalDays = getDaysInMonth(currentDate);
+    const firstDay = getFirstDayOfMonth(currentDate);
+    const days = [];
 
-        // Previous month days
-        const prevMonthDays = getDaysInMonth(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
-        for (let i = firstDay - 1; i >= 0; i--) {
-            days.push(
-                <div key={`prev-${i}`} className="calendar-day other-month">
-                    <div className="day-number">
-                        <span>{prevMonthDays - i}</span>
-                    </div>
-                </div>
-            );
-        }
-
-        // Current month days
-        for (let day = 1; day <= totalDays; day++) {
-            const currentDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-            const isToday = currentDay.toDateString() === new Date().toDateString();
-            const dayEvents = events.filter((event) =>
-                event.start.toDateString() === currentDay.toDateString()
-            );
-
-            days.push(
-                <div key={day} className={`calendar-day ${isToday ? 'today' : ''}`}>
-                    <div className="day-number">
-                        <span>{day}</span>
-                    </div>
-                    {dayEvents.map((event, index) => (
-                        <div key={event.id} className="event-item">
-                            <span className="event-title">{event.title}</span>
-                            {event.start.getHours() && (
-                                <span className="event-time">
-                                    {`${event.start.getHours().toString().padStart(2, '0')}:${event.start.getMinutes().toString().padStart(2, '0')} - ${event.end.getHours().toString().padStart(2, '0')}:${event.end.getMinutes().toString().padStart(2, '0')}`}
-                                </span>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-
-        // Next month days to fill a 5x7 grid (35 cells)
-        const remainingCells = 35 - days.length; // Changed from 42 to 35
-        for (let i = 1; i <= remainingCells; i++) {
-            days.push(
-                <div key={`next-${i}`} className="calendar-day other-month">
-                    <div className="day-number">
-                        <span>{i}</span>
-                    </div>
-                </div>
-            );
-        }
-
-        return days;
-    };
-
-    const ViewOptions = () => {
-        const [currentView, setCurrentView] = useState('month');
-        const views = ['Date', 'Week', 'Month', 'Year'];
-        
-        return (
-          <div className="view-options-container">
-            <div className="view-options-wrapper">
-              {views.map((view) => (
-                <button
-                  key={view}
-                  onClick={() => setCurrentView(view.toLowerCase())}
-                  className={`view-option ${currentView === view.toLowerCase() ? 'active' : ''}`}
-                >
-                  {view}
-                </button>
-              ))}
-            </div>
+    // Previous month days
+    const prevMonthDays = getDaysInMonth(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+    for (let i = firstDay - 1; i >= 0; i--) {
+      days.push(
+        <div key={`prev-${i}`} className="calendar-day other-month">
+          <div className="day-number">
+            <span>{prevMonthDays - i}</span>
           </div>
-        );
-      };
+        </div>
+      );
+    }
 
-      return (
-        <div className="dashboard-layout">
-          <Sidebar />
-          
-          <main className="dashboard-main">
-            <div className="calendar-content">
-              <div className="calendar-header">
-                <div className="header-center">
-                  <div className="calendar-type">
-                    <button className="nav-button" onClick={handlePrevMonth}>
-                      <ChevronRight alt="Previous" className="nav-icon prev" />                      
+    // Current month days
+    for (let day = 1; day <= totalDays; day++) {
+      const currentDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+      const isToday = currentDay.toDateString() === new Date().toDateString();
+      const dayEvents = events.filter((event) =>
+        event.start.toDateString() === currentDay.toDateString()
+      );
+
+      days.push(
+        <div key={day} className={`calendar-day ${isToday ? 'today' : ''}`}>
+          <div className="day-number">
+            <span>{day}</span>
+          </div>
+          {dayEvents.map((event) => (
+            <div key={event.id} className="event-item">
+              <span className="event-title">{event.title}</span>
+              {event.start.getHours() && event.end && (
+                <span className="event-time">
+                  {`${event.start.getHours().toString().padStart(2, '0')}:${event.start.getMinutes().toString().padStart(2, '0')} - ${event.end.getHours().toString().padStart(2, '0')}:${event.end.getMinutes().toString().padStart(2, '0')}`}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Next month days
+    const remainingCells = 35 - days.length;
+    for (let i = 1; i <= remainingCells; i++) {
+      days.push(
+        <div key={`next-${i}`} className="calendar-day other-month">
+          <div className="day-number">
+            <span>{i}</span>
+          </div>
+        </div>
+      );
+    }
+
+    return days;
+  };
+
+  return (
+    <div className="calendar-layout">
+      <Sidebar />
+      
+      <main className="calendar-main">
+        <div className="calendar-content">
+          <div className="calendar-header">
+            <div className="header-center">
+              <div className="calendar-type">
+                <button className="nav-button" onClick={handlePrevMonth}>
+                  <ChevronLeft className="nav-icon" />                      
+                </button>
+                <span className="current-month">
+                  {formatMonth(currentDate)}, {currentDate.getFullYear()}
+                </span>
+                <button className="nav-button" onClick={handleNextMonth}>
+                  <ChevronRight className="nav-icon" />
+                </button>
+              </div>
+            </div>
+            <div className="header-left">
+              <div className="view-options-container">
+                <div className="view-options-wrapper">
+                  {['Date', 'Week', 'Month'].map((view) => (
+                    <button
+                      key={view}
+                      onClick={() => setCurrentView(view.toLowerCase())}
+                      className={`view-option ${currentView === view.toLowerCase() ? 'active' : ''}`}
+                    >
+                      {view}
                     </button>
-                    <span className="current-month">
-                      {formatMonth(currentDate)}, {currentDate.getFullYear()}
-                    </span>
-                    <button className="nav-button" onClick={handleNextMonth}>
-                      <ChevronRight alt="Next" className="nav-icon next" />
-                    </button>
-                  </div>
-                </div>
-                <div className="header-left">
-                  <ViewOptions />
-                </div>
-                <div className="header-right">
-                  <button className="today-button">Today ({getTodayDate()})</button>
-                  <button className="new-schedule-button">+ New Schedule</button>
+                  ))}
                 </div>
               </div>
-    
+            </div>
+            <div className="header-right">
+              <button className="today-button">Today ({getTodayDate()})</button>
+              <button className="new-schedule-button">+ New Schedule</button>
+            </div>
+          </div>
+
+          {currentView === 'date' ? (
+            <DayView 
+              currentDate={currentDate}
+              events={events}
+              onDateChange={(date) => setCurrentDate(date)}
+            />
+          ) : (
+            <>
               <div className="calendar-days">
                 <span className="day-label">Monday</span>
                 <span className="day-label">Tuesday</span>
@@ -177,14 +191,15 @@ const Calendar = () => {
                 <span className="day-label">Saturday</span>
                 <span className="day-label">Sunday</span>
               </div>
-    
               <div className="calendar-grid">
                 {renderCalendarDays()}
               </div>
-            </div>
-          </main>
+            </>
+          )}
         </div>
-      );
-    };
+      </main>
+    </div>
+  );
+};
 
 export default Calendar;
