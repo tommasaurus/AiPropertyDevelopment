@@ -77,7 +77,7 @@ const ClientLogin = () => {
           <span>or</span>
         </div>
 
-        <form onSubmit={handleLogin} className='form'>
+        <form onSubmit={handleLogin} className='form-login'>
           <div className='input-group'>
             <label className='label'>Email</label>
             <input

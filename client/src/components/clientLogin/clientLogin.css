@@ -61,8 +61,8 @@
   font-size: 1.3rem;
 }
 
-.form {
-  width: 100%;
+.form-login {
+  width: 26vw !important;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -82,7 +82,7 @@
 }
 
 .input-group input {
-  width: 92%;
+  width: 100%;
   padding: 0.9rem;
   border: 2px solid #a8a8a8;
   border-radius: 8px;

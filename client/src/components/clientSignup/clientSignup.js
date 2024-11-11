@@ -88,7 +88,7 @@ const ClientSignup = () => {
           <span>or</span>
         </div>
 
-        <form onSubmit={handleSignup} className='form'>
+        <form onSubmit={handleSignup} className='form-login'>
           <div className='input-group'>
             <label className='label'>Email</label>
             <input
