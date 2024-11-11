@@ -18,60 +18,54 @@ const Messages = () => {
   const [loadingExpenses, setLoadingExpenses] = useState(false);
   const [expensesError, setExpensesError] = useState("");
 
-  const businessName = "Jason";
-
-  const formatDate = (dateString) => {
-    return dateString ? new Date(dateString).toLocaleDateString() : "N/A";
-  };
-
   const formatCurrency = (value) => {
     const num = Number(value);
     return !isNaN(num) ? `$${num.toFixed(2)}` : "N/A";
   };
 
-  const fetchProperties = async () => {
-    try {
-      const response = await api.get("/properties");
-      setProperties(response.data);
-    } catch (error) {
-      console.error("Error fetching properties:", error);
-      toast.error("Failed to fetch properties.");
-      setErrorMessage("Failed to fetch properties.");
-    }
-  };
+  // const fetchProperties = async () => {
+  //   try {
+  //     const response = await api.get("/properties");
+  //     setProperties(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching properties:", error);
+  //     toast.error("Failed to fetch properties.");
+  //     setErrorMessage("Failed to fetch properties.");
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchProperties();
-  }, []);
+  // useEffect(() => {
+  //   fetchProperties();
+  // }, []);
 
-  const handleGetExpenses = async () => {
-    if (!selectedProperty) {
-      toast.error("Please select a property first.");
-      setExpensesError("Please select a property first.");
-      return;
-    }
+  // const handleGetExpenses = async () => {
+  //   if (!selectedProperty) {
+  //     toast.error("Please select a property first.");
+  //     setExpensesError("Please select a property first.");
+  //     return;
+  //   }
 
-    setLoadingExpenses(true);
-    setExpensesError("");
-    setExpenses([]);
+  //   setLoadingExpenses(true);
+  //   setExpensesError("");
+  //   setExpenses([]);
 
-    try {
-      const response = await api.get(`/properties/${selectedProperty}/expenses`);
-      if (response.data.length === 0) {
-        toast.info("No expenses found for the selected property.");
-        setExpensesError("No expenses found for the selected property.");
-      } else {
-        setExpenses(response.data);
-        toast.success("Expenses fetched successfully!");
-      }
-    } catch (error) {
-      console.error("Error fetching expenses:", error);
-      toast.error("Failed to fetch expenses.");
-      setExpensesError("Failed to fetch expenses.");
-    } finally {
-      setLoadingExpenses(false);
-    }
-  };
+  //   try {
+  //     const response = await api.get(`/properties/${selectedProperty}/expenses`);
+  //     if (response.data.length === 0) {
+  //       toast.info("No expenses found for the selected property.");
+  //       setExpensesError("No expenses found for the selected property.");
+  //     } else {
+  //       setExpenses(response.data);
+  //       toast.success("Expenses fetched successfully!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching expenses:", error);
+  //     toast.error("Failed to fetch expenses.");
+  //     setExpensesError("Failed to fetch expenses.");
+  //   } finally {
+  //     setLoadingExpenses(false);
+  //   }
+  // };
 
   return (
     <div className="dashboard-layout">
@@ -87,7 +81,7 @@ const Messages = () => {
           <SearchBar />
 
           <div className="nouveau-content-section">
-            <div className="property-selection">
+            {/* <div className="property-selection">
               <h2>Messages & Expenses</h2>
               <select
                 value={selectedProperty}
@@ -123,7 +117,7 @@ const Messages = () => {
               </div>
             )}
 
-            {expenses.length > 0 && <ExpensesTable expenses={expenses} />}
+            {expenses.length > 0 && <ExpensesTable expenses={expenses} />} */}
 
             <div className="chat-container">
               <Chat />
