@@ -1,13 +1,13 @@
 /* Greeting.css */
 .greeting-container {
-  padding: 0;
+  padding: 0rem;
   animation: fadeSlideIn 0.8s ease-out;
 }
 
 .greeting-content {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0rem;
 }
 
 .greeting-title {
