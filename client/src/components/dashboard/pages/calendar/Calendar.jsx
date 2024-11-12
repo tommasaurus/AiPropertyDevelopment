@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Calendar.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Sidebar from "../../sidebar/Sidebar";
@@ -10,42 +10,65 @@ import TopNavigation from "../../TopNavigation/TopNavigation";
 const Calendar = () => {
   const [currentView, setCurrentView] = useState("month");
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDay, setSelectedDay] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  useEffect(() => {
+    const mainContent = document.querySelector(".calendar-main");
+    const handleSidebarChange = () => {
+      if (document.body.classList.contains("dashboard-sidebar-expanded")) {
+        mainContent?.classList.add("sidebar-expanded");
+      } else {
+        mainContent?.classList.remove("sidebar-expanded");
+      }
+    };
+
+    handleSidebarChange();
+
+    const observer = new MutationObserver(handleSidebarChange);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const events = [
     {
       id: 1,
-      title: "Weekly Meeting Projects",
-      start: new Date(2024, 9, 14, 8, 0),
-      end: new Date(2024, 9, 14, 9, 30),
-      location: "Corner Rounded St, London, United Kingdom",
+      title: "Property Inspection - Nob Hill Complex",
+      start: new Date(2024, 10, 12, 9, 0),
+      end: new Date(2024, 10, 12, 10, 30),
+      location: "1200 California St, San Francisco",
       type: "primary",
-      attendees: ["JD", "AB", "CD", "EF", "GH"],
+      attendees: ["JM", "KL", "RT"],
     },
     {
       id: 2,
-      title: "Maintenance Server",
-      start: new Date(2024, 9, 14, 8, 30),
-      end: new Date(2024, 9, 14, 9, 30),
-      location: "Corner Rounded St, London, United Kingdom",
-      type: "dark",
+      title: "Tenant Lease Signing - SOMA Unit",
+      start: new Date(2024, 10, 12, 11, 0),
+      end: new Date(2024, 10, 12, 12, 15),
+      location: "888 Brannan St, San Francisco",
+      type: "success",
+      attendees: ["JM", "CW"],
     },
     {
       id: 3,
-      title: "UI Design Weekly Workshop",
-      start: new Date(2024, 9, 14, 10, 0),
-      end: new Date(2024, 9, 14, 11, 30),
-      location: "Corner Rounded St, London, United Kingdom",
-      type: "success",
+      title: "Contractor Meeting - Renovation Project",
+      start: new Date(2024, 10, 12, 13, 30),
+      end: new Date(2024, 10, 12, 15, 0),
+      location: "Marina District Property, San Francisco",
+      type: "dark",
+      attendees: ["JM", "BK", "DH", "MS"],
     },
     {
       id: 4,
-      title: "Meet Mr.Yuan in Airport",
-      start: new Date(2024, 9, 14, 13, 0),
-      end: new Date(2024, 9, 14, 14, 0),
-      location: "Corner Rounded St, London, United Kingdom",
+      title: "Building Safety Inspection",
+      start: new Date(2024, 10, 12, 15, 30),
+      end: new Date(2024, 10, 12, 17, 0),
+      location: "Pacific Heights Complex, San Francisco",
       type: "warning",
+      attendees: ["JM", "SF"],
     },
   ];
 
@@ -71,9 +94,9 @@ const Calendar = () => {
 
   const formatEventTime = (date) => {
     return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
+      hour: "numeric",
       minute: "2-digit",
-      hour12: false,
+      hour12: true,
     });
   };
 
@@ -92,8 +115,20 @@ const Calendar = () => {
   const handleDayClick = (year, month, day) => {
     const newDate = new Date(year, month, day);
     setCurrentDate(newDate);
-    setSelectedDay(newDate);
-    setCurrentView("date");
+    setCurrentView("day");
+  };
+
+  const handleEventClick = (event, e) => {
+    e.stopPropagation();
+    setCurrentDate(event.start);
+    setSelectedEvent(event);
+    setCurrentView("day");
+  };
+
+  const handleTodayClick = () => {
+    const today = new Date();
+    setCurrentDate(today);
+    setCurrentView("day");
   };
 
   const renderCalendarDays = () => {
@@ -154,18 +189,15 @@ const Calendar = () => {
               <div
                 key={event.id}
                 className={`event-item ${event.type}`}
-                title={`${event.title}\n${formatEventTime(
-                  event.start
-                )} - ${formatEventTime(event.end)}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedEvent(event);
-                }}
+                title={`${formatEventTime(event.start)} - ${formatEventTime(
+                  event.end
+                )}\n${event.title}`}
+                onClick={(e) => handleEventClick(event, e)}
               >
-                <span className='event-time'>
-                  {formatEventTime(event.start)}
-                </span>
-                <span className='event-title'>{event.title}</span>
+                <div className='event-time'>
+                  {formatEventTime(event.start)} - {formatEventTime(event.end)}
+                </div>
+                <div className='event-title'>{event.title}</div>
               </div>
             ))}
             {dayEvents.length > 3 && (
@@ -209,12 +241,6 @@ const Calendar = () => {
     return days;
   };
 
-  const handleTodayClick = () => {
-    const today = new Date();
-    setCurrentDate(today);
-    setSelectedDay(today);
-  };
-
   return (
     <div className='calendar-layout'>
       <Sidebar />
@@ -240,7 +266,7 @@ const Calendar = () => {
             <div className='header-left'>
               <div className='view-options-container'>
                 <div className='view-options-wrapper'>
-                  {["Date", "Week", "Month"].map((view) => (
+                  {["Day", "Week", "Month"].map((view) => (
                     <button
                       key={view}
                       onClick={() => setCurrentView(view.toLowerCase())}
@@ -262,17 +288,20 @@ const Calendar = () => {
             </div>
           </div>
 
-          {currentView === "date" ? (
+          {currentView === "day" ? (
             <DayView
               currentDate={currentDate}
               events={events}
               onDateChange={(date) => setCurrentDate(date)}
+              onEventClick={handleEventClick}
+              selectedEvent={selectedEvent}
             />
           ) : currentView === "week" ? (
             <WeekView
               currentDate={currentDate}
               events={events}
               onDateChange={(date) => setCurrentDate(date)}
+              onEventClick={handleEventClick}
             />
           ) : (
             <>

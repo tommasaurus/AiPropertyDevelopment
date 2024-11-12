@@ -6,7 +6,7 @@ import api from "../../../../services/api";
 import PropertyDetails from "./propertyDetails";
 import UploadDocument from "./UploadDocument";
 import AddProperty from "./AddProperty";
-import Chat from '../../chatBot/Chat'
+import Chat from "../../chatBot/Chat";
 import "./Properties.css";
 
 const Properties = () => {

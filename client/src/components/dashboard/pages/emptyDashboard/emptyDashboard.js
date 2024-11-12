@@ -4,7 +4,8 @@ import Sidebar from "../../sidebar/Sidebar";
 import TopNavigation from "../../TopNavigation/TopNavigation";
 import api from "../../../../services/api";
 import logo from "../../../../assets/img/logo.png";
-import Chat from '../../chatBot/Chat'
+import Chat from "../../chatBot/Chat";
+import Greeting from "../../greeting/Greeting";
 import "./emptyDashboard.css";
 
 const EmptyDashboard = () => {
@@ -102,10 +103,10 @@ const EmptyDashboard = () => {
       <Sidebar logo={logo} />
       <TopNavigation />
       <Chat />
+      <Greeting />
 
       <main className='empty-dashboard-main'>
         <div className='dashboard-header'>
-          <h1 className='main-greeting'>Welcome to your dashboard, Jason</h1>
           <p className='date-display'>
             {currentTime.toLocaleDateString("en-US", {
               weekday: "long",
