@@ -322,21 +322,22 @@
 }
 
 /* Custom Scrollbar */
+
 ::-webkit-scrollbar {
   width: 0.5rem;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #b8b8b8;
+  background: #e17c50d8;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c66a45;
+  background: #d35e3abc;
 }
 
 /* Animations */

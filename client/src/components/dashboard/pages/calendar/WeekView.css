@@ -238,6 +238,11 @@
   background: #e17b50;
 }
 
+.week-body::-webkit-scrollbar-thumb {
+  background: #feb99e;
+  border-radius: 6px;
+}
+
 /* Media Queries */
 @media (max-width: 1200px) {
   .week-nav-button {

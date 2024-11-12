@@ -5,11 +5,12 @@
   top: 0;
   bottom: 0;
   width: 73px;
-  background: linear-gradient(135deg, #f9f6f2 0%, #f3ede7 100%);
+  background: linear-gradient(180deg, #fcfaf8 0%, #f7f4f0 100%);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #2d3748;
+  border-right: 1px solid rgba(45, 55, 72, 0.1);
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.05);
   z-index: 50;
   overflow: hidden;
 }
@@ -25,7 +26,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #2d3748;
+  border-bottom: 1px solid #2d374898;
+  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    180deg,
+    #f9f6f2 0%,
+    #f3ede7 100%
+  ); /* Keep your current clean look */
 }
 
 .dashboard-sidebar .logo-container {
@@ -112,7 +119,7 @@
 }
 
 .dashboard-sidebar .nav-section.bottom {
-  border-top: 1px solid #2d3748;
+  border-top: 1px solid #2d374898;
   padding-top: 0.5rem;
   margin-top: auto;
   gap: 0rem;
@@ -122,30 +129,31 @@
   display: flex;
   align-items: center;
   padding: 0.75rem 0.45rem; /* Reduced padding */
-  margin: 0 0.8rem;
-  border-radius: 0.5rem;
-  color: #2d3748;
+  margin: 0.2rem 0 0rem 1rem;
+  border-radius: 8px;
+  color: #4a5568;
   transition: all 0.2s ease;
   border: none;
   background: none;
   cursor: pointer;
-  width: calc(100% - 1.4rem);
+  width: calc(100%);
   text-align: left;
 }
 
 .dashboard-sidebar .nav-item:hover {
-  background-color: #7a666642;
-  color: #0f172a;
+  background-color: rgba(225, 123, 80, 0.08); /* Lighter hover state */
+  color: #e17b50;
 }
 
 .dashboard-sidebar .nav-item.active {
   color: #e17b50;
+  background-color: rgba(225, 124, 80, 0.2); /* Background for active state */
+  font-weight: 600;
 }
 
 .dashboard-sidebar .nav-item-content {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   width: 100%;
 }
 
@@ -157,6 +165,7 @@
   white-space: nowrap;
   width: 0;
   overflow: hidden;
+  margin-left: 1rem;
 }
 
 .dashboard-sidebar.expanded .nav-label {

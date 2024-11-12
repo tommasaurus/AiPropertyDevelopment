@@ -101,7 +101,7 @@
   overflow-y: auto;
   background: transparent;
   border-radius: 12px;
-  border: 1px solid #000000;
+  /* border: 2px solid #00000035; */
 }
 
 .dateview-timeline {
@@ -131,7 +131,7 @@
 
 .dateview-hourline {
   height: 100px;
-  border-top: 1px dashed #000000;
+  border-top: 1px dashed #00000077;
   margin: 0;
 }
 
@@ -230,6 +230,24 @@
 
 .dateview-attendee:first-child {
   margin-left: 0;
+}
+
+.dateview-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dateview-body::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 6px;
+}
+
+.dateview-body::-webkit-scrollbar-thumb {
+  background: #feb99e;
+  border-radius: 6px;
+}
+
+.dateview-body::-webkit-scrollbar-thumb:hover {
+  background: #f9a17b;
 }
 
 @media (max-width: 768px) {

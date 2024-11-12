@@ -85,6 +85,15 @@ body.dashboard-sidebar-expanded .top-navigation {
   gap: 8px; /* Increased gap between items */
 }
 
+.notification-wrapper svg {
+  color: #a85c3c; /* This matches your search icon color */
+  transition: color 0.2s ease;
+}
+
+.notification-wrapper:hover svg {
+  color: #e17b50; /* Changes to orange on hover, matching your theme */
+}
+
 .notification-wrapper:hover {
   background-color: #fef8f0;
 }
@@ -103,26 +112,6 @@ body.dashboard-sidebar-expanded .top-navigation {
   align-items: center;
   justify-content: center;
   margin-left: 10px; /* Added margin for extra spacing */
-}
-
-.top-navigation .language-selector {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.top-navigation .flag-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-}
-
-.top-navigation .language-selector span {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2d3748;
-  text-transform: uppercase;
 }
 
 .top-navigation .user-profile {

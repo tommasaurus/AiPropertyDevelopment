@@ -9,7 +9,7 @@ import {
   HelpCircle,
   LogOut,
   MessagesSquare,
-  ChevronRight,
+  Pin,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
@@ -132,9 +132,9 @@ const Sidebar = () => {
         onClick={() => handleNavigation(item.path, item.action)}
         title={!isExpanded ? item.label : ""}
       >
-        <div className='nav-item-content'>
+        <div className="nav-item-content">
           <Icon size={24} />
-          <span className='nav-label'>{item.label}</span>
+          <span className="nav-label">{item.label}</span>
         </div>
       </button>
     );
@@ -146,23 +146,23 @@ const Sidebar = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className='sidebar-header'>
-        <div className='logo-container'>
-          <img src={tabLogo} className='tab-logo' alt='Tab Logo' />
-          <img src={logo} className='logo' alt='Dwellex Logo' />
+      <div className="sidebar-header">
+        <div className="logo-container">
+          <img src={tabLogo} className="tab-logo" alt="Tab Logo" />
+          <img src={logo} className="logo" alt="Dwellex Logo" />
         </div>
         <button
           className={`pin-button ${isPinned ? "pinned" : ""}`}
           onClick={togglePin}
           aria-label={isPinned ? "Collapse sidebar" : "Expand sidebar"}
         >
-          <ChevronRight size={16} />
+          <Pin size={16} />
         </button>
       </div>
 
-      <nav className='sidebar-nav'>
-        <div className='nav-section'>{navItems.map(renderNavItem)}</div>
-        <div className='nav-section bottom'>
+      <nav className="sidebar-nav">
+        <div className="nav-section">{navItems.map(renderNavItem)}</div>
+        <div className="nav-section bottom">
           {bottomNavItems.map(renderNavItem)}
         </div>
       </nav>

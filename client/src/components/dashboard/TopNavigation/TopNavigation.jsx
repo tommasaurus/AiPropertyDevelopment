@@ -288,10 +288,7 @@ const TopNavigation = () => {
 
         <div className="nav-items">
           <button className="notification-wrapper">
-            <Bell
-              className="text-orange-400 hover:text-orange-500 transition-colors"
-              size={20}
-            />
+            <Bell size={20} />
             <span className="notification-count">10</span>
           </button>
           <div className="user-profile">

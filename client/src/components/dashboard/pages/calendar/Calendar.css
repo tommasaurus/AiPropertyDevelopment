@@ -230,7 +230,7 @@
 
 .calendar-day {
   background: white;
-  border: 1px solid #000000;
+  border: 2px solid #00000063;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
