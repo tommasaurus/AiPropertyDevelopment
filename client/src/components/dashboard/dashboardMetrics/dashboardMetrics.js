@@ -20,7 +20,7 @@ const DashboardMetrics = () => {
       title: "Incoming Rent",
       value: "$24.6k",
       icon: DollarSign,
-      subtitle: "Aug '24",
+      subtitle: "Nov '24",
       trend: "+2.1%",
       color: "emerald",
     },

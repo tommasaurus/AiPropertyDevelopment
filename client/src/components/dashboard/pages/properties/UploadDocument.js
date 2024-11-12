@@ -1,11 +1,17 @@
 // src/components/properties/UploadDocument.js
-
 import React, { useState, useRef } from "react";
 import api from "../../../../services/api";
+import {
+  Upload,
+  X,
+  ChevronRight,
+  AlertCircle,
+  FileText,
+  Trash2,
+} from "lucide-react";
 import "./UploadDocument.css";
 
 const UploadDocument = ({ properties, onClose, fetchAllData }) => {
-  // State variables for uploading documents
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
@@ -19,7 +25,6 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
   const fileInputRef = useRef(null);
   const documentTypes = ["Lease", "Contract", "Invoice", "Legal", "Other"];
 
-  // Handle file selection
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
@@ -31,7 +36,6 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
     }
   };
 
-  // Handle Step 1: Upload file to determine document type
   const handleDetermineDocType = async () => {
     if (!file) {
       setErrorMessage("Please upload a file.");
@@ -46,9 +50,7 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
       setErrorMessage("");
 
       const response = await api.post("/processor/upload", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       const document_type = response.data;
@@ -70,26 +72,21 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
     }
   };
 
-  // Handle Step 2: User confirms or changes document type
   const handleConfirmDocType = () => {
     if (!selectedDocType) {
       setErrorMessage("Please select a document type.");
       return;
     }
     setErrorMessage("");
-    // If document type is Lease, show property option step
     if (selectedDocType.toLowerCase() === "lease") {
       setUploadStep(3);
     } else {
-      // For other document types, property selection is required
       setUseExistingProperty(true);
       setUploadStep(3);
     }
   };
 
-  // Handle Step 3: Process document
   const handleProcessDocument = async () => {
-    // For non-lease documents or when using existing property, property selection is required
     if (
       (selectedDocType.toLowerCase() !== "lease" || useExistingProperty) &&
       !selectedProperty
@@ -110,19 +107,13 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
       setErrorMessage("");
 
       if (selectedDocType.toLowerCase() === "lease" && !useExistingProperty) {
-        // For leases without property selection, use the lease endpoint
         await api.post("/leases/upload", formDataToSend, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
-        // For all other cases, use the process endpoint which requires property_id
         formDataToSend.append("property_id", selectedProperty.id);
         await api.post("/processor/process", formDataToSend, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         });
       }
 
@@ -141,7 +132,6 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
     }
   };
 
-  // Reset upload states
   const resetUploadStates = () => {
     setFile(null);
     setSelectedDocType(null);
@@ -152,222 +142,241 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
   };
 
   return (
-    <div className="modal nouveau-modal">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h2>Upload Document</h2>
+    <div className='modal'>
+      <div className='modal-content'>
+        <div className='modal-header'>
+          <div className='header-content'>
+            <div className='header-icon'>
+              <FileText size={24} />
+            </div>
+            <h2>Upload Document</h2>
+          </div>
           <button
-            className="close-button"
+            className='close-button'
             onClick={() => {
               onClose();
               resetUploadStates();
             }}
           >
-            ×
+            <X size={24} />
           </button>
         </div>
 
-        <div className="modal-body">
+        <div className='upload-container'>
           {/* Steps Indicator */}
-          <div className="steps-indicator">
+          <div className='steps-indicator'>
             <div className={`step ${uploadStep >= 1 ? "active" : ""}`}>
-              1. Upload File
+              <div className='step-number'>1</div>
+              <span>Upload File</span>
             </div>
             <div className={`step ${uploadStep >= 2 ? "active" : ""}`}>
-              2. Document Type
+              <div className='step-number'>2</div>
+              <span>Document Type</span>
             </div>
             <div className={`step ${uploadStep >= 3 ? "active" : ""}`}>
-              3. Select Property
+              <div className='step-number'>3</div>
+              <span>Property Details</span>
             </div>
           </div>
 
-          {/* Step 1: Upload File */}
-          {uploadStep === 1 && (
-            <div className="upload-step">
-              <div
-                className={`file-drop-area ${file ? "active" : ""}`}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                    handleFileChange({
-                      target: { files: e.dataTransfer.files },
-                    });
-                  }
-                }}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  style={{ display: "none" }}
-                  accept="image/*,.pdf,.doc,.docx"
-                />
-                <p>Drag & drop files here, or click to upload</p>
-              </div>
-
-              {file && (
-                <div className="uploaded-file-preview">
-                  <p>{file.name}</p>
-                  <button className="delete-file" onClick={() => setFile(null)}>
-                    Remove
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Step 2: Document Type */}
-          {uploadStep === 2 && (
-            <div className="upload-step">
-              <h3>Determine Document Type</h3>
-              <p>
-                The document type has been determined as:{" "}
-                <strong>{selectedDocType}</strong>. You can change it if
-                necessary.
-              </p>
-              <div className="document-type-boxes">
-                {documentTypes.map((type) => (
-                  <div
-                    key={type}
-                    className={`document-type-box ${
-                      selectedDocType === type ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedDocType(type);
-                      if (type !== "Other") setCustomDocType("");
-                    }}
-                  >
-                    {type}
-                  </div>
-                ))}
-              </div>
-              {selectedDocType === "Other" && (
-                <input
-                  type="text"
-                  className="custom-doc-input"
-                  placeholder="Enter custom document type"
-                  value={customDocType}
-                  onChange={(e) => setCustomDocType(e.target.value)}
-                />
-              )}
-            </div>
-          )}
-
-          {/* Step 3: Select Property */}
-          {uploadStep === 3 && (
-            <div className="upload-step">
-              <h3>Property Options</h3>
-
-              {selectedDocType.toLowerCase() === "lease" && (
-                <div className="checkbox-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={useExistingProperty}
-                      onChange={(e) => {
-                        setUseExistingProperty(e.target.checked);
-                        if (!e.target.checked) {
-                          setSelectedProperty(null);
-                        }
-                      }}
-                    />
-                    Link to Existing Property
-                  </label>
-                  <p className="help-text">
-                    {useExistingProperty
-                      ? "Select an existing property below"
-                      : "Property information will be extracted from the lease"}
+          <div className='upload-content'>
+            {/* Step 1: Upload File */}
+            {uploadStep === 1 && (
+              <div className='upload-step'>
+                <div
+                  className={`file-drop-area ${file ? "active" : ""}`}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                      handleFileChange({
+                        target: { files: e.dataTransfer.files },
+                      });
+                    }
+                  }}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <input
+                    type='file'
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                    accept='image/*,.pdf,.doc,.docx'
+                  />
+                  <Upload size={48} className='upload-icon' />
+                  <p className='upload-text'>
+                    Drag & drop files here, or click to upload
+                  </p>
+                  <p className='upload-subtext'>
+                    Supported formats: PDF, DOC, DOCX, Images
                   </p>
                 </div>
-              )}
 
-              {(useExistingProperty ||
-                selectedDocType.toLowerCase() !== "lease") && (
-                <select
-                  value={selectedProperty ? selectedProperty.id : ""}
-                  onChange={(e) => {
-                    const property = properties.find(
-                      (p) => p.id === parseInt(e.target.value)
-                    );
-                    setSelectedProperty(property);
-                  }}
-                  className="property-dropdown"
-                >
-                  <option value="" disabled>
-                    Select a property
-                  </option>
-                  {properties.map((property) => (
-                    <option key={property.id} value={property.id}>
-                      {property.address}
-                    </option>
+                {file && (
+                  <div className='file-preview'>
+                    <div className='file-info'>
+                      <FileText size={20} />
+                      <span>{file.name}</span>
+                    </div>
+                    <button
+                      className='remove-file'
+                      onClick={() => setFile(null)}
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Step 2: Document Type */}
+            {uploadStep === 2 && (
+              <div className='upload-step'>
+                <div className='section-title'>
+                  <h3>Document Type</h3>
+                  <p className='section-description'>
+                    The document type has been determined as:{" "}
+                    <strong>{selectedDocType}</strong>
+                  </p>
+                </div>
+
+                <div className='document-type-grid'>
+                  {documentTypes.map((type) => (
+                    <div
+                      key={type}
+                      className={`document-type-box ${
+                        selectedDocType === type ? "selected" : ""
+                      }`}
+                      onClick={() => {
+                        setSelectedDocType(type);
+                        if (type !== "Other") setCustomDocType("");
+                      }}
+                    >
+                      {type}
+                    </div>
                   ))}
-                </select>
-              )}
-            </div>
-          )}
+                </div>
 
-          {/* Success and Error Messages */}
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
-          {isUploaded && (
-            <p className="success-message">Document uploaded successfully!</p>
-          )}
-        </div>
+                {selectedDocType === "Other" && (
+                  <input
+                    type='text'
+                    className='custom-type-input'
+                    placeholder='Enter custom document type'
+                    value={customDocType}
+                    onChange={(e) => setCustomDocType(e.target.value)}
+                  />
+                )}
+              </div>
+            )}
 
-        <div className="modal-footer">
-          {/* Back Button */}
-          {uploadStep > 1 && (
-            <button
-              className="secondary-button"
-              onClick={() => {
-                setUploadStep((prev) => prev - 1);
-                setErrorMessage("");
-              }}
-            >
-              Back
-            </button>
-          )}
+            {/* Step 3: Property Selection */}
+            {uploadStep === 3 && (
+              <div className='upload-step'>
+                <div className='section-title'>
+                  <h3>Property Details</h3>
+                </div>
 
-          {/* Next Button */}
-          {uploadStep < 3 && (
-            <button
-              className="primary-button"
-              onClick={async () => {
-                if (uploadStep === 1) {
-                  if (!file) {
-                    setErrorMessage("Please select a file first.");
-                    return;
-                  }
-                  await handleDetermineDocType();
-                } else if (uploadStep === 2) {
-                  if (selectedDocType === "Other" && !customDocType) {
-                    setErrorMessage("Please enter a custom document type.");
-                    return;
-                  }
-                  handleConfirmDocType();
+                {selectedDocType.toLowerCase() === "lease" && (
+                  <div className='property-option'>
+                    <label className='checkbox-wrapper'>
+                      <input
+                        type='checkbox'
+                        checked={useExistingProperty}
+                        onChange={(e) => {
+                          setUseExistingProperty(e.target.checked);
+                          if (!e.target.checked) setSelectedProperty(null);
+                        }}
+                      />
+                      <span className='checkbox-label'>
+                        Link to Existing Property
+                      </span>
+                    </label>
+                    <p className='help-text'>
+                      {useExistingProperty
+                        ? "Select an existing property below"
+                        : "Property information will be extracted from the lease"}
+                    </p>
+                  </div>
+                )}
+
+                {(useExistingProperty ||
+                  selectedDocType.toLowerCase() !== "lease") && (
+                  <select
+                    value={selectedProperty ? selectedProperty.id : ""}
+                    onChange={(e) => {
+                      const property = properties.find(
+                        (p) => p.id === parseInt(e.target.value)
+                      );
+                      setSelectedProperty(property);
+                    }}
+                    className='property-select'
+                  >
+                    <option value='' disabled>
+                      Select a property
+                    </option>
+                    {properties.map((property) => (
+                      <option key={property.id} value={property.id}>
+                        {property.address}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            )}
+
+            {/* Error Message */}
+            {errorMessage && (
+              <div className='error-message'>
+                <AlertCircle size={20} />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Footer Actions */}
+          <div className='modal-footer'>
+            {uploadStep > 1 && (
+              <button
+                className='secondary-button'
+                onClick={() => {
+                  setUploadStep((prev) => prev - 1);
+                  setErrorMessage("");
+                }}
+              >
+                Back
+              </button>
+            )}
+
+            {uploadStep < 3 && (
+              <button
+                className='primary-button'
+                onClick={
+                  uploadStep === 1
+                    ? handleDetermineDocType
+                    : handleConfirmDocType
                 }
-              }}
-              disabled={uploading}
-            >
-              {uploadStep === 1
-                ? uploading
-                  ? "Determining..."
-                  : "Next"
-                : "Next"}
-            </button>
-          )}
+                disabled={uploading}
+              >
+                {uploading ? (
+                  "Processing..."
+                ) : (
+                  <>
+                    Next <ChevronRight size={20} />
+                  </>
+                )}
+              </button>
+            )}
 
-          {/* Upload Document Button */}
-          {uploadStep === 3 && (
-            <button
-              className="primary-button"
-              onClick={handleProcessDocument}
-              disabled={uploading}
-            >
-              {uploading ? "Uploading..." : "Upload Document"}
-            </button>
-          )}
+            {uploadStep === 3 && (
+              <button
+                className='primary-button'
+                onClick={handleProcessDocument}
+                disabled={uploading}
+              >
+                {uploading ? "Uploading..." : "Upload Document"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
