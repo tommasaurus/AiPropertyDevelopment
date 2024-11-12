@@ -5,6 +5,7 @@ import "./Chat.css";
 import api from "../../../services/api";
 import { toast } from "react-toastify";
 import botAvatar from '../../../assets/img/SpaceifyBotAvatar.webp';
+import profilePhoto from '../../../assets/img/DefaultProfilePhoto.webp';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -82,7 +83,11 @@ const Chat = () => {
             {messages.map((msg, index) => (
               <div key={index} className={`modern-message ${msg.sender}-container`}>
                 <div className="message-avatar">
-                  {msg.sender === 'bot' && <img src={botAvatar} alt="Spaceify Bot" />}
+                  {msg.sender === 'bot' ? (
+                    <img src={botAvatar} alt="Spaceify Bot" />
+                  ) : (
+                    <img src={profilePhoto} alt="User" />
+                  )}
                 </div>
                 <div className="message-content">
                   <div className={`message-text ${msg.sender}`}>
