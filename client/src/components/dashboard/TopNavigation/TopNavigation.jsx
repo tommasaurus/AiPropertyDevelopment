@@ -1,7 +1,10 @@
+// src/components/TopNavigation/TopNavigation.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
+import PropertyDetails from '../pages/properties/propertyDetails';
 import './TopNavigation.css';
 
 const TopNavigation = () => {
@@ -9,18 +12,14 @@ const TopNavigation = () => {
   const [properties, setProperties] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
+  const [selectedProperty, setSelectedProperty] = useState(null); // New state for selected property
 
   const suggestionsRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
-  const customSuggestionsList = [
-    'Profile',
-    'Settings',
-    'Support',
-    'Notifications'
-  ];
+  const customSuggestionsList = ['Profile', 'Settings', 'Support', 'Notifications'];
 
   const sidebarSuggestionsList = [
     { type: 'sidebar', label: 'Dashboard', path: '/dashboard' },
@@ -46,19 +45,18 @@ const TopNavigation = () => {
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        const response = await api.get("/users/me");
-        // Extract first name from full name
+        const response = await api.get('/users/me');
         const firstName = response.data.name
-          ? response.data.name.split(" ")[0]
-          : "User";
+          ? response.data.name.split(' ')[0]
+          : 'User';
         setUserName(firstName);
       } catch (error) {
-        console.error("Error fetching user data:", error);
-        setUserName("User");
+        console.error('Error fetching user data:', error);
+        setUserName('User');
       }
     };
 
-      fetchUserName();
+    fetchUserName();
   }, []);
 
   useEffect(() => {
@@ -71,21 +69,16 @@ const TopNavigation = () => {
     const lowerQuery = query.toLowerCase();
 
     const propertySuggestions = properties
-      .filter((property) =>
-        property.address.toLowerCase().includes(lowerQuery)
-      )
+      .filter((property) => property.address.toLowerCase().includes(lowerQuery))
       .map((property) => ({ type: 'property', label: property.address, id: property.id }));
 
     const customSuggestionsFiltered = customSuggestionsList
-      .filter((suggestion) =>
-        suggestion.toLowerCase().includes(lowerQuery)
-      )
+      .filter((suggestion) => suggestion.toLowerCase().includes(lowerQuery))
       .map((suggestion) => ({ type: 'custom', label: suggestion }));
 
-    const sidebarSuggestionsFiltered = sidebarSuggestionsList
-      .filter((suggestion) =>
-        suggestion.label.toLowerCase().includes(lowerQuery)
-      );
+    const sidebarSuggestionsFiltered = sidebarSuggestionsList.filter((suggestion) =>
+      suggestion.label.toLowerCase().includes(lowerQuery)
+    );
 
     const combinedSuggestions = [
       ...customSuggestionsFiltered,
@@ -112,7 +105,12 @@ const TopNavigation = () => {
       } else if (e.key === 'Tab') {
         if (activeSuggestionIndex >= 0 && activeSuggestionIndex < suggestions.length) {
           e.preventDefault();
-          selectSuggestion(suggestions[activeSuggestionIndex]);
+          // Only set the query, do not open the popup
+          const suggestion = suggestions[activeSuggestionIndex];
+          setQuery(suggestion.label);
+          setSuggestions([]);
+          setActiveSuggestionIndex(-1);
+          // Do not open the popup
         }
       } else if (e.key === 'Enter') {
         e.preventDefault();
@@ -134,10 +132,19 @@ const TopNavigation = () => {
     inputRef.current.focus();
   };
 
-  const navigateToSuggestion = (suggestion) => {
+  const handleSuggestionClick = (suggestion) => {
+    selectSuggestion(suggestion);
+    // Now, if it's a property, open the popup
     if (suggestion.type === 'property') {
-      navigate(`/dashboard/properties?propertyId=${suggestion.id}`);
-    } else if (suggestion.type === 'sidebar') {
+      const property = properties.find((p) => p.id === suggestion.id);
+      setSelectedProperty(property);
+    } else {
+      navigateToSuggestion(suggestion);
+    }
+  };
+
+  const navigateToSuggestion = (suggestion) => {
+    if (suggestion.type === 'sidebar') {
       navigate(suggestion.path);
     } else if (suggestion.type === 'custom') {
       switch (suggestion.label.toLowerCase()) {
@@ -183,7 +190,12 @@ const TopNavigation = () => {
     );
 
     if (matchedSuggestion) {
-      navigateToSuggestion(matchedSuggestion);
+      if (matchedSuggestion.type === 'property') {
+        const property = properties.find((p) => p.id === matchedSuggestion.id);
+        setSelectedProperty(property);
+      } else {
+        navigateToSuggestion(matchedSuggestion);
+      }
     }
   };
 
@@ -238,7 +250,7 @@ const TopNavigation = () => {
                     className={`suggestion-item ${
                       index === activeSuggestionIndex ? 'active' : ''
                     }`}
-                    onClick={() => selectSuggestion(item)}
+                    onClick={() => handleSuggestionClick(item)}
                     role="option"
                     aria-selected={index === activeSuggestionIndex}
                   >
@@ -249,7 +261,7 @@ const TopNavigation = () => {
             )}
           </div>
         </div>
-        
+
         <div className="nav-items">
           <span className="other-menus">OTHER MENUS</span>
           <span className="notification-count">1</span>
@@ -263,6 +275,14 @@ const TopNavigation = () => {
           </div>
         </div>
       </div>
+
+      {/* Render PropertyDetails Popup */}
+      {selectedProperty && (
+        <PropertyDetails
+          property={selectedProperty}
+          onClose={() => setSelectedProperty(null)}
+        />
+      )}
     </div>
   );
 };

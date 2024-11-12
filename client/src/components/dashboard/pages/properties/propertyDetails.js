@@ -1,35 +1,77 @@
-import React, { useState } from "react";
-import "./propertyDetails.css";
+// src/components/properties/PropertyDetails.js
 
-const PropertyDetails = ({
-  property,
-  onClose,
-  contracts,
-  documents,
-  expenses,
-  incomes,
-  invoices,
-  leases,
-  payments,
-  tenants,
-  vendors,
-}) => {
-  const [activeTab, setActiveTab] = useState("tenants");
+import React, { useState, useEffect } from 'react';
+import api from '../../../../services/api';
+import './propertyDetails.css';
+
+const PropertyDetails = ({ property, onClose }) => {
+  const [activeTab, setActiveTab] = useState('tenants');
+  const [contracts, setContracts] = useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [incomes, setIncomes] = useState([]);
+  const [invoices, setInvoices] = useState([]);
+  const [leases, setLeases] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [tenants, setTenants] = useState([]);
+  const [vendors, setVendors] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [
+          contractsRes,
+          documentsRes,
+          expensesRes,
+          incomesRes,
+          invoicesRes,
+          leasesRes,
+          paymentsRes,
+          tenantsRes,
+          vendorsRes,
+        ] = await Promise.all([
+          api.get('/contracts'),
+          api.get('/documents'),
+          api.get('/expenses'),
+          api.get('/incomes'),
+          api.get('/invoices'),
+          api.get('/leases'),
+          api.get('/payments'),
+          api.get('/tenants'),
+          api.get('/vendors'),
+        ]);
+
+        setContracts(contractsRes.data);
+        setDocuments(documentsRes.data);
+        setExpenses(expensesRes.data);
+        setIncomes(incomesRes.data);
+        setInvoices(invoicesRes.data);
+        setLeases(leasesRes.data);
+        setPayments(paymentsRes.data);
+        setTenants(tenantsRes.data);
+        setVendors(vendorsRes.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Helper functions
   const formatCurrency = (value) => {
     const num = Number(value);
-    return !isNaN(num) ? `$${num.toFixed(2)}` : "N/A";
+    return !isNaN(num) ? `$${num.toFixed(2)}` : 'N/A';
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
+    if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
 
   const getPropertyAge = () => {
-    if (!property.purchase_date) return "N/A";
+    if (!property.purchase_date) return 'N/A';
 
     const purchaseDate = new Date(property.purchase_date);
     const today = new Date();
@@ -49,49 +91,37 @@ const PropertyDetails = ({
   };
 
   // Filter data for current property
-  const propertyContracts = contracts.filter(
-    (c) => c.property_id === property.id
-  );
-  const propertyDocuments = documents.filter(
-    (d) => d.property_id === property.id
-  );
-  const propertyExpenses = expenses.filter(
-    (e) => e.property_id === property.id
-  );
+  const propertyContracts = contracts.filter((c) => c.property_id === property.id);
+  const propertyDocuments = documents.filter((d) => d.property_id === property.id);
+  const propertyExpenses = expenses.filter((e) => e.property_id === property.id);
   const propertyIncomes = incomes.filter((i) => i.property_id === property.id);
-  const propertyInvoices = invoices.filter(
-    (i) => i.property_id === property.id
-  );
+  const propertyInvoices = invoices.filter((i) => i.property_id === property.id);
   const propertyLeases = leases.filter((l) => l.property_id === property.id);
-  const propertyPayments = payments.filter(
-    (p) => p.property_id === property.id
-  );
+  const propertyPayments = payments.filter((p) => p.property_id === property.id);
 
   const currentTenantIds = propertyLeases
     .filter((lease) => lease.is_active)
     .map((lease) => lease.tenant_id);
-  const propertyTenants = tenants.filter((t) =>
-    currentTenantIds.includes(t.id)
-  );
+  const propertyTenants = tenants.filter((t) => currentTenantIds.includes(t.id));
 
   return (
-    <div className='property-modal'>
-      <div className='property-modal-content'>
-        <div className='modal-header'>
+    <div className="property-modal">
+      <div className="property-modal-content">
+        <div className="modal-header">
           <h2>{property.address}</h2>
-          <button className='modal-close-button' onClick={onClose}>
+          <button className="modal-close-button" onClick={onClose}>
             ×
           </button>
         </div>
 
-        <div className='modal-body'>
+        <div className="modal-body">
           {/* Property Overview */}
-          <div className='overview-grid'>
-            <div className='overview-card'>
+          <div className="overview-grid">
+            <div className="overview-card">
               <h3>Property Details</h3>
               <dl>
                 <dt>Type</dt>
-                <dd>{property.property_type || "N/A"}</dd>
+                <dd>{property.property_type || 'N/A'}</dd>
                 <dt>Purchase Price</dt>
                 <dd>{formatCurrency(property.purchase_price)}</dd>
                 <dt>Owned For</dt>
@@ -99,25 +129,25 @@ const PropertyDetails = ({
               </dl>
             </div>
 
-            <div className='overview-card'>
+            <div className="overview-card">
               <h3>Structure</h3>
               <dl>
                 <dt>Bedrooms</dt>
-                <dd>{property.num_bedrooms || "N/A"}</dd>
+                <dd>{property.num_bedrooms || 'N/A'}</dd>
                 <dt>Bathrooms</dt>
-                <dd>{property.num_bathrooms || "N/A"}</dd>
+                <dd>{property.num_bathrooms || 'N/A'}</dd>
                 <dt>Floors</dt>
-                <dd>{property.num_floors || "N/A"}</dd>
+                <dd>{property.num_floors || 'N/A'}</dd>
               </dl>
             </div>
 
-            <div className='overview-card'>
+            <div className="overview-card">
               <h3>Fees & Status</h3>
               <dl>
                 <dt>Property Type</dt>
-                <dd>{property.is_commercial ? "Commercial" : "Residential"}</dd>
+                <dd>{property.is_commercial ? 'Commercial' : 'Residential'}</dd>
                 <dt>HOA</dt>
-                <dd>{property.is_hoa ? "Yes" : "No"}</dd>
+                <dd>{property.is_hoa ? 'Yes' : 'No'}</dd>
                 <dt>HOA Fee</dt>
                 <dd>{formatCurrency(property.hoa_fee)}</dd>
               </dl>
@@ -125,26 +155,22 @@ const PropertyDetails = ({
           </div>
 
           {/* Tabs */}
-          <div className='tabs'>
-            <div className='tabs-list'>
-              {["tenants", "leases", "finances", "documents", "contracts"].map(
-                (tab) => (
-                  <button
-                    key={tab}
-                    className={`tab-button ${
-                      activeTab === tab ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                )
-              )}
+          <div className="tabs">
+            <div className="tabs-list">
+              {['tenants', 'leases', 'finances', 'documents', 'contracts'].map((tab) => (
+                <button
+                  key={tab}
+                  className={`tab-button ${activeTab === tab ? 'active' : ''}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
             </div>
 
             {/* Tab Content */}
-            {activeTab === "tenants" && (
-              <table className='details-table'>
+            {activeTab === 'tenants' && (
+              <table className="details-table">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -164,8 +190,8 @@ const PropertyDetails = ({
               </table>
             )}
 
-            {activeTab === "leases" && (
-              <table className='details-table'>
+            {activeTab === 'leases' && (
+              <table className="details-table">
                 <thead>
                   <tr>
                     <th>Type</th>
@@ -184,11 +210,9 @@ const PropertyDetails = ({
                       <td>{formatCurrency(lease.rent_amount_monthly)}</td>
                       <td>
                         <span
-                          className={`status-badge ${
-                            lease.is_active ? "active" : "inactive"
-                          }`}
+                          className={`status-badge ${lease.is_active ? 'active' : 'inactive'}`}
                         >
-                          {lease.is_active ? "Active" : "Inactive"}
+                          {lease.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </td>
                     </tr>
@@ -197,10 +221,10 @@ const PropertyDetails = ({
               </table>
             )}
 
-            {activeTab === "finances" && (
+            {activeTab === 'finances' && (
               <>
                 <h3>Income</h3>
-                <table className='details-table'>
+                <table className="details-table">
                   <thead>
                     <tr>
                       <th>Date</th>
@@ -220,7 +244,7 @@ const PropertyDetails = ({
                 </table>
 
                 <h3>Expenses</h3>
-                <table className='details-table'>
+                <table className="details-table">
                   <thead>
                     <tr>
                       <th>Date</th>
@@ -243,8 +267,8 @@ const PropertyDetails = ({
               </>
             )}
 
-            {activeTab === "documents" && (
-              <table className='details-table'>
+            {activeTab === 'documents' && (
+              <table className="details-table">
                 <thead>
                   <tr>
                     <th>Type</th>
@@ -264,8 +288,8 @@ const PropertyDetails = ({
               </table>
             )}
 
-            {activeTab === "contracts" && (
-              <table className='details-table'>
+            {activeTab === 'contracts' && (
+              <table className="details-table">
                 <thead>
                   <tr>
                     <th>Type</th>
@@ -283,10 +307,10 @@ const PropertyDetails = ({
                       <td>
                         <span
                           className={`status-badge ${
-                            contract.is_active ? "active" : "inactive"
+                            contract.is_active ? 'active' : 'inactive'
                           }`}
                         >
-                          {contract.is_active ? "Active" : "Inactive"}
+                          {contract.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </td>
                     </tr>
