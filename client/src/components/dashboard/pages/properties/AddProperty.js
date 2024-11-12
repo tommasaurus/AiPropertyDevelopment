@@ -1,12 +1,11 @@
-// src/components/properties/AddProperty.js
-
+// AddProperty.jsx
 import React, { useState } from "react";
 import api from "../../../../services/api";
 import AddressAutocomplete from "../../addressAutocomplete/AddressAutocomplete";
+import { Home, X, ChevronRight } from "lucide-react";
 import "./AddProperty.css";
 
 const AddProperty = ({ onClose, fetchAllData }) => {
-  // State variables for form handling
   const [formData, setFormData] = useState({
     address: "",
     city: "",
@@ -28,7 +27,53 @@ const AddProperty = ({ onClose, fetchAllData }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Handle modal form input change
+  const generateSmartPropertyDetails = () => {
+    // Generate random number of floors (1-4)
+    const floors = Math.floor(Math.random() * 4) + 1;
+
+    // Calculate bedrooms based on floors (2-4 bedrooms per floor)
+    const bedroomsPerFloor = Math.floor(Math.random() * 4) + 1;
+    const totalBedrooms = floors * bedroomsPerFloor;
+
+    // Calculate bathrooms (typically fewer than bedrooms)
+    const totalBathrooms = Math.max(floors, Math.ceil(totalBedrooms * 0.7));
+
+    // Base price per bedroom (350k-450k)
+    const pricePerBedroom = Math.random() * 150000 + 350000;
+
+    // Calculate total price based on bedrooms, floors, and a random factor
+    const basePrice = totalBedrooms * pricePerBedroom;
+    const floorMultiplier = 1 + (floors - 1) * 0.2; // Each additional floor adds 20%
+    const randomFactor = 0.9 + Math.random() * 0.2; // ±10% variation
+    const totalPrice = Math.round(basePrice * floorMultiplier * randomFactor);
+
+    // Property types based on size
+    const propertyTypes = [
+      "Single Family Home",
+      "Townhouse",
+      "Multi-Family Home",
+      "Apartment Complex",
+    ];
+    const propertyType =
+      propertyTypes[Math.min(floors - 1, propertyTypes.length - 1)];
+
+    // HOA fee based on property type and size
+    const baseHoaFee = 250;
+    const hoaFee = Math.round(
+      baseHoaFee * (floors * 0.5) * (Math.random() * 0.4 + 0.8)
+    );
+
+    return {
+      num_bedrooms: totalBedrooms,
+      num_bathrooms: totalBathrooms,
+      num_floors: floors,
+      purchase_price: totalPrice,
+      property_type: propertyType,
+      is_hoa: true,
+      hoa_fee: hoaFee,
+    };
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -37,7 +82,6 @@ const AddProperty = ({ onClose, fetchAllData }) => {
     }));
   };
 
-  // Handle address selection from autocomplete
   const handleSelectAddress = (addressData) => {
     setFormData((prev) => ({
       ...prev,
@@ -48,46 +92,37 @@ const AddProperty = ({ onClose, fetchAllData }) => {
     }));
   };
 
-  // Proceed to next step in Add Property modal
   const handleNextAddStep = () => {
-    if (addStep === 1) {
-      // You can add validation for address fields here if needed
-      if (!formData.address || !formData.city || !formData.state || !formData.zipCode) {
-        setErrorMessage("Please fill in all address fields.");
-        return;
-      }
-      // Auto-fill property information with placeholder data
-      const randomInt = Math.floor(Math.random() * 5) + 1; // Random integer between 1 and 5
-      const randomIntFloor = Math.floor(Math.random() * 3) + 2;
-      const propertyValue = randomInt * 417827;
-
-      setFormData((prev) => ({
-        ...prev,
-        num_bedrooms: randomInt,
-        num_bathrooms: randomInt,
-        num_floors: randomIntFloor,
-        purchase_price: propertyValue,
-        property_type: "Residential", // Example default value
-        is_hoa: true,
-      }));
-
-      setErrorMessage("");
-      setAddStep(2);
+    if (
+      !formData.address ||
+      !formData.city ||
+      !formData.state ||
+      !formData.zipCode
+    ) {
+      setErrorMessage("Please fill in all address fields.");
+      return;
     }
+    // Auto-fill property details with smart random data
+    const propertyDetails = generateSmartPropertyDetails();
+    setFormData((prev) => ({
+      ...prev,
+      ...propertyDetails,
+    }));
+    setErrorMessage("");
+    setAddStep(2);
   };
 
-  // Handle add property form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const formattedData = {
       ...formData,
-      num_bedrooms: formData.num_bedrooms ? parseInt(formData.num_bedrooms, 10) : null,
-      num_bathrooms: formData.num_bathrooms ? parseInt(formData.num_bathrooms, 10) : null,
-      num_floors: formData.num_floors ? parseInt(formData.num_floors, 10) : null,
-      hoa_fee: formData.hoa_fee ? parseFloat(formData.hoa_fee) : null,
-      purchase_price: formData.purchase_price ? parseFloat(formData.purchase_price) : null,
+      num_bedrooms: parseInt(formData.num_bedrooms, 10) || null,
+      num_bathrooms: parseInt(formData.num_bathrooms, 10) || null,
+      num_floors: parseInt(formData.num_floors, 10) || null,
+      hoa_fee: parseFloat(formData.hoa_fee) || null,
+      purchase_price: parseFloat(formData.purchase_price) || null,
       purchase_date: formData.purchase_date || null,
       property_type: formData.property_type || null,
     };
@@ -96,18 +131,18 @@ const AddProperty = ({ onClose, fetchAllData }) => {
       await api.post("/properties", formattedData);
       resetAddPropertyStates();
       fetchAllData();
-      onClose(); // Close the modal
+      onClose();
     } catch (error) {
       console.error("Error adding property:", error);
       setErrorMessage(
-        error.response?.data?.detail || "Failed to add property. Please try again."
+        error.response?.data?.detail ||
+          "Failed to add property. Please try again."
       );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Reset add property modal states
   const resetAddPropertyStates = () => {
     setFormData({
       address: "",
@@ -134,30 +169,32 @@ const AddProperty = ({ onClose, fetchAllData }) => {
     <div className="modal nouveau-modal">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Add New Property</h2>
-          <button
-            className="close-button"
-            onClick={() => {
-              resetAddPropertyStates();
-              onClose();
-            }}
-          >
-            ×
+          <div className="header-content">
+            <div className="header-icon">
+              <Home size={24} />
+            </div>
+            <h2>Add New Property</h2>
+          </div>
+          <button className="close-button" onClick={onClose}>
+            <X size={24} />
           </button>
         </div>
+
         <form onSubmit={handleSubmit}>
-          <div className="steps-indicator-add">
-            <div className={`step-add ${addStep >= 1 ? "active" : ""}`}>
-              1. Address Information
+          <div className="steps-indicator">
+            <div className={`step ${addStep === 1 ? "active" : ""}`}>
+              <div className="step-number">1</div>
+              <span>Address Information</span>
             </div>
-            <div className={`step-add ${addStep >= 2 ? "active" : ""}`}>
-              2. Property Details
+            <div className={`step ${addStep === 2 ? "active" : ""}`}>
+              <div className="step-number">2</div>
+              <span>Property Details</span>
             </div>
           </div>
 
           {addStep === 1 && (
             <div className="form-grid">
-              <div className="form-group">
+              <div className="form-group full-width">
                 <label>Address</label>
                 <AddressAutocomplete onSelectAddress={handleSelectAddress} />
               </div>
@@ -185,7 +222,7 @@ const AddProperty = ({ onClose, fetchAllData }) => {
               </div>
 
               <div className="form-group">
-                <label>Zip Code</label>
+                <label>ZIP Code</label>
                 <input
                   type="text"
                   name="zipCode"
@@ -195,15 +232,17 @@ const AddProperty = ({ onClose, fetchAllData }) => {
                 />
               </div>
 
-              {errorMessage && <p className="error-message">{errorMessage}</p>}
+              {errorMessage && (
+                <div className="error-message">{errorMessage}</div>
+              )}
 
-              <div className="modal-footer">
+              <div className="button-group">
                 <button
                   type="button"
                   className="primary-button"
                   onClick={handleNextAddStep}
                 >
-                  Next
+                  Next <ChevronRight size={22} strokeWidth={2.5} />
                 </button>
               </div>
             </div>
@@ -252,16 +291,6 @@ const AddProperty = ({ onClose, fetchAllData }) => {
               </div>
 
               <div className="form-group">
-                <label>Purchase Date</label>
-                <input
-                  type="date"
-                  name="purchase_date"
-                  value={formData.purchase_date}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
                 <label>Property Type</label>
                 <input
                   type="text"
@@ -271,43 +300,45 @@ const AddProperty = ({ onClose, fetchAllData }) => {
                 />
               </div>
 
-              <div className="checkbox-group">
-                <label>
+              <div className="checkbox-section">
+                <div className="checkbox-group">
                   <input
                     type="checkbox"
                     name="is_commercial"
                     checked={formData.is_commercial}
                     onChange={handleInputChange}
                   />
-                  Commercial Property
-                </label>
-              </div>
+                  <label>Commercial Property</label>
+                </div>
 
-              <div className="checkbox-group">
-                <label>
+                <div className="checkbox-group">
                   <input
                     type="checkbox"
                     name="is_hoa"
                     checked={formData.is_hoa}
                     onChange={handleInputChange}
                   />
-                  HOA Property
-                </label>
+                  <label>HOA Property</label>
+                </div>
+
+                {formData.is_hoa && (
+                  <div className="form-group">
+                    <label>HOA Fee</label>
+                    <input
+                      type="number"
+                      name="hoa_fee"
+                      value={formData.hoa_fee}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                )}
               </div>
 
-              <div className="form-group">
-                <label>HOA Fee</label>
-                <input
-                  type="number"
-                  name="hoa_fee"
-                  value={formData.hoa_fee}
-                  onChange={handleInputChange}
-                />
-              </div>
+              {errorMessage && (
+                <div className="error-message">{errorMessage}</div>
+              )}
 
-              {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-              <div className="modal-footer">
+              <div className="button-group">
                 <button
                   type="button"
                   className="secondary-button"
@@ -315,7 +346,11 @@ const AddProperty = ({ onClose, fetchAllData }) => {
                 >
                   Back
                 </button>
-                <button type="submit" className="primary-button" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  className="primary-button"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? "Adding..." : "Add Property"}
                 </button>
               </div>
