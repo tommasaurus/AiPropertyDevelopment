@@ -310,7 +310,7 @@
   justify-content: center;
   position: relative;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 3rem; /* Increased padding to make space for longer line */
 }
 
 .connector-line {
@@ -319,11 +319,10 @@
   background: #e5e7eb;
 }
 
-.status-dot {
+.status-line {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  stroke-width: 2.5;
+  width: 32px; /* Made the line longer */
 }
 
 .payment-details {
@@ -361,17 +360,17 @@
   color: #6366f1;
 }
 
-.status-dot.emerald {
-  background: #10b981;
+.status-line.emerald {
+  color: #10b981;
 }
-.status-dot.blue {
-  background: #3b82f6;
+.status-line.blue {
+  color: #3b82f6;
 }
-.status-dot.purple {
-  background: #8b5cf6;
+.status-line.purple {
+  color: #8b5cf6;
 }
-.status-dot.amber {
-  background: #f59e0b;
+.status-line.amber {
+  color: #f59e0b;
 }
 
 .view-all {

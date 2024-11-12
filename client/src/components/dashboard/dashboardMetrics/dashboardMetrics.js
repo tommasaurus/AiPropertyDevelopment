@@ -10,6 +10,7 @@ import {
   Building2,
   ArrowUpRight,
   LineChart,
+  Minus,
 } from "lucide-react";
 import "./dashboardMetrics.css";
 
@@ -154,14 +155,14 @@ const DashboardMetrics = () => {
         <div className='metric-block'>
           <span className='metric-label'>Properties</span>
           <div className='metric-value'>
-            <Building2 size={20} className='metric-icon emerald' />
+            <Building2 size={20} className='metric-icon blue' />
             <span>32</span>
           </div>
         </div>
         <div className='metric-block'>
           <span className='metric-label'>Total Value</span>
           <div className='metric-value'>
-            <DollarSign size={20} className='metric-icon blue' />
+            <DollarSign size={20} className='metric-icon emerald' />
             <span>8.45M</span>
           </div>
         </div>
@@ -214,7 +215,7 @@ const DashboardMetrics = () => {
             </div>
             <div className='payment-connector'>
               <div className='connector-line'></div>
-              <div className={`status-dot ${payment.color}`}></div>
+              <Minus className={`status-line ${payment.color}`} size={24} />
             </div>
             <div className='payment-details'>
               <div className={`payment-amount ${payment.color}`}>

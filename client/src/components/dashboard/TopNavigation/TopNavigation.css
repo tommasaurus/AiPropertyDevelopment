@@ -5,8 +5,8 @@
   right: 0;
   height: 70px;
   background: rgb(245, 237, 230);
-  border-bottom: 1px solid rgba(175, 27, 27, 0.1); /* Added subtle border */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.104); /* Added subtle shadow */
+  border-bottom: 1px solid rgba(175, 27, 27, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.104);
   z-index: 40;
   transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
