@@ -68,7 +68,11 @@ async def process_lease_upload(
                 final_property_id = new_property.id
             except Exception as e:
                 raise ValueError(f"Error creating property: {str(e)}")
+    else:
+            # If we have a property_id, still remove property_info if it exists
+            _ = mapped_data.pop('property_info', None)
 
+            
     # Update mapped_data with final property_id
     mapped_data['property_id'] = final_property_id
 
