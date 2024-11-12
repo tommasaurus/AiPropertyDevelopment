@@ -137,8 +137,8 @@
 }
 
 .grid-cell {
-  border-right: 1px solid #333;
-  border-bottom: 1px solid #333;
+  border-right: 1px dashed #71675f;
+  border-bottom: 1px dashed #71675f;
   background: transparent;
   transition: background-color 0.2s ease;
 }
