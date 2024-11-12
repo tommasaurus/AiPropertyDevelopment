@@ -33,11 +33,12 @@ body.dashboard-sidebar-expanded .top-navigation {
 }
 
 .top-navigation .search-input {
-  width: 100%;
+  width: 50%;
+  margin-left: 1.5rem;
   height: 40px;
-  padding: 8px 40px 8px 16px;
+  padding: 8px 40px 8px 38px; /* Changed left padding from 16px to 40px */
   border: 1px solid #2d3748;
-  border-radius: 20px;
+  border-radius: 9px;
   font-size: 14px;
   background-color: #ffffff;
   transition: all 0.2s ease;
@@ -51,7 +52,7 @@ body.dashboard-sidebar-expanded .top-navigation {
 
 .top-navigation .search-icon {
   position: absolute;
-  right: 16px;
+  margin-left: 1.3rem;
   top: 50%;
   transform: translateY(-50%);
   color: #2d3748;
@@ -128,17 +129,18 @@ body.dashboard-sidebar-expanded .top-navigation {
 .top-navigation .suggestions-list {
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+  left: 1.5rem; /* Match the input's margin-left */
+  width: 50%; /* Match the input's width */
   background: white;
   border: 1px solid #2d3748;
-  border-radius: 12px;
+  border-radius: 9px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   max-height: 300px;
   overflow-y: auto;
   z-index: 1000;
   padding: 8px 0;
+  right: auto; /* Remove the right: 0 to prevent full width */
 }
 
 .top-navigation .suggestion-item {
