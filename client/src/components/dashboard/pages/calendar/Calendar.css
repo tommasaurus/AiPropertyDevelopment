@@ -90,9 +90,7 @@
 }
 
 .nav-button:hover {
-  background-color: #f1efe7;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(225, 123, 80, 0.1);
 }
 
 .nav-icon {
@@ -116,7 +114,7 @@
   align-items: center;
   gap: 0.75rem;
   white-space: nowrap;
-  font-weight: 600;
+  font-weight: 800;
   font-family: "Outfit", sans-serif;
   font-size: 0.875rem;
   transition: all 0.3s ease;
@@ -124,8 +122,9 @@
 }
 
 .today-button {
-  color: #000000;
-  border: 1px solid #000000;
+  color: #e1934b;
+  border: 2px solid #e1934b;
+  background: #fff0e4;
 }
 
 .new-schedule-button {
@@ -191,11 +190,14 @@
 .view-option:hover {
   color: #333;
   font-weight: 600;
+  transform: translateY(-1px);
+  z-index: 5;
 }
 
 .view-option.active {
   color: #e17b50;
-  font-weight: 600;
+  font-weight: bolder;
+  font-size: 19px;
 }
 
 .view-option.active::after {
@@ -250,12 +252,12 @@
 
 .calendar-day.today {
   background-color: #f9d6c5;
-  border: 2px solid #e17b50;
+  border: 3px solid #e17b50;
   position: relative;
 }
 
 .calendar-day.other-month {
-  background-color: #ece9de;
+  background-color: #ece4de;
   color: #666;
   border-color: transparent;
 }
@@ -265,8 +267,8 @@
 }
 
 .day-number {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 800;
   padding: 0.75rem 0.75rem 0.5rem;
   color: #000000;
   flex-shrink: 0;
