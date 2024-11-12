@@ -13,7 +13,7 @@
   transform: scale(0);
   opacity: 0;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   z-index: 1000;
 }
@@ -105,14 +105,14 @@
 .header-avatar {
   width: 55px;
   height: 55px;
-  position: relative;  
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .header-avatar::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -4px;
   left: -4px;
@@ -148,7 +148,6 @@
   /* background: linear-gradient(90deg, #ff69b4 0%, #e0aaff 40%, #87ceeb 100%); */
   /* background: linear-gradient(90deg, #1a1a2e 0%, #4a4a8f 40%, #16213e 100%); */
   background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 40%, #e0c3fc 100%);
-  
 }
 
 .modern-chat-history {
@@ -295,12 +294,22 @@
   animation: bounce 1.4s infinite ease-in-out;
 }
 
-.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+.typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
 
 @keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
 }
 
 @keyframes slideIn {
@@ -359,7 +368,7 @@
     width: 32px;
     height: 32px;
   }
-  
+
   .header-avatar {
     width: 40px;
     height: 40px;

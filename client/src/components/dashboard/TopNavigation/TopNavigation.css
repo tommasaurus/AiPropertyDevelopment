@@ -4,7 +4,9 @@
   left: 80px;
   right: 0;
   height: 70px;
-  background: linear-gradient(135deg, #f9f6f2 0%, #f3ede7 100%);
+  background: rgb(245, 237, 230);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Added subtle border */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.104); /* Added subtle shadow */
   z-index: 40;
   transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -37,15 +39,17 @@ body.dashboard-sidebar-expanded .top-navigation {
   margin-left: 1.5rem;
   height: 40px;
   padding: 8px 40px 8px 38px; /* Changed left padding from 16px to 40px */
-  border: 1px solid #2d3748;
+  border: 1px solid #e2e8f0;
   border-radius: 9px;
   font-size: 14px;
-  background-color: #ffffff;
+  font-weight: 500;
+  background-color: #fcfeff;
   transition: all 0.2s ease;
 }
 
 .top-navigation .search-input:focus {
   outline: none;
+  background-color: white;
   border-color: #e17b50;
   box-shadow: 0 0 0 2px rgba(225, 123, 80, 0.1);
 }
@@ -55,7 +59,7 @@ body.dashboard-sidebar-expanded .top-navigation {
   margin-left: 1.3rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #2d3748;
+  color: #e2ac6e;
   pointer-events: none;
 }
 
@@ -64,19 +68,33 @@ body.dashboard-sidebar-expanded .top-navigation {
   align-items: center;
   gap: 24px;
   white-space: nowrap;
+  padding-right: 0.5rem;
 }
 
-.top-navigation .other-menus {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2d3748;
-  text-transform: uppercase;
+.notification-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 6px 6px 6px 12px; /* Increased left padding */
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  border: 0;
+  background-color: transparent;
+  font-size: 13px;
+  font-weight: 1000;
+  cursor: pointer;
+  gap: 8px; /* Increased gap between items */
+}
+
+.notification-wrapper:hover {
+  background-color: #fef8f0;
 }
 
 .top-navigation .notification-count {
   background-color: #e17b50;
   color: white;
-  font-size: 12px;
+  font-family: "Helvetica";
+  font-size: 16px;
+  font-weight: 1000;
   padding: 2px 8px;
   border-radius: 12px;
   min-width: 20px;
@@ -84,6 +102,7 @@ body.dashboard-sidebar-expanded .top-navigation {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 10px; /* Added margin for extra spacing */
 }
 
 .top-navigation .language-selector {
@@ -109,8 +128,11 @@ body.dashboard-sidebar-expanded .top-navigation {
 .top-navigation .user-profile {
   display: flex;
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
+  gap: 12px; /* Increased gap */
+  padding: 6px; /* Added padding */
+  border-radius: 24px; /* Rounded corners */
+  background-color: #fef8f0; /* Light background */
+  transition: background-color 0.2s ease;
 }
 
 .top-navigation .user-avatar {
