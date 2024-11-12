@@ -1,7 +1,8 @@
 // Dashboard.jsx
 import React, { useEffect, useState } from "react";
-import { PlusCircle, Bell, Search } from "lucide-react";
-import TopNavigation from './TopNavigation/TopNavigation'
+import { useNavigate } from "react-router-dom";
+import { PlusCircle, Bell, Search, Upload } from "lucide-react";
+import TopNavigation from "./TopNavigation/TopNavigation";
 import Sidebar from "./sidebar/Sidebar";
 import DashboardMetrics from "./dashboardMetrics/dashboardMetrics";
 import EmptyDashboard from "./pages/emptyDashboard/emptyDashboard";
@@ -14,20 +15,20 @@ import "./Dashboard.css";
 const Dashboard = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-  const businessName = "Jason.";
+  const navigate = useNavigate();
+
+  const fetchProperties = async () => {
+    try {
+      const response = await api.get("/properties");
+      setProperties(response.data);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await api.get("/properties");
-        setProperties(response.data);
-      } catch (error) {
-        console.error("Error fetching properties:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProperties();
   }, []);
 
@@ -52,6 +53,20 @@ const Dashboard = () => {
     return () => observer.disconnect();
   }, []);
 
+  const handleAddProperty = async () => {
+    // Store the action in sessionStorage
+    sessionStorage.setItem("pendingAction", "addProperty");
+    // Navigate to properties page
+    navigate("/dashboard/properties");
+  };
+
+  const handleUploadDocument = async () => {
+    // Store the action in sessionStorage
+    sessionStorage.setItem("pendingAction", "uploadDocument");
+    // Navigate to properties page
+    navigate("/dashboard/properties");
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -71,8 +86,26 @@ const Dashboard = () => {
           <div className='art-nouveau-corner top-right'></div>
           <div className='art-nouveau-corner bottom-left'></div>
           <div className='art-nouveau-corner bottom-right'></div>
-          <div className='header-container'>            
-              <Greeting />                          
+          <div className='header-container'>
+            <div className='header-left'>
+              <Greeting />
+            </div>
+            <div className='header-actions'>
+              <button
+                className='nouveau-button primary'
+                onClick={handleAddProperty}
+              >
+                <PlusCircle className='button-icon' />
+                Add Property
+              </button>
+              <button
+                className='nouveau-button secondary'
+                onClick={handleUploadDocument}
+              >
+                <Upload className='button-icon' />
+                Upload Document
+              </button>
+            </div>
           </div>
           <DashboardMetrics properties={properties} />
         </div>

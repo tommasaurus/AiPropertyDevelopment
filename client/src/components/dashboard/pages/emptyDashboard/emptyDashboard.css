@@ -1,8 +1,8 @@
 .empty-dashboard-layout {
   display: flex;
   min-height: 100vh;
-  margin-top: 70px;
-  margin-left: 73px;
+  /* margin-top: 70px;
+  margin-left: 73px; */
   background-color: #f8fafc;
   font-family: "Outfit", sans-serif;
 }
@@ -322,22 +322,21 @@
 }
 
 /* Custom Scrollbar */
-
 ::-webkit-scrollbar {
   width: 0.5rem;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e17c50d8;
+  background: #b8b8b8;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d35e3abc;
+  background: #c66a45;
 }
 
 /* Animations */

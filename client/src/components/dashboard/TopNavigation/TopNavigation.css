@@ -5,7 +5,7 @@
   right: 0;
   height: 70px;
   background: rgb(245, 237, 230);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Added subtle border */
+  border-bottom: 1px solid rgba(175, 27, 27, 0.1); /* Added subtle border */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.104); /* Added subtle shadow */
   z-index: 40;
   transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -39,7 +39,7 @@ body.dashboard-sidebar-expanded .top-navigation {
   margin-left: 1.5rem;
   height: 40px;
   padding: 8px 40px 8px 38px; /* Changed left padding from 16px to 40px */
-  border: 1px solid #e2e8f0;
+  border: 1px solid #000000;
   border-radius: 9px;
   font-size: 14px;
   font-weight: 500;

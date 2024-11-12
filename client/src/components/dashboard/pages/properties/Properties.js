@@ -1,3 +1,4 @@
+// src/components/dashboard/properties/Properties.js
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Upload, Search } from "lucide-react";
 import Sidebar from "../../sidebar/Sidebar";
@@ -30,7 +31,26 @@ const Properties = () => {
   const [vendors, setVendors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Existing helper functions
+  // Check for pending actions on mount
+  useEffect(() => {
+    const pendingAction = sessionStorage.getItem("pendingAction");
+    if (pendingAction) {
+      // Small delay to ensure page is loaded
+      const timer = setTimeout(() => {
+        if (pendingAction === "addProperty") {
+          setShowAddPropertyModal(true);
+        } else if (pendingAction === "uploadDocument") {
+          setShowUploadModal(true);
+        }
+        // Clear the pending action
+        sessionStorage.removeItem("pendingAction");
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Helper functions
   const formatCurrency = (value) => {
     const num = Number(value);
     return !isNaN(num) ? `$${num.toFixed(2)}` : "N/A";
@@ -86,6 +106,7 @@ const Properties = () => {
     }
   };
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchAllData();
   }, []);
@@ -201,6 +222,9 @@ const Properties = () => {
               </div>
             ))}
           </div>
+
+          {/* Error Message */}
+          {errorMessage && <p className='error-message'>{errorMessage}</p>}
 
           {/* Modals */}
           {selectedProperty && (

@@ -112,6 +112,7 @@
 .nouveau-button.secondary {
   background: #f1efe7;
   color: #000000;
+  border: 1px solid #000000;
 }
 
 .nouveau-button:hover {
