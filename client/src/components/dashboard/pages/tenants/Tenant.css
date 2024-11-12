@@ -124,6 +124,8 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 .filter-btn.active {
   background: #e56d44;
   color: white;
+  font-weight: bolder;
+  font-size: 17px;
 }
 
 .filter-btn:hover:not(.active) {
