@@ -214,6 +214,39 @@
   color: #ff453a;
 }
 
+.lease-terms {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lease-term-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+}
+
+.lease-term-heading {
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 0.25rem;
+}
+
+.lease-term-value {
+  color: #666;
+}
+
+.lease-term-separator {
+  height: 1px;
+  background: #000000;
+  margin: 0.25rem 0;
+}
+
 @media (max-width: 768px) {
   .property-modal {
     padding: 1rem;
