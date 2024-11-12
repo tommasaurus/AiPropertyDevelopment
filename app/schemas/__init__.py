@@ -3,7 +3,7 @@
 from .user import User, UserCreate, UserUpdate, UserMe
 from .property import Property, PropertyCreate, PropertyUpdate
 from .utility import Utility, UtilityCreate, UtilityUpdate
-from .tenant import Tenant, TenantCreate, TenantUpdate
+from .tenant import TenantCreate, TenantUpdate, TenantResponse
 from .lease import Lease, LeaseCreate, LeaseUpdate
 from .payment import Payment, PaymentCreate, PaymentUpdate
 from .expense import Expense, ExpenseCreate, ExpenseUpdate
@@ -27,9 +27,9 @@ __all__ = [
     "Utility",
     "UtilityCreate",
     "UtilityUpdate",
-    "Tenant",
     "TenantCreate",
     "TenantUpdate",
+    "TenantResponse",
     "Lease",
     "LeaseCreate",
     "LeaseUpdate",

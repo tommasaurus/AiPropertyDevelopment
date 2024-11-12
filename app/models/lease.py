@@ -9,8 +9,7 @@ class Lease(Base):
     __tablename__ = 'leases'
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)  # Auto-incrementing primary key
-    property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)
-    tenant_id = Column(Integer, ForeignKey('tenants.id'), nullable=True)
+    property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)    
     
     # Main fields
     lease_type = Column(String(50), nullable=False)

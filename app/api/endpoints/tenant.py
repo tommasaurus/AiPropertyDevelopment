@@ -10,29 +10,47 @@ from app.models.user import User
 
 router = APIRouter()
 
-@router.post("/", response_model=schemas.Tenant)
+@router.post("/", response_model=schemas.TenantResponse)
 async def create_tenant(
     tenant_in: schemas.TenantCreate,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     try:
-        tenant = await crud.crud_tenant.create_tenant(db=db, tenant_in=tenant_in, owner_id=current_user.id)
+        tenant = await crud.crud_tenant.create_tenant(
+            db=db, tenant_in=tenant_in, owner_id=current_user.id
+        )
         return tenant
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.get("/", response_model=List[schemas.Tenant])
+@router.post("/manual", response_model=schemas.TenantResponse)
+async def create_tenant_manual(
+    tenant_in: schemas.TenantCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    try:
+        tenant = await crud.crud_tenant.create_tenant_manual(
+            db=db, tenant_in=tenant_in, owner_id=current_user.id
+        )
+        return tenant
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/", response_model=List[schemas.TenantResponse])
 async def read_tenants(
     skip: int = 0,
     limit: int = 100,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    tenants = await crud.crud_tenant.get_tenants(db=db, owner_id=current_user.id, skip=skip, limit=limit)
+    tenants = await crud.crud_tenant.get_tenants(
+        db=db, owner_id=current_user.id, skip=skip, limit=limit
+    )
     return tenants
 
-@router.get("/{tenant_id}", response_model=schemas.Tenant)
+@router.get("/{tenant_id}", response_model=schemas.TenantResponse)
 async def read_tenant(
     tenant_id: int,
     db: AsyncSession = Depends(get_db),
@@ -43,7 +61,7 @@ async def read_tenant(
         raise HTTPException(status_code=404, detail="Tenant not found")
     return tenant
 
-@router.put("/{tenant_id}", response_model=schemas.Tenant)
+@router.put("/{tenant_id}", response_model=schemas.TenantResponse)
 async def update_tenant(
     tenant_id: int,
     tenant_in: schemas.TenantUpdate,
@@ -59,7 +77,7 @@ async def update_tenant(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.delete("/{tenant_id}", response_model=schemas.Tenant)
+@router.delete("/{tenant_id}", response_model=schemas.TenantResponse)
 async def delete_tenant(
     tenant_id: int,
     db: AsyncSession = Depends(get_db),

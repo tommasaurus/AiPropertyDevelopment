@@ -67,8 +67,7 @@ async def process_lease_upload(
             tenant_id = tenant.id
 
     # Include property_id and tenant_id in mapped_data
-    mapped_data['property_id'] = property_id
-    mapped_data['tenant_id'] = tenant_id
+    mapped_data['property_id'] = property_id 
 
     # Create LeaseCreate schema
     try:        
@@ -129,13 +128,15 @@ async def process_lease_upload(
 
     # Link the lease to the document, tenant, and property
     lease.property = property
-    lease.document = document
-    lease.tenants = tenant
+    lease.document = document    
     tenant.lease = lease
     tenant.property = property
     document.lease = lease
     document.property = property    
-    await db.commit()
+
+    db.add(tenant)
+
+    await db.commit()    
 
     # Refresh the lease to ensure all relationships are loaded
     await db.refresh(lease)

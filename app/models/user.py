@@ -18,3 +18,4 @@ class User(Base):
     # Relationships
     properties = relationship('Property', back_populates='owner')
     vendors = relationship('Vendor', back_populates='owner')
+    tenants = relationship('Tenant', back_populates='owner')  # Add this line

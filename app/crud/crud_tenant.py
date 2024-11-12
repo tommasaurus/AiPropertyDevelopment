@@ -4,10 +4,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
+from sqlalchemy.orm import selectinload
 from typing import List, Optional
 from app.models.tenant import Tenant
 from app.models.property import Property
-from app.schemas.tenant import TenantCreate, TenantUpdate
+from app.schemas.tenant import TenantResponse, TenantCreate, TenantUpdate
 
 class CRUDTenant:
     async def get_tenant(
@@ -15,23 +16,32 @@ class CRUDTenant:
     ) -> Optional[Tenant]:
         result = await db.execute(
             select(Tenant)
-            .join(Tenant.lease)
-            .join(Property)
+            .options(
+                selectinload(Tenant.property),
+                selectinload(Tenant.lease),
+            )
+            .join(Tenant.property)
             .filter(Tenant.id == tenant_id)
             .filter(Property.owner_id == owner_id)
         )
         return result.scalars().first()
 
     async def get_tenants(
-    self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100) -> List[Tenant]:
+        self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100
+    ) -> List[TenantResponse]:
         result = await db.execute(
             select(Tenant)
-            .join(Tenant.property)  # Join Tenant with Property through the relationship
-            .filter(Property.owner_id == owner_id)  # Filter by the owner's ID
+            .options(
+                selectinload(Tenant.property),
+                selectinload(Tenant.lease),
+            )
+            .filter(Tenant.owner_id == owner_id)
             .offset(skip)
             .limit(limit)
         )
-        return result.scalars().all()
+        tenants = result.scalars().all()
+        return tenants
+
 
     async def get_tenant_by_name_and_landlord(
         self,
@@ -70,21 +80,48 @@ class CRUDTenant:
             select(Tenant).where(Tenant.id == tenant_id)
         )
         return result.scalars().first()
-
+    
     async def create_tenant(
-        self, db: AsyncSession, tenant_in: TenantCreate, owner_id: int
+        self, db: AsyncSession, *, tenant_in: TenantCreate, owner_id: int
     ) -> Tenant:
-        db_tenant = Tenant(**tenant_in.dict())
-        # If Tenant has an owner_id, assign it here
-        # db_tenant.owner_id = owner_id  # Uncomment if Tenant model has owner_id
-        db.add(db_tenant)
+        tenant_data = tenant_in.dict()
+        tenant_data['owner_id'] = owner_id  # Set owner_id
+        tenant = Tenant(**tenant_data)
+        db.add(tenant)
         try:
             await db.commit()
-            await db.refresh(db_tenant)
+            await db.refresh(tenant)
         except IntegrityError as e:
             await db.rollback()
             raise ValueError("An error occurred while creating the tenant: " + str(e))
-        return db_tenant
+
+        # Eagerly load relationships
+        await db.refresh(tenant)
+        return tenant
+
+    async def create_tenant_manual(
+        self, db: AsyncSession, *, tenant_in: TenantCreate, owner_id: int
+    ) -> TenantResponse:
+        tenant_data = tenant_in.dict()
+        tenant_data['owner_id'] = owner_id  # Set owner_id
+        tenant = Tenant(**tenant_data)
+        db.add(tenant)
+        await db.commit()
+        await db.refresh(tenant)
+
+        # Re-fetch the tenant with relationships eagerly loaded
+        result = await db.execute(
+            select(Tenant)
+            .options(
+                selectinload(Tenant.property),
+                selectinload(Tenant.lease),
+            )
+            .filter(Tenant.id == tenant.id)
+        )
+        tenant_with_relationships = result.scalars().first()
+
+        return TenantResponse.from_orm(tenant_with_relationships)
+
 
     async def update_tenant(
         self, db: AsyncSession, db_tenant: Tenant, tenant_in: TenantUpdate

@@ -106,7 +106,8 @@ def map_tenant_data(tenant_info: list) -> list:
         "phone_number": tenant_info.get("phone_number", None),
         "date_of_birth": parse_date(tenant_info.get("date_of_birth", None)),
         "landlord": tenant_info.get("landlord", None),
-        "address": tenant_info.get("address", None)
+        "address": tenant_info.get("address", None),
+        "status": tenant_info.get("status", "current")
     }        
 
     return tenant_data
