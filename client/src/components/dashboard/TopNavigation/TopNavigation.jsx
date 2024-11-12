@@ -5,6 +5,7 @@ import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 import PropertyDetails from '../pages/properties/propertyDetails';
+import profilePhoto from '../../../assets/img/DefaultProfilePhoto.webp';
 import './TopNavigation.css';
 
 const TopNavigation = () => {
@@ -262,15 +263,10 @@ const TopNavigation = () => {
           </div>
         </div>
 
-        <div className="nav-items">
-          <span className="other-menus">OTHER MENUS</span>
+        <div className="nav-items">          
           <span className="notification-count">1</span>
-          <div className="language-selector">
-            <img src="/api/placeholder/20/20" alt="Language flag" className="flag-icon" />
-            <span>ENGLISH</span>
-          </div>
           <div className="user-profile">
-            <img src="" alt="User avatar" className="user-avatar" />
+            <img src={ profilePhoto } alt="User avatar" className="user-avatar" />
             <span>{userName}</span>
           </div>
         </div>
