@@ -83,6 +83,14 @@
   border-color: #e17b50;
 }
 
+.dateview-item.dateview-selected .dateview-dayname {
+  font-size: 1.3rem;
+}
+
+.dateview-item.dateview-selected .dateview-daynumber {
+  font-size: 2rem;
+}
+
 .dateview-dayname {
   font-size: 1rem;
   font-weight: 600;
