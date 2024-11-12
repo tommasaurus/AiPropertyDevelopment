@@ -1,32 +1,33 @@
 // src/components/tenant/TenantPage.jsx
 
-import React, { useState, useEffect } from 'react';
-import './Tenant.css';
-import Sidebar from '../../sidebar/Sidebar';
-import TopNavigation from '../../TopNavigation/TopNavigation';
-import TenantPopup from './TenantPopup';
-import AddTenant from './AddTenant';
-import Chat from '../../chatBot/Chat';
-import api from '../../../../services/api';
+import React, { useState, useEffect } from "react";
+import "./Tenant.css";
+import Sidebar from "../../sidebar/Sidebar";
+import TopNavigation from "../../TopNavigation/TopNavigation";
+import TenantPopup from "./TenantPopup";
+import AddTenant from "./AddTenant";
+import Chat from "../../chatBot/Chat";
+import api from "../../../../services/api";
+import profilePhoto from "../../../../assets/img/DefaultProfilePhoto.webp";
 
 const TenantPage = () => {
-  const [viewMode, setViewMode] = useState('grid');
+  const [viewMode, setViewMode] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTenant, setSelectedTenant] = useState(null);
   const [showAddTenant, setShowAddTenant] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState("all");
   const [tenants, setTenants] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     // Fetch tenants from API
     const fetchTenants = async () => {
       try {
-        const response = await api.get('/tenants');
+        const response = await api.get("/tenants");
         setTenants(response.data);
         console.log(response.data);
       } catch (error) {
-        console.error('Error fetching tenants:', error);
+        console.error("Error fetching tenants:", error);
       }
     };
     fetchTenants();
@@ -36,9 +37,9 @@ const TenantPage = () => {
     setSelectedTenant(tenant);
   };
 
-  const filteredTenants = tenants.filter((tenant) => {    
+  const filteredTenants = tenants.filter((tenant) => {
     const matchesFilter =
-      activeFilter === 'all' || tenant.status === activeFilter;
+      activeFilter === "all" || tenant.status === activeFilter;
     const matchesSearch =
       tenant.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       tenant.last_name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -67,25 +68,25 @@ const TenantPage = () => {
             <div className="filter-buttons">
               <button
                 className={`filter-btn ${
-                  activeFilter === 'all' ? 'active' : ''
+                  activeFilter === "all" ? "active" : ""
                 }`}
-                onClick={() => setActiveFilter('all')}
+                onClick={() => setActiveFilter("all")}
               >
                 All
               </button>
               <button
                 className={`filter-btn ${
-                  activeFilter === 'current' ? 'active' : ''
+                  activeFilter === "current" ? "active" : ""
                 }`}
-                onClick={() => setActiveFilter('current')}
+                onClick={() => setActiveFilter("current")}
               >
                 Current
               </button>
               <button
                 className={`filter-btn ${
-                  activeFilter === 'late' ? 'active' : ''
+                  activeFilter === "late" ? "active" : ""
                 }`}
-                onClick={() => setActiveFilter('late')}
+                onClick={() => setActiveFilter("late")}
               >
                 Late
               </button>
@@ -103,18 +104,14 @@ const TenantPage = () => {
 
             <div className="view-toggles">
               <button
-                className={`view-toggle ${
-                  viewMode === 'list' ? 'active' : ''
-                }`}
-                onClick={() => setViewMode('list')}
+                className={`view-toggle ${viewMode === "list" ? "active" : ""}`}
+                onClick={() => setViewMode("list")}
               >
                 ≡
               </button>
               <button
-                className={`view-toggle ${
-                  viewMode === 'grid' ? 'active' : ''
-                }`}
-                onClick={() => setViewMode('grid')}
+                className={`view-toggle ${viewMode === "grid" ? "active" : ""}`}
+                onClick={() => setViewMode("grid")}
               >
                 ⊞
               </button>
@@ -126,21 +123,21 @@ const TenantPage = () => {
           {filteredTenants.map((tenant) => (
             <div
               key={tenant.id}
-              className={`tenant-card ${tenant.status || 'current'}`}
+              className={`tenant-card ${tenant.status || "current"}`}
               onClick={() => handleTenantClick(tenant)}
             >
-              <div className="tenant-avatar"></div>
+              <img src={profilePhoto} className="tenant-avatar"></img>
               <div className="tenant-info">
                 <h3>
                   {tenant.first_name} {tenant.last_name}
                 </h3>
-                <p className="tenant-title">{tenant.title || ''}</p>
+                <p className="tenant-title">{tenant.title || ""}</p>
 
                 <div className="tenant-details">
                   <div className="detail-group">
                     <span className="label">Property</span>
                     <span className="value">
-                      {tenant.property ? tenant.property.address : 'N/A'}
+                      {tenant.property ? tenant.property.address : "N/A"}
                     </span>
                   </div>
                   <div className="detail-group">
@@ -148,7 +145,7 @@ const TenantPage = () => {
                     <span className="value">
                       {tenant.lease && tenant.lease.rent_amount_monthly
                         ? `$${tenant.lease.rent_amount_monthly}`
-                        : 'N/A'}
+                        : "N/A"}
                     </span>
                   </div>
                   <div className="detail-group">
@@ -156,7 +153,7 @@ const TenantPage = () => {
                     <span className="value">
                       {tenant.lease && tenant.lease.end_date
                         ? new Date(tenant.lease.end_date).toLocaleDateString()
-                        : 'N/A'}
+                        : "N/A"}
                     </span>
                   </div>
                   {/* You can add more details here as needed */}
@@ -166,7 +163,7 @@ const TenantPage = () => {
                       {tenant.status
                         ? tenant.status.charAt(0).toUpperCase() +
                           tenant.status.slice(1)
-                        : 'Current'}
+                        : "Current"}
                     </span>
                   </div>
                 </div>
@@ -220,7 +217,10 @@ const TenantPage = () => {
 
         {/* Add Tenant Modal */}
         {showAddTenant && (
-          <div className="modal-overlay" onClick={() => setShowAddTenant(false)}>
+          <div
+            className="modal-overlay"
+            onClick={() => setShowAddTenant(false)}
+          >
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <AddTenant onClose={() => setShowAddTenant(false)} />
             </div>

@@ -4,7 +4,7 @@
   margin-left: 73px;
   margin-top: 70px;
   min-height: 100vh;
-  background-color: #f2f2f2;
+  background-color: #faf6f3;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: calc(100% - 73px);
 }
@@ -48,7 +48,7 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 }
 
 .add-tenant-btn {
-  background: #6418c3;
+  background: #e56d44;
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -59,7 +59,7 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 }
 
 .add-tenant-btn:hover {
-  background: #7029d8;
+  background: #d85f37;
   transform: translateY(-1px);
 }
 
@@ -113,7 +113,7 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 }
 
 .filter-btn.active {
-  background: #6418c3;
+  background: #e56d44;
   color: white;
 }
 
@@ -144,7 +144,7 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 }
 
 .view-toggle.active {
-  background: #6418c3;
+  background: #e56d44;
   color: white;
 }
 
@@ -166,14 +166,15 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 
 .tenant-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
   position: relative;
   cursor: pointer;
+  border: 1px solid #f0f0f0;
 }
 
 .tenant-card::before {
@@ -359,7 +360,7 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 }
 
 .page-btn.active {
-  background: #6418c3;
+  background: #e56d44;
   color: white;
   border-color: #6418c3;
 }
