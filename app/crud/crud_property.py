@@ -46,6 +46,21 @@ async def get_property_by_owner(db: AsyncSession, property_id: int, owner_id: in
     )
     return result.scalars().first()
 
+async def get_property_by_address(
+    db: AsyncSession,
+    address: str,
+    owner_id: int
+) -> Optional[Property]:
+    """
+    Get a property by its address and owner_id.
+    """
+    result = await db.execute(
+        select(Property)
+        .filter(Property.address.ilike(address))  
+        .filter(Property.owner_id == owner_id)
+    )
+    return result.scalars().first()
+
 async def get_property_by_id(db: AsyncSession, property_id: int, owner_id: int) -> Optional[Property]:
     result = await db.execute(
         select(Property)

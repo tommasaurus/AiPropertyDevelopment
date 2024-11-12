@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 from app import schemas, crud
 from app.db.database import get_db
 from app.core.security import get_current_user
@@ -21,7 +21,7 @@ router = APIRouter()
 
 @router.post("/upload", response_model=schemas.Lease)
 async def upload_lease(
-    property_id: int = Form(...),
+    property_id: Optional[int] = Form(None),
     document_type: str = Form(...),
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
@@ -31,17 +31,18 @@ async def upload_lease(
     Upload a lease document, process it, and create a lease.
     """    
 
-    # Verify that the property exists and belongs to the owner
-    property = await crud.crud_property.get_property_by_owner(
-        db=db,
-        property_id=property_id,
-        owner_id=current_user.id
-    )
-    if not property:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Property not found or you do not have access to this property."
+    # Only verify property if property_id is provided
+    if property_id is not None:
+        property = await crud.crud_property.get_property_by_owner(
+            db=db,
+            property_id=property_id,
+            owner_id=current_user.id
         )
+        if not property:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Property not found or you do not have access to this property."
+            )
 
     # Read the file content
     file_content = await file.read()
@@ -50,7 +51,7 @@ async def upload_lease(
         lease = await process_lease_upload(
             file_content=file_content,
             filename=file.filename,
-            property_id=property_id,
+            property_id=property_id,  # Can be None
             document_type=document_type,
             db=db,
             owner_id=current_user.id

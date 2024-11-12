@@ -14,6 +14,7 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
   const [uploadStep, setUploadStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [useExistingProperty, setUseExistingProperty] = useState(false);
 
   const fileInputRef = useRef(null);
   const documentTypes = ["Lease", "Contract", "Invoice", "Legal", "Other"];
@@ -76,12 +77,23 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
       return;
     }
     setErrorMessage("");
-    setUploadStep(3);
+    // If document type is Lease, show property option step
+    if (selectedDocType.toLowerCase() === "lease") {
+      setUploadStep(3);
+    } else {
+      // For other document types, property selection is required
+      setUseExistingProperty(true);
+      setUploadStep(3);
+    }
   };
 
   // Handle Step 3: Process document
   const handleProcessDocument = async () => {
-    if (!selectedProperty) {
+    // For non-lease documents or when using existing property, property selection is required
+    if (
+      (selectedDocType.toLowerCase() !== "lease" || useExistingProperty) &&
+      !selectedProperty
+    ) {
       setErrorMessage("Please select a property.");
       return;
     }
@@ -92,22 +104,32 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
       "document_type",
       selectedDocType === "Other" ? customDocType : selectedDocType
     );
-    formDataToSend.append("property_id", selectedProperty.id);
 
     try {
       setUploading(true);
       setErrorMessage("");
 
-      await api.post("/processor/process", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      if (selectedDocType.toLowerCase() === "lease" && !useExistingProperty) {
+        // For leases without property selection, use the lease endpoint
+        await api.post("/leases/upload", formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        // For all other cases, use the process endpoint which requires property_id
+        formDataToSend.append("property_id", selectedProperty.id);
+        await api.post("/processor/process", formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
 
       setIsUploaded(true);
       resetUploadStates();
-      fetchAllData(); // Refresh data after successful upload
-      onClose(); // Close the modal
+      fetchAllData();
+      onClose();
     } catch (error) {
       console.error("Error processing document:", error);
       setErrorMessage(
@@ -202,7 +224,8 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
               <h3>Determine Document Type</h3>
               <p>
                 The document type has been determined as:{" "}
-                <strong>{selectedDocType}</strong>. You can change it if necessary.
+                <strong>{selectedDocType}</strong>. You can change it if
+                necessary.
               </p>
               <div className="document-type-boxes">
                 {documentTypes.map((type) => (
@@ -235,26 +258,53 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
           {/* Step 3: Select Property */}
           {uploadStep === 3 && (
             <div className="upload-step">
-              <h3>Select Property</h3>
-              <select
-                value={selectedProperty ? selectedProperty.id : ""}
-                onChange={(e) => {
-                  const property = properties.find(
-                    (p) => p.id === parseInt(e.target.value)
-                  );
-                  setSelectedProperty(property);
-                }}
-                className="property-dropdown"
-              >
-                <option value="" disabled>
-                  Select a property
-                </option>
-                {properties.map((property) => (
-                  <option key={property.id} value={property.id}>
-                    {property.address}
+              <h3>Property Options</h3>
+
+              {selectedDocType.toLowerCase() === "lease" && (
+                <div className="checkbox-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={useExistingProperty}
+                      onChange={(e) => {
+                        setUseExistingProperty(e.target.checked);
+                        if (!e.target.checked) {
+                          setSelectedProperty(null);
+                        }
+                      }}
+                    />
+                    Link to Existing Property
+                  </label>
+                  <p className="help-text">
+                    {useExistingProperty
+                      ? "Select an existing property below"
+                      : "Property information will be extracted from the lease"}
+                  </p>
+                </div>
+              )}
+
+              {(useExistingProperty ||
+                selectedDocType.toLowerCase() !== "lease") && (
+                <select
+                  value={selectedProperty ? selectedProperty.id : ""}
+                  onChange={(e) => {
+                    const property = properties.find(
+                      (p) => p.id === parseInt(e.target.value)
+                    );
+                    setSelectedProperty(property);
+                  }}
+                  className="property-dropdown"
+                >
+                  <option value="" disabled>
+                    Select a property
                   </option>
-                ))}
-              </select>
+                  {properties.map((property) => (
+                    <option key={property.id} value={property.id}>
+                      {property.address}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           )}
 
@@ -300,7 +350,11 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
               }}
               disabled={uploading}
             >
-              {uploadStep === 1 ? (uploading ? "Determining..." : "Next") : "Next"}
+              {uploadStep === 1
+                ? uploading
+                  ? "Determining..."
+                  : "Next"
+                : "Next"}
             </button>
           )}
 

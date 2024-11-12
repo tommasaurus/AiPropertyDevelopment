@@ -2,6 +2,7 @@
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
+from typing import Optional
 from app import schemas, crud
 from app.services.document_processor import extract_text_from_file
 from app.services.openai.openai_document import OpenAIService
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 async def process_lease_upload(
     file_content: bytes,
     filename: str,
-    property_id: int,
+    property_id: Optional[int],
     document_type: str,
     db: AsyncSession,
     owner_id: int
@@ -38,9 +39,44 @@ async def process_lease_upload(
     parsed_data = parse_json(json.dumps(extracted_data))
     mapped_data = map_lease_data(parsed_data)    
 
+    # Handle property creation/retrieval
+    final_property_id = property_id
+    if not final_property_id:
+        # Extract property info
+        property_info = mapped_data.pop('property_info', {})
+        if not property_info.get('address'):
+            raise ValueError("Property address is required when no property_id is provided")
+
+        # Check if property exists for this owner
+        existing_property = await crud.crud_property.get_property_by_address(
+            db=db,
+            address=property_info['address'],
+            owner_id=owner_id
+        )
+
+        if existing_property:
+            final_property_id = existing_property.id
+        else:
+            # Create new property
+            try:
+                property_in = schemas.PropertyCreate(**property_info)
+                new_property = await crud.crud_property.create_with_owner(
+                    db=db,
+                    obj_in=property_in,
+                    owner_id=owner_id
+                )
+                final_property_id = new_property.id
+            except Exception as e:
+                raise ValueError(f"Error creating property: {str(e)}")
+
+    # Update mapped_data with final property_id
+    mapped_data['property_id'] = final_property_id
+
+
     # Extract tenant_info if present
     tenant_info = mapped_data.get('tenant_info', None)   
-    tenant_info['property_id'] = property_id     
+    if tenant_info:
+        tenant_info['property_id'] = final_property_id
 
     # Handle tenant creation or retrieval
     tenant_id = None
@@ -67,7 +103,7 @@ async def process_lease_upload(
             tenant_id = tenant.id
 
     # Include property_id and tenant_id in mapped_data
-    mapped_data['property_id'] = property_id 
+    mapped_data['property_id'] = final_property_id 
 
     # Create LeaseCreate schema
     try:        
@@ -100,7 +136,7 @@ async def process_lease_upload(
     # Handle document creation or retrieval
     document_id = None    
     document_in = schemas.DocumentCreate(
-        property_id=property_id,
+        property_id=final_property_id,
         lease_id=lease_id,
         tenant_id=tenant_id,
         document_type=lease_type,
@@ -117,7 +153,7 @@ async def process_lease_upload(
 
     property = await crud.crud_property.get_property_by_id(
         db=db,
-        property_id=property_id,
+        property_id=final_property_id,
         owner_id=owner_id
     )
     if not property:

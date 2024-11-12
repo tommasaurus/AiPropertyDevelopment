@@ -112,6 +112,39 @@ def map_tenant_data(tenant_info: list) -> list:
 
     return tenant_data
 
+def map_property_data(property_info: dict) -> dict:
+    """
+    Maps property information extracted from lease document to Property model fields.
+    Ensures numeric fields are None when not found or invalid.
+    
+    Args:
+        property_info (dict): Property information dictionary parsed from JSON
+        
+    Returns:
+        dict: Mapped property data ready for Property creation
+    """
+    # Helper function to convert to int or None
+    def to_int_or_none(value):
+        if isinstance(value, (int, float)):
+            return int(value)
+        if isinstance(value, str):
+            try:
+                return int(value)
+            except (ValueError, TypeError):
+                return None
+        return None
+
+    property_data = {
+        "address": property_info.get("address", "Not Found"),
+        "num_bedrooms": to_int_or_none(property_info.get("num_bedrooms")),
+        "num_bathrooms": to_int_or_none(property_info.get("num_bathrooms")),
+        "num_floors": to_int_or_none(property_info.get("num_floors")),
+        "is_commercial": property_info.get("is_commercial", False),
+        "property_type": property_info.get("property_type", "residential")
+    }
+    
+    return property_data
+
 def map_lease_data(parsed_data: dict) -> dict:
     """
     Maps the parsed data to the Lease model fields.
@@ -122,6 +155,8 @@ def map_lease_data(parsed_data: dict) -> dict:
     Returns:
         dict: A dictionary of Lease fields ready to be used for creation.
     """
+
+    property_info = parsed_data.get("property_information", {})
 
     lease_data = {
         "lease_type": parsed_data.get("lease_type", "Not Found"),
@@ -135,6 +170,7 @@ def map_lease_data(parsed_data: dict) -> dict:
         "payment_frequency": parsed_data.get("payment_frequency", "Monthly"),
         "tenant_info": map_tenant_data(parsed_data.get("tenant_information", {})),
         "special_lease_terms": parsed_data.get("special_lease_terms", {}),
+        "property_info": map_property_data(property_info),
         "is_active": True  # Default value; adjust if necessary
     }
 

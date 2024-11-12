@@ -72,15 +72,15 @@ const DayView = ({ currentDate, events, onDateChange }) => {
   );
 
   return (
-    <div className='dateview-content'>
-      <div className='dateview-nav'>
+    <div className="dateview-content">
+      <div className="dateview-nav">
         <button
-          className='dateview-nav-button'
+          className="dateview-nav-button"
           onClick={() => handleNavigate("prev")}
         >
           <ChevronLeft size={24} />
         </button>
-        <div className='dateview-selector'>
+        <div className="dateview-selector">
           {getDayNumbers().map(({ date, isToday, isSelected }) => (
             <button
               key={date.toISOString()}
@@ -89,25 +89,25 @@ const DayView = ({ currentDate, events, onDateChange }) => {
                 isSelected ? "dateview-selected" : ""
               } ${isToday ? "dateview-today" : ""}`}
             >
-              <span className='dateview-dayname'>
+              <span className="dateview-dayname">
                 {date.toLocaleDateString("en-US", { weekday: "short" })}
               </span>
-              <span className='dateview-daynumber'>{date.getDate()}</span>
+              <span className="dateview-daynumber">{date.getDate()}</span>
             </button>
           ))}
         </div>
         <button
-          className='dateview-nav-button'
+          className="dateview-nav-button"
           onClick={() => handleNavigate("next")}
         >
           <ChevronRight size={24} />
         </button>
       </div>
 
-      <div className='dateview-body'>
-        <div className='dateview-timeline'>
+      <div className="dateview-body">
+        <div className="dateview-timeline">
           {hours.map((hour) => (
-            <div key={hour} className='dateview-timeslot'>
+            <div key={hour} className="dateview-timeslot">
               {hour === 12
                 ? `${hour} PM`
                 : hour < 12
@@ -117,18 +117,18 @@ const DayView = ({ currentDate, events, onDateChange }) => {
           ))}
         </div>
 
-        <div className='dateview-grid'>
+        <div className="dateview-grid">
           {hours.map((hour) => (
-            <div key={hour} className='dateview-hourline' />
+            <div key={hour} className="dateview-hourline" />
           ))}
 
           {isCurrentDateToday && getCurrentTimePosition() && (
             <div
-              className='dateview-currenttime'
+              className="dateview-currenttime"
               style={{ top: getCurrentTimePosition() }}
             >
-              <div className='dateview-currenttime-dot' />
-              <div className='dateview-currenttime-line' />
+              <div className="dateview-currenttime-dot" />
+              <div className="dateview-currenttime-line" />
             </div>
           )}
 
@@ -138,20 +138,20 @@ const DayView = ({ currentDate, events, onDateChange }) => {
               className={`dateview-event type-${event.type || "primary"}`}
               style={getEventStyle(event)}
             >
-              <div className='dateview-event-time'>
+              <div className="dateview-event-time">
                 {formatEventTime(event.start)} - {formatEventTime(event.end)}
               </div>
-              <div className='dateview-event-title'>{event.title}</div>
+              <div className="dateview-event-title">{event.title}</div>
               {event.location && (
-                <div className='dateview-event-location'>
+                <div className="dateview-event-location">
                   <MapPin size={16} />
                   <span>{event.location}</span>
                 </div>
               )}
               {event.attendees && (
-                <div className='dateview-event-attendees'>
+                <div className="dateview-event-attendees">
                   {event.attendees.map((attendee, i) => (
-                    <div key={i} className='dateview-attendee'>
+                    <div key={i} className="dateview-attendee">
                       {attendee}
                     </div>
                   ))}
