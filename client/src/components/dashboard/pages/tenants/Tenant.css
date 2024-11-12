@@ -185,7 +185,7 @@ body.dashboard-sidebar-expanded .tenant-page-container {
   transition: all 0.2s ease;
   position: relative;
   cursor: pointer;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #000000;
 }
 
 .tenant-card::before {
@@ -195,7 +195,6 @@ body.dashboard-sidebar-expanded .tenant-page-container {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 16px 16px 0 0;
@@ -208,14 +207,6 @@ body.dashboard-sidebar-expanded .tenant-page-container {
 
 .tenant-card:hover::before {
   opacity: 1;
-}
-
-.tenant-card.late::before {
-  background: linear-gradient(90deg, #ff6b6b, #ff4949);
-}
-
-.tenant-card.current::before {
-  background: linear-gradient(90deg, #4ecdc4, #2ecc71);
 }
 
 .tenant-avatar {
@@ -252,7 +243,7 @@ body.dashboard-sidebar-expanded .tenant-page-container {
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin: 1.5rem 0;
-  background-color: #f8f9fa;
+  background-color: #f0f0f0;
   padding: 1rem;
   border-radius: 12px;
 }

@@ -1,312 +1,316 @@
 .tenant-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.tenant-popup-content {
+  background: rgb(255, 255, 255);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: popup-appear 0.3s ease;
+}
+
+@keyframes popup-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .tenant-popup-content {
-    background: white;
-    border-radius: 20px;
-    padding: 2rem;
-    width: 90%;
-    max-width: 800px;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    animation: popup-appear 0.3s ease;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  @keyframes popup-appear {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .close-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    color: #666;
-    transition: color 0.2s;
-  }
-  
-  .close-btn:hover {
-    color: #333;
-  }
-  
-  .tenant-popup-header {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .tenant-popup-avatar {
-    width: 100px;
-    height: 100px;
-    background-color: #f0f0f0;
-    border-radius: 20px;
-  }
-  
-  .tenant-popup-title h2 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: #333;
-  }
-  
-  .tenant-popup-title p {
-    margin: 0.5rem 0 0;
-    color: #666;
-    font-size: 1rem;
-  }
-  
-  .popup-tabs {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .popup-tab {
-    padding: 1rem 2rem;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: #666;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  .popup-tab:hover {
-    color: #8833ff;
-  }
-  
-  .popup-tab.active {
-    color: #8833ff;
-    border-bottom-color: #8833ff;
-  }
-  
-  .tenant-popup-sections {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  .popup-section {
-    background: #f8f9fa;
-    border-radius: 15px;
-    padding: 1.5rem;
-  }
-  
-  .popup-section h3 {
-    margin: 0 0 1rem;
-    color: #333;
-    font-size: 1.2rem;
-  }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .add-payment-btn,
-  .add-expense-btn {
-    background: #8833ff;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  .add-payment-btn:hover,
-  .add-expense-btn:hover {
-    background: #7029d8;
-  }
-  
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.tenant-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tenant-popup-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.tenant-popup-title h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.tenant-popup-title p {
+  margin: 0.5rem 0 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+.popup-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-tab {
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #666;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.popup-tab:hover {
+  color: #e56d44; /* Changed from #8833ff */
+}
+
+.popup-tab.active {
+  color: #e56d44; /* Changed from #8833ff */
+  border-bottom-color: #e56d44; /* Changed from #8833ff */
+}
+
+.tenant-popup-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.popup-section {
+  background: #f0f0f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+}
+
+.popup-section h3 {
+  margin: 0 0 1rem;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.add-payment-btn,
+.add-expense-btn {
+  background: #e56d44; /* Changed from #8833ff */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.add-payment-btn:hover,
+.add-expense-btn:hover {
+  background: #d85f37; /* Changed from #7029d8 */
+}
+
+.popup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.popup-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popup-label {
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.popup-value {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.financial-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-pill.current {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-pill.late {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.financial-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summary-label {
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.popup-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.popup-action-btn {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.popup-action-btn.edit {
+  background-color: #e56d44; /* Changed from #8833ff */
+  color: white;
+  font-weight: 600;
+}
+
+.popup-action-btn.message {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.popup-action-btn.delete {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: 600;
+}
+
+.popup-action-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
+}
+
+@media (max-width: 768px) {
   .popup-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
   }
-  
-  .popup-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .popup-label {
-    color: #666;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  
-  .popup-value {
-    color: #333;
-    font-size: 1.1rem;
-    font-weight: 500;
-  }
-  
-  .financial-table {
-    width: 100%;
-    overflow-x: auto;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-  
-  th, td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-  }
-  
-  th {
-    font-weight: 600;
-    color: #666;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
-  }
-  
-  .status-pill {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.8rem;
-    font-weight: 500;
-  }
-  
-  .status-pill.paid {
-    background: #e8f5e9;
-    color: #2e7d32;
-  }
-  
-  .status-pill.pending {
-    background: #fff3e0;
-    color: #ef6c00;
-  }
-  
-  .financial-summary {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-  
-  .summary-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .summary-label {
-    color: #666;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  
-  .summary-value {
-    color: #333;
-    font-size: 1.4rem;
-    font-weight: 600;
-  }
-  
+
   .popup-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    grid-template-columns: 1fr;
   }
-  
-  .popup-action-btn {
-    padding: 0.8rem;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+
+  .tenant-popup-content {
+    padding: 1.5rem;
+    width: 95%;
   }
-  
-  .popup-action-btn.edit {
-    background-color: #8833ff;
-    color: white;
+
+  .tenant-popup-header {
+    flex-direction: column;
+    text-align: center;
   }
-  
-  .popup-action-btn.message {
-    background-color: #e3f2fd;
-    color: #1565c0;
+
+  .popup-tabs {
+    justify-content: center;
   }
-  
-  .popup-action-btn.delete {
-    background-color: #ffebee;
-    color: #c62828;
+
+  .popup-tab {
+    padding: 0.8rem 1.2rem;
   }
-  
-  .popup-action-btn:hover {
-    transform: translateY(-2px);
-    filter: brightness(0.95);
+
+  .financial-summary {
+    grid-template-columns: 1fr;
   }
-  
-  @media (max-width: 768px) {
-    .popup-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .popup-actions {
-      grid-template-columns: 1fr;
-    }
-  
-    .tenant-popup-content {
-      padding: 1.5rem;
-      width: 95%;
-    }
-  
-    .tenant-popup-header {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .popup-tabs {
-      justify-content: center;
-    }
-  
-    .popup-tab {
-      padding: 0.8rem 1.2rem;
-    }
-  
-    .financial-summary {
-      grid-template-columns: 1fr;
-    }
-  
-    .summary-item {
-      text-align: center;
-    }
+
+  .summary-item {
+    text-align: center;
   }
+}
