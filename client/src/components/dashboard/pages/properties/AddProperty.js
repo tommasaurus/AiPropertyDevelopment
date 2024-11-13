@@ -93,16 +93,19 @@ const AddProperty = ({ onClose, fetchAllData }) => {
   };
 
   const handleNextAddStep = () => {
+    const { address, city, state, zipCode } = formData;
+
+    // Trim the values to check for empty strings
     if (
-      !formData.address ||
-      !formData.city ||
-      !formData.state ||
-      !formData.zipCode
+      !address?.trim() ||
+      !city?.trim() ||
+      !state?.trim() ||
+      !zipCode?.trim()
     ) {
       setErrorMessage("Please fill in all address fields.");
       return;
     }
-    // Auto-fill property details with smart random data
+
     const propertyDetails = generateSmartPropertyDetails();
     setFormData((prev) => ({
       ...prev,
@@ -196,7 +199,11 @@ const AddProperty = ({ onClose, fetchAllData }) => {
             <div className="form-grid">
               <div className="form-group full-width">
                 <label>Address</label>
-                <AddressAutocomplete onSelectAddress={handleSelectAddress} />
+                <AddressAutocomplete
+                  onSelectAddress={handleSelectAddress}
+                  value={formData.address}
+                  onChange={handleInputChange}
+                />
               </div>
 
               <div className="form-group">

@@ -1,15 +1,13 @@
-// src/components/addressAutocomplete/AddressAutocomplete.js
+// AddressAutocomplete.jsx
+import React, { useRef, useEffect } from "react";
+import { useJsApiLoader } from "@react-google-maps/api";
+import "./AddressAutocomplete.css";
 
-import React, { useRef, useEffect } from 'react';
-import { useJsApiLoader } from '@react-google-maps/api';
-import './AddressAutocomplete.css'; // Optional: Import CSS for styling
+const libraries = ["places"];
 
-const libraries = ['places'];
-
-const AddressAutocomplete = ({ onSelectAddress }) => {
+const AddressAutocomplete = ({ onSelectAddress, value, onChange }) => {
   const inputRef = useRef(null);
 
-  // Load the Google Maps JavaScript API
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -17,12 +15,15 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
 
   useEffect(() => {
     if (isLoaded && inputRef.current) {
-      const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
-        types: ['address'],
-        componentRestrictions: { country: 'us' }, // Adjust as needed
-      });
+      const autocomplete = new window.google.maps.places.Autocomplete(
+        inputRef.current,
+        {
+          types: ["address"],
+          componentRestrictions: { country: "us" },
+        }
+      );
 
-      autocomplete.addListener('place_changed', () => {
+      autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
         if (!place.geometry) {
           console.log("No details available for input: '" + place.name + "'");
@@ -30,27 +31,27 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
         }
 
         const addressComponents = place.address_components;
-        let streetNumber = '';
-        let route = '';
-        let city = '';
-        let state = '';
-        let zipCode = '';
+        let streetNumber = "";
+        let route = "";
+        let city = "";
+        let state = "";
+        let zipCode = "";
 
-        addressComponents.forEach(component => {
+        addressComponents.forEach((component) => {
           const types = component.types;
-          if (types.includes('street_number')) {
+          if (types.includes("street_number")) {
             streetNumber = component.long_name;
           }
-          if (types.includes('route')) {
+          if (types.includes("route")) {
             route = component.long_name;
           }
-          if (types.includes('locality')) {
+          if (types.includes("locality")) {
             city = component.long_name;
           }
-          if (types.includes('administrative_area_level_1')) {
+          if (types.includes("administrative_area_level_1")) {
             state = component.short_name;
           }
-          if (types.includes('postal_code')) {
+          if (types.includes("postal_code")) {
             zipCode = component.long_name;
           }
         });
@@ -60,7 +61,6 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
         const latitude = place.geometry.location.lat();
         const longitude = place.geometry.location.lng();
 
-        // Pass the selected address data to the parent component
         onSelectAddress({
           address: `${streetNumber} ${route}`,
           city,
@@ -75,6 +75,13 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
     }
   }, [isLoaded, onSelectAddress]);
 
+  // Handle manual input changes
+  const handleInputChange = (e) => {
+    if (onChange) {
+      onChange(e);
+    }
+  };
+
   if (loadError) {
     return <div>Error loading Google Maps API</div>;
   }
@@ -84,6 +91,9 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
       <input
         ref={inputRef}
         type="text"
+        name="address"
+        value={value}
+        onChange={handleInputChange}
         placeholder="Enter property address"
         className="autocomplete-input"
         disabled={!isLoaded}
