@@ -34,7 +34,7 @@ const DashboardMetrics = () => {
     },
     {
       title: "Tenants",
-      value: "32",
+      value: "21",
       icon: Users,
       subtitle: "Active",
       trend: "+2",
@@ -90,7 +90,7 @@ const DashboardMetrics = () => {
   const payments = [
     {
       tenant: "Sarah Johnson",
-      property: "123 Palm Ave",
+      property: "123 Palm St",
       amount: 2400,
       date: "Nov 10",
       status: "Completed",
@@ -98,7 +98,7 @@ const DashboardMetrics = () => {
     },
     {
       tenant: "Mike Chen",
-      property: "456 Oak St",
+      property: "513 Rugby Rd",
       amount: 1850,
       date: "Nov 9",
       status: "Processing",
@@ -106,7 +106,7 @@ const DashboardMetrics = () => {
     },
     {
       tenant: "Emma Davis",
-      property: "789 Pine Rd",
+      property: "1234 Fairfax St",
       amount: 2100,
       date: "Nov 8",
       status: "Completed",
@@ -114,7 +114,7 @@ const DashboardMetrics = () => {
     },
     {
       tenant: "Alex Thompson",
-      property: "321 Maple Dr",
+      property: "2420 Old Ivy Rd",
       amount: 1950,
       date: "Nov 7",
       status: "Completed",
@@ -156,7 +156,7 @@ const DashboardMetrics = () => {
           <span className='metric-label'>Properties</span>
           <div className='metric-value'>
             <Building2 size={20} className='metric-icon blue' />
-            <span>32</span>
+            <span>5</span>
           </div>
         </div>
         <div className='metric-block'>

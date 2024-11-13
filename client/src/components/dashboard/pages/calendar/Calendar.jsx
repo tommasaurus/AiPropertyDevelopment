@@ -178,6 +178,14 @@ const Calendar = () => {
       type: "primary",
       attendees: ["JM", "FD", "AC", "CEO"],
     },
+
+    {
+      id: 15,
+      title: "Lease Renewal for Thomas Qu",
+      start: new Date(2024, 10, 30, 7, 0),
+      end: new Date(2024, 10, 30, 16, 0),
+      type: "primary",
+    },
   ];
 
   const getTodayDate = () => {
