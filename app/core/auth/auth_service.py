@@ -11,7 +11,7 @@ from typing import List, Optional
 from jose import JWTError
 
 # Signup service
-async def signup_user(db: AsyncSession, email: str, password: str):
+async def signup_user(db: AsyncSession, email: str, password: str, name: str):
     # Normalize the email
     normalized_email = email.strip().lower()
 
@@ -32,7 +32,7 @@ async def signup_user(db: AsyncSession, email: str, password: str):
 
     # Hash the user's password and create a new user
     hashed_password = get_password_hash(password)
-    new_user = User(email=normalized_email, hashed_password=hashed_password)
+    new_user = User(name=name, email=normalized_email, hashed_password=hashed_password)
     db.add(new_user)
     try:
         await db.commit()

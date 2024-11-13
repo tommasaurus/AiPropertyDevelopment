@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # Signup route
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
 async def signup(user: UserCreate, db: AsyncSession = Depends(get_db)):
-    return await signup_user(db, user.email, user.password)
+     return await signup_user(db, user.email, user.password, user.name)
 
 # Login route
 @router.post("/login", response_model=Token)

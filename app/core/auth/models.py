@@ -1,16 +1,16 @@
 # app/core/auth/models.py
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 # User login request model
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 # User creation request model (for signup)
 class UserCreate(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     name: Optional[str] = None
     is_admin: Optional[bool] = False  # Only settable by admin users
@@ -28,4 +28,4 @@ class AccessToken(BaseModel):
 
 # Token data model (for token verification)
 class TokenData(BaseModel):
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None

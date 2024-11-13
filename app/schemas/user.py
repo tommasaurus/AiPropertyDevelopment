@@ -1,11 +1,11 @@
 # app/schemas/user.py
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from app.schemas.property_summary import PropertySummary
 
 class UserBase(BaseModel):
-    email: EmailStr
+    email: str
     name: Optional[str] = None
     profile_pic: Optional[str] = None
 
@@ -14,7 +14,7 @@ class UserCreate(UserBase):
     is_admin: Optional[bool] = False  # Allow setting is_admin during user creation (optional)
 
 class UserUpdate(BaseModel):
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     name: Optional[str] = None
     profile_pic: Optional[str] = None
     password: Optional[str] = None
