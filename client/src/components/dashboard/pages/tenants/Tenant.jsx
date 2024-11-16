@@ -19,17 +19,17 @@ const TenantPage = () => {
   const [tenants, setTenants] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const fetchTenants = async () => {
+    try {
+      const response = await api.get("/tenants");
+      setTenants(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching tenants:", error);
+    }
+  };
+
   useEffect(() => {
-    // Fetch tenants from API
-    const fetchTenants = async () => {
-      try {
-        const response = await api.get("/tenants");
-        setTenants(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching tenants:", error);
-      }
-    };
     fetchTenants();
   }, []);
 
@@ -235,6 +235,7 @@ const TenantPage = () => {
           <TenantPopup
             tenant={selectedTenant}
             onClose={() => setSelectedTenant(null)}
+            fetchTenants={fetchTenants} // Add this prop
           />
         )}
 
@@ -245,7 +246,10 @@ const TenantPage = () => {
             onClick={() => setShowAddTenant(false)}
           >
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <AddTenant onClose={() => setShowAddTenant(false)} />
+              <AddTenant
+                onClose={() => setShowAddTenant(false)}
+                fetchTenants={fetchTenants}
+              />
             </div>
           </div>
         )}

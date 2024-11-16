@@ -1,35 +1,35 @@
 // src/components/tenant/AddTenant.jsx
 
-import React, { useState, useEffect } from 'react';
-import './AddTenant.css';
-import api from '../../../../services/api';
+import React, { useState, useEffect } from "react";
+import "./AddTenant.css";
+import api from "../../../../services/api";
 
 const AddTenant = ({ onClose, fetchTenants }) => {
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone_number: '',
-    property_id: '',
-    lease_type: '',
-    rent_amount_monthly: '',
-    lease_start: '',
-    lease_end: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    property_id: "",
+    lease_type: "",
+    rent_amount_monthly: "",
+    lease_start: "",
+    lease_end: "",
   });
 
   const [properties, setProperties] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Fetch properties from API on component mount
     const fetchProperties = async () => {
       try {
-        const response = await api.get('/properties');
+        const response = await api.get("/properties");
         setProperties(response.data);
       } catch (error) {
-        console.error('Error fetching properties:', error);
-        setErrorMessage('Failed to fetch properties. Please try again.');
+        console.error("Error fetching properties:", error);
+        setErrorMessage("Failed to fetch properties. Please try again.");
       }
     };
     fetchProperties();
@@ -46,12 +46,12 @@ const AddTenant = ({ onClose, fetchTenants }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setErrorMessage('');
+    setErrorMessage("");
 
     try {
       // Validate required fields
       if (!formData.first_name || !formData.last_name) {
-        setErrorMessage('First name and last name are required.');
+        setErrorMessage("First name and last name are required.");
         setIsSubmitting(false);
         return;
       }
@@ -66,7 +66,7 @@ const AddTenant = ({ onClose, fetchTenants }) => {
       };
 
       // Create Tenant
-      const tenantResponse = await api.post('/tenants/manual', tenantPayload);
+      const tenantResponse = await api.post("/tenants/manual", tenantPayload);
       const tenant = tenantResponse.data;
 
       // Conditionally create Lease if property_id and lease_type are provided
@@ -83,7 +83,7 @@ const AddTenant = ({ onClose, fetchTenants }) => {
         };
 
         // Check if a lease with the same property_id and lease_type exists
-        const existingLeasesResponse = await api.get('/leases', {
+        const existingLeasesResponse = await api.get("/leases", {
           params: {
             property_id: leasePayload.property_id,
             lease_type: leasePayload.lease_type,
@@ -93,35 +93,33 @@ const AddTenant = ({ onClose, fetchTenants }) => {
 
         if (existingLeases.length === 0) {
           // Create Lease only if it doesn't exist
-          await api.post('/leases', leasePayload);
+          await api.post("/leases", leasePayload);
         }
       }
 
       // Refresh tenant list
-      if (fetchTenants) {
-        await fetchTenants();
-      }
+      await fetchTenants();
 
       // Close the modal
       onClose();
     } catch (error) {
-      console.error('Error adding tenant:', error);
+      console.error("Error adding tenant:", error);
       // Check if error response exists
       if (error.response && error.response.data && error.response.data.detail) {
         const errorDetail = error.response.data.detail;
         if (Array.isArray(errorDetail)) {
           // If it's an array, map over the errors to create a string
-          const messages = errorDetail.map((err) => err.msg).join(' ');
+          const messages = errorDetail.map((err) => err.msg).join(" ");
           setErrorMessage(messages);
-        } else if (typeof errorDetail === 'string') {
+        } else if (typeof errorDetail === "string") {
           // If it's a string, use it directly
           setErrorMessage(errorDetail);
         } else {
-          setErrorMessage('An unknown error occurred.');
+          setErrorMessage("An unknown error occurred.");
         }
       } else {
-        setErrorMessage('Failed to add tenant. Please try again.');
-      }    
+        setErrorMessage("Failed to add tenant. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -274,7 +272,7 @@ const AddTenant = ({ onClose, fetchTenants }) => {
         {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         <button type="submit" className="save-button" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : 'SAVE TENANT'}
+          {isSubmitting ? "Saving..." : "SAVE TENANT"}
         </button>
       </form>
     </div>

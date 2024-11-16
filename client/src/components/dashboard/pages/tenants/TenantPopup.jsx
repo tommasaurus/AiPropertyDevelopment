@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import api from "../../../../services/api";
+import { toast } from "react-toastify";
 import "./TenantPopup.css";
 import profilePhoto from "../../../../assets/img/DefaultProfilePhoto.webp";
 
-const TenantPopup = ({ tenant, onClose }) => {
+const TenantPopup = ({ tenant, onClose, fetchTenants }) => {
   const [activeTab, setActiveTab] = useState("info");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   // Sample financial data - replace with actual data
   const financialData = {
@@ -44,23 +48,57 @@ const TenantPopup = ({ tenant, onClose }) => {
     ],
   };
 
+  const handleDeleteTenant = async () => {
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${tenant.first_name} ${tenant.last_name}? This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    setIsDeleting(true);
+    setDeleteError("");
+
+    try {
+      await api.delete(`/tenants/${tenant.id}`);
+
+      // Close the popup
+      onClose();
+
+      // Refresh the tenant list
+      fetchTenants();
+
+      // Show success message
+      toast.success("Tenant successfully deleted");
+    } catch (error) {
+      console.error("Error deleting tenant:", error);
+      setDeleteError(
+        error.response?.data?.detail ||
+          "Failed to delete tenant. Please try again."
+      );
+      toast.error("Failed to delete tenant");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <div className='tenant-popup-overlay' onClick={onClose}>
+    <div className="tenant-popup-overlay" onClick={onClose}>
       <div
-        className='tenant-popup-content'
+        className="tenant-popup-content"
         onClick={(e) => e.stopPropagation()}
       >
-        <button className='close-btn' onClick={onClose}>
+        <button className="close-btn" onClick={onClose}>
           ×
         </button>
 
-        <div className='tenant-popup-header'>
+        <div className="tenant-popup-header">
           <img
             src={profilePhoto}
-            className='tenant-popup-avatar'
-            alt='Tenant Profile'
+            className="tenant-popup-avatar"
+            alt="Tenant Profile"
           />
-          <div className='tenant-popup-title'>
+          <div className="tenant-popup-title">
             <h2>
               {tenant.first_name} {tenant.last_name}
             </h2>
@@ -68,7 +106,7 @@ const TenantPopup = ({ tenant, onClose }) => {
           </div>
         </div>
 
-        <div className='popup-tabs'>
+        <div className="popup-tabs">
           <button
             className={`popup-tab ${activeTab === "info" ? "active" : ""}`}
             onClick={() => setActiveTab("info")}
@@ -86,34 +124,34 @@ const TenantPopup = ({ tenant, onClose }) => {
         </div>
 
         {activeTab === "info" ? (
-          <div className='tenant-popup-sections'>
-            <div className='popup-section'>
+          <div className="tenant-popup-sections">
+            <div className="popup-section">
               <h3>Lease Information</h3>
-              <div className='popup-grid'>
-                <div className='popup-detail'>
-                  <span className='popup-label'>Property</span>
-                  <span className='popup-value'>
+              <div className="popup-grid">
+                <div className="popup-detail">
+                  <span className="popup-label">Property</span>
+                  <span className="popup-value">
                     {tenant.property ? tenant.property.address : "N/A"}
                   </span>
                 </div>
-                <div className='popup-detail'>
-                  <span className='popup-label'>Monthly Rent</span>
-                  <span className='popup-value'>
+                <div className="popup-detail">
+                  <span className="popup-label">Monthly Rent</span>
+                  <span className="popup-value">
                     {tenant.lease && tenant.lease.rent_amount_monthly
                       ? `$${tenant.lease.rent_amount_monthly}`
                       : "N/A"}
                   </span>
                 </div>
-                <div className='popup-detail'>
-                  <span className='popup-label'>Lease End Date</span>
-                  <span className='popup-value'>
+                <div className="popup-detail">
+                  <span className="popup-label">Lease End Date</span>
+                  <span className="popup-value">
                     {tenant.lease && tenant.lease.end_date
                       ? new Date(tenant.lease.end_date).toLocaleDateString()
                       : "N/A"}
                   </span>
                 </div>
-                <div className='popup-detail'>
-                  <span className='popup-label'>Status</span>
+                <div className="popup-detail">
+                  <span className="popup-label">Status</span>
                   <span className={`status-pill ${tenant.status || "current"}`}>
                     {tenant.status
                       ? tenant.status.charAt(0).toUpperCase() +
@@ -124,43 +162,50 @@ const TenantPopup = ({ tenant, onClose }) => {
               </div>
             </div>
 
-            <div className='popup-section'>
+            <div className="popup-section">
               <h3>Contact Information</h3>
-              <div className='popup-grid'>
-                <div className='popup-detail'>
-                  <span className='popup-label'>Email</span>
-                  <span className='popup-value'>{tenant.email || "N/A"}</span>
+              <div className="popup-grid">
+                <div className="popup-detail">
+                  <span className="popup-label">Email</span>
+                  <span className="popup-value">{tenant.email || "N/A"}</span>
                 </div>
-                <div className='popup-detail'>
-                  <span className='popup-label'>Phone</span>
-                  <span className='popup-value'>
+                <div className="popup-detail">
+                  <span className="popup-label">Phone</span>
+                  <span className="popup-value">
                     {tenant.phone_number || "N/A"}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className='popup-section'>
+            <div className="popup-section">
               <h3>Actions</h3>
-              <div className='popup-actions'>
-                <button className='popup-action-btn edit'>Edit Tenant</button>
-                <button className='popup-action-btn message'>
+              <div className="popup-actions">
+                <button className="popup-action-btn edit">Edit Tenant</button>
+                <button className="popup-action-btn message">
                   Send Message
                 </button>
-                <button className='popup-action-btn delete'>
-                  Remove Tenant
+                <button
+                  className="popup-action-btn delete"
+                  onClick={handleDeleteTenant}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete Tenant"}
                 </button>
               </div>
+              {deleteError && (
+                <div className="error-message">{deleteError}</div>
+              )}
             </div>
           </div>
         ) : (
-          <div className='tenant-popup-sections'>
-            <div className='popup-section'>
-              <div className='section-header'>
+          <div className="tenant-popup-sections">
+            <div className="popup-section">
+              <div className="section-header">
                 <h3>Payment History</h3>
-                <button className='add-payment-btn'>+ Add Payment</button>
+                <button className="add-payment-btn">+ Add Payment</button>
               </div>
-              <div className='financial-table'>
+              <div className="financial-table">
                 <table>
                   <thead>
                     <tr>
@@ -190,12 +235,12 @@ const TenantPopup = ({ tenant, onClose }) => {
               </div>
             </div>
 
-            <div className='popup-section'>
-              <div className='section-header'>
+            <div className="popup-section">
+              <div className="section-header">
                 <h3>Expenses</h3>
-                <button className='add-expense-btn'>+ Add Expense</button>
+                <button className="add-expense-btn">+ Add Expense</button>
               </div>
-              <div className='financial-table'>
+              <div className="financial-table">
                 <table>
                   <thead>
                     <tr>
@@ -219,12 +264,12 @@ const TenantPopup = ({ tenant, onClose }) => {
               </div>
             </div>
 
-            <div className='popup-section'>
+            <div className="popup-section">
               <h3>Financial Summary</h3>
-              <div className='financial-summary'>
-                <div className='summary-item'>
-                  <span className='summary-label'>Total Payments</span>
-                  <span className='summary-value'>
+              <div className="financial-summary">
+                <div className="summary-item">
+                  <span className="summary-label">Total Payments</span>
+                  <span className="summary-value">
                     $
                     {financialData.payments.reduce(
                       (sum, payment) => sum + payment.amount,
@@ -232,9 +277,9 @@ const TenantPopup = ({ tenant, onClose }) => {
                     )}
                   </span>
                 </div>
-                <div className='summary-item'>
-                  <span className='summary-label'>Total Expenses</span>
-                  <span className='summary-value'>
+                <div className="summary-item">
+                  <span className="summary-label">Total Expenses</span>
+                  <span className="summary-value">
                     $
                     {financialData.expenses.reduce(
                       (sum, expense) => sum + expense.amount,

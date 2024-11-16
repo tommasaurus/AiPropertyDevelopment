@@ -140,7 +140,14 @@ class CRUDTenant:
     async def delete_tenant(
         self, db: AsyncSession, tenant_id: int, owner_id: int
     ) -> Optional[Tenant]:
-        db_tenant = await self.get_tenant(db, tenant_id, owner_id)
+        # First find the tenant directly without joining property
+        result = await db.execute(
+            select(Tenant)
+            .filter(Tenant.id == tenant_id)
+            .filter(Tenant.owner_id == owner_id)
+        )
+        db_tenant = result.scalars().first()
+        
         if db_tenant:
             await db.delete(db_tenant)
             try:
