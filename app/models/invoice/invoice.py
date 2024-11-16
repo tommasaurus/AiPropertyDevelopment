@@ -8,8 +8,8 @@ class Invoice(Base):
     __tablename__ = 'invoices'
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    property_id = Column(Integer, ForeignKey('properties.id'), nullable=False)
-    vendor_id = Column(Integer, ForeignKey('vendors.id'), nullable=True)
+    property_id = Column(Integer, ForeignKey('properties.id', ondelete='CASCADE'), nullable=False)
+    vendor_id = Column(Integer, ForeignKey('vendors.id', ondelete='SET NULL'), nullable=True)
 
     invoice_number = Column(String(50), nullable=True)
     amount = Column(Float, nullable=False)
@@ -23,8 +23,8 @@ class Invoice(Base):
     # Relationships
     property = relationship('Property', back_populates='invoices')
     vendor = relationship('Vendor', back_populates='invoices')
-    expense = relationship('Expense', back_populates='invoice', uselist=False)
-    document = relationship('Document', back_populates='invoice', uselist=False)
+    expense = relationship('Expense', back_populates='invoice', uselist=False, cascade="all, delete-orphan")
+    document = relationship('Document', back_populates='invoice', uselist=False, cascade="all, delete-orphan")
     line_items = relationship(
         'InvoiceItem',
         back_populates='invoice',

@@ -1,63 +1,84 @@
-// src/components/properties/PropertyDetails.js
-
-import React, { useState, useEffect } from "react";
-import api from "../../../../services/api";
+import React, { useState } from "react";
 import "./propertyDetails.css";
+import { toast } from "react-toastify";
 
-const PropertyDetails = ({ property, onClose }) => {
+const PropertyDetails = ({
+  property,
+  onClose,
+  onDelete,
+  contracts = [],
+  documents = [],
+  expenses = [],
+  incomes = [],
+  invoices = [],
+  leases = [],
+  payments = [],
+  tenants = [],
+  vendors = [],
+}) => {
   const [activeTab, setActiveTab] = useState("tenants");
-  const [contracts, setContracts] = useState([]);
-  const [documents, setDocuments] = useState([]);
-  const [expenses, setExpenses] = useState([]);
-  const [incomes, setIncomes] = useState([]);
-  const [invoices, setInvoices] = useState([]);
-  const [leases, setLeases] = useState([]);
-  const [payments, setPayments] = useState([]);
-  const [tenants, setTenants] = useState([]);
-  const [vendors, setVendors] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [
-          contractsRes,
-          documentsRes,
-          expensesRes,
-          incomesRes,
-          invoicesRes,
-          leasesRes,
-          paymentsRes,
-          tenantsRes,
-          vendorsRes,
-        ] = await Promise.all([
-          api.get("/contracts"),
-          api.get("/documents"),
-          api.get("/expenses"),
-          api.get("/incomes"),
-          api.get("/invoices"),
-          api.get("/leases"),
-          api.get("/payments"),
-          api.get("/tenants"),
-          api.get("/vendors"),
-        ]);
+  // Delete confirmation modal
+  const DeleteConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
+    if (!isOpen) return null;
 
-        setContracts(contractsRes.data);
-        setDocuments(documentsRes.data);
-        setExpenses(expensesRes.data);
-        setIncomes(incomesRes.data);
-        setInvoices(invoicesRes.data);
-        console.log(leasesRes.data);
-        setLeases(leasesRes.data);
-        setPayments(paymentsRes.data);
-        setTenants(tenantsRes.data);
-        setVendors(vendorsRes.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    return (
+      <div className="delete-modal-overlay">
+        <div className="delete-modal">
+          <h3>Confirm Delete</h3>
+          <p>
+            Are you sure you want to delete this property? This action cannot be
+            undone and will delete all associated data including:
+          </p>
+          <ul>
+            <li>Leases and tenant information</li>
+            <li>Financial records (expenses, incomes, invoices)</li>
+            <li>Documents and contracts</li>
+            <li>Utility records</li>
+          </ul>
+          <div className="delete-modal-buttons">
+            <button
+              className="cancel-button"
+              onClick={onCancel}
+              disabled={isDeleting}
+            >
+              Cancel
+            </button>
+            <button
+              className="delete-button"
+              onClick={onConfirm}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete Property"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
-    fetchData();
-  }, []);
+  const handleDeleteConfirm = async () => {
+    if (!property?.id) {
+      console.error("No property ID found");
+      toast.error("Invalid property ID");
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+      console.log("Attempting to delete property:", property.id);
+      await onDelete(property.id);
+      setShowDeleteModal(false); // Close the modal on success
+      onClose(); // Close the property details
+    } catch (error) {
+      console.error("Delete confirmation error:", error);
+      toast.error("Failed to delete property. Please try again.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   // Helper functions
   const formatCurrency = (value) => {
@@ -171,10 +192,25 @@ const PropertyDetails = ({ property, onClose }) => {
       <div className="property-modal-content">
         <div className="modal-header">
           <h2>{property.address}</h2>
-          <button className="modal-close-button" onClick={onClose}>
-            ×
-          </button>
+          <div className="modal-header-buttons">
+            <button
+              className="delete-property-button"
+              onClick={() => setShowDeleteModal(true)} // CORRECT
+            >
+              Delete Property
+            </button>
+            <button className="modal-close-button" onClick={onClose}>
+              ×
+            </button>
+          </div>
         </div>
+
+        {/* Delete Confirmation Modal */}
+        <DeleteConfirmationModal
+          isOpen={showDeleteModal}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setShowDeleteModal(false)}
+        />
 
         <div className="modal-body">
           {/* Property Overview */}

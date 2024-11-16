@@ -1,6 +1,7 @@
 # app/api/endpoints/property.py
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from app import schemas, crud
@@ -92,16 +93,32 @@ async def update_property(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 # Delete a property
-@router.delete("/{property_id}", response_model=schemas.Property)
+@router.delete("/{property_id}")  
 async def delete_property(
     property_id: int,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    print(f"Delete request received for property {property_id} by user {current_user.id}")
     property = await crud.crud_property.get_property_by_owner(db=db, property_id=property_id, owner_id=current_user.id)
+    
     if property is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Property not found or access denied")
+        print(f"Property {property_id} not found or access denied")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Property not found or access denied"
+        )
+    
     try:
-        return await crud.crud_property.delete_property(db=db, property=property)
+        await crud.crud_property.delete_property(db=db, property=property)
+        print(f"Property {property_id} successfully deleted")
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={"message": "Property successfully deleted"}
+        )
     except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        print(f"Error deleting property {property_id}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail=str(e)
+        )
