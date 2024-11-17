@@ -5,6 +5,7 @@ from typing import Optional, Union
 from io import BytesIO
 from abc import ABC, abstractmethod
 import os
+from app.utils.timing import log_timing
 
 # Import necessary modules
 from PIL import Image, UnidentifiedImageError
@@ -103,6 +104,7 @@ def get_processor(file: Union[BytesIO, 'File'], filename: str) -> Optional[BaseD
         logger.warning(f"Unsupported file type: {file_extension}")
         return None
 
+@log_timing("OCR Text Extraction")
 def extract_text_from_file(file: Union[BytesIO, 'File'], filename: str) -> Optional[str]:
     processor = get_processor(file, filename)
     if not processor:

@@ -13,6 +13,8 @@ from app.services.lease_processor import process_lease_upload
 from app.services.openai.openai_document import OpenAIService
 from io import BytesIO
 import logging
+from app.utils.timing import log_timing
+
 logger = logging.getLogger(__name__)
 router = APIRouter()
 @router.post("/upload")
@@ -45,7 +47,9 @@ async def upload_document(
             detail="Could not determine document type."
         )
     return document_type
+
 @router.post("/process")
+@log_timing("Total Document Processing")
 async def process_document(
     property_id: int = Form(...),
     document_type: str = Form(...),

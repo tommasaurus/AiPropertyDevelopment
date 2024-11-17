@@ -11,9 +11,11 @@ from io import BytesIO
 import json
 import logging
 from datetime import datetime
+from app.utils.timing import log_timing
 
 logger = logging.getLogger(__name__)
 
+@log_timing("Lease Processing")
 async def process_lease_upload(
     file_content: bytes,
     filename: str,

@@ -5,6 +5,7 @@ import json
 from typing import Optional
 from openai import AsyncOpenAI
 from openai.types.chat import ChatCompletionMessage
+from app.utils.timing import log_timing
 
 # Import your settings or configuration module
 from app.core.config import settings
@@ -18,6 +19,7 @@ class OpenAIService:
         # Initialize the OpenAI client
         self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
+    @log_timing("OpenAI Information Extraction")
     async def extract_information(self, text: str, document_type: str) -> dict:
         """
         Uses OpenAI's API to extract relevant information from the text based on the document type.
@@ -57,6 +59,7 @@ class OpenAIService:
             logger.error(f"An error occurred while extracting information: {e}")
             return {}
 
+    @log_timing("OpenAI Document Type Classification")
     async def determine_document_type(self, text: str) -> Optional[str]:
         """
         Uses OpenAI's API to determine the type of document based on the text.
