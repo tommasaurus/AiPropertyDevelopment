@@ -10,6 +10,7 @@ import {
   LogOut,
   MessagesSquare,
   Pin,
+  Vault,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
@@ -71,6 +72,12 @@ const Sidebar = () => {
       label: "Messages",
       path: "/dashboard/messages",
       active: window.location.pathname === "/dashboard/messages",
+    },
+    {
+      icon: Vault,
+      label: "Vault",
+      path: "/dashboard/vault",
+      active: window.location.pathname === "/dashboard/vault",
     },
   ];
 
