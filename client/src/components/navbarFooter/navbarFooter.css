@@ -10,7 +10,7 @@
 
 .navbar-container {
   max-width: 1425px;
-  margin: 0 auto;
+  margin: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;

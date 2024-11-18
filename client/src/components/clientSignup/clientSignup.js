@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginWithGoogle } from "../../services/login";
 import signupUser from "../../services/signup";
 import "./clientSignup.css";
-import walkingUpStairs from "../../assets/videos/WalkingUpStairsGIF.mp4";
-import logo from '../../assets/img/logo.png'
+import logo from "../../assets/img/logo.png";
 
 const ClientSignup = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,6 +15,40 @@ const ClientSignup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      const xPercent = ((clientX - windowWidth / 2) / windowWidth) * 100;
+      const yPercent = ((clientY - windowHeight / 2) / windowHeight) * 100;
+
+      const gradientElement = document.querySelector(".signup-gradient-bg");
+      if (gradientElement) {
+        gradientElement.classList.add("signup-moving");
+        gradientElement.style.backgroundPosition = `${50 + xPercent}% ${
+          50 + yPercent
+        }%`;
+      }
+    };
+
+    const handleMouseLeave = () => {
+      const gradientElement = document.querySelector(".signup-gradient-bg");
+      if (gradientElement) {
+        gradientElement.style.backgroundPosition = "50% 50%";
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -25,12 +59,11 @@ const ClientSignup = () => {
     }
 
     try {
-      await signupUser(email, password);
-      console.log("Signup successful");
+      await signupUser(name, email, password);
       navigate("/dashboard");
     } catch (error) {
-      setError(error.message || "Signup failed");
-      console.error("Signup failed", error);
+      const errorDetail = error.response?.data?.detail;
+      setError(errorDetail || error.message || "Signup failed");
     }
   };
 
@@ -38,26 +71,23 @@ const ClientSignup = () => {
     loginWithGoogle();
   };
 
-  const handleLogoClick = () => {
-    navigate("/");
-  };
-
   return (
-    <div className='container'>
-      <video
-        src={walkingUpStairs}
-        autoPlay
-        loop
-        muted
-        className='side-video'
-      ></video>
-      <div className='card'>
-        <button onClick={handleLogoClick} className='logo-button'>
-          <img src={logo} alt='Dwellex Logo' className='logo' />
-        </button>
-        <p className='subtitle'>Create your account</p>
+    <div className='signup-container'>
+      <div className='signup-gradient-bg'></div>
+      <div className='signup-white-overlay'></div>
 
-        <button onClick={handleGoogleSignup} className='google-button'>
+      <nav className='signup-page-navbar'>
+        <div className='signup-page-navbar-container'>
+          <Link to='/' className='signup-page-logo'>
+            <img src={logo} alt='Logo' />
+          </Link>
+        </div>
+      </nav>
+
+      <div className='signup-card'>
+        <h1 className='signup-title'>Create your account</h1>
+
+        <button onClick={handleGoogleSignup} className='signup-google-button'>
           <svg
             className='google-icon'
             width='18'
@@ -84,74 +114,79 @@ const ClientSignup = () => {
           Continue with Google
         </button>
 
-        <div className='divider'>
-          <span>or</span>
+        <div className='signup-divider'>
+          <span>or sign up with username</span>
         </div>
 
-        <form onSubmit={handleSignup} className='form-login'>
-          <div className='input-group'>
-            <label className='label'>Email</label>
+        <form onSubmit={handleSignup} className='signup-form'>
+          {error && <div className='signup-error-message'>{error}</div>}
+
+          <div className='signup-input-group'>
+            <label className='signup-label'>EMAIL</label>
             <input
-              type='email'
+              type='text'
               placeholder='Enter your email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className='input-group'>
-            <label className='label'>Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder='Enter your password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type='button'
-              className='password-toggle'
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-            </button>
+
+          <div className='signup-input-group'>
+            <label className='signup-label'>PASSWORD</label>
+            <div className='signup-password-input-wrapper'>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder='Enter your password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type='button'
+                className='signup-password-toggle'
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
+            </div>
           </div>
-          <div className='input-group'>
-            <label className='label'>Confirm Password</label>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder='Confirm your password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-            <button
-              type='button'
-              className='password-toggle'
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              aria-label={
-                showConfirmPassword ? "Hide password" : "Show password"
-              }
-            >
-              {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-            </button>
+
+          <div className='signup-input-group'>
+            <label className='signup-label'>CONFIRM PASSWORD</label>
+            <div className='signup-password-input-wrapper'>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder='Confirm your password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <button
+                type='button'
+                className='signup-password-toggle'
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={
+                  showConfirmPassword ? "Hide password" : "Show password"
+                }
+              >
+                {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
+            </div>
           </div>
-          {error && <div className='error-message'>{error}</div>}
-          <button type='submit' className='button'>
+
+          <button type='submit' className='signup-submit-button'>
             Create Account
           </button>
         </form>
 
-        <div className='links'>
-          <span>
-            Already have an account? <Link to='/login'>Sign in</Link>
-          </span>
-        </div>
-
-        <div className='footer'>
+        <div className='signup-footer'>
           <p>
-            By creating an account, you agree to our{" "}
+            Already have an account? <Link to='/login'>Sign in</Link>
+          </p>
+          <p>
+            By signing up, you agree to our{" "}
             <a href='/privacy-policy'>Privacy Policy</a> and{" "}
             <a href='/terms-conditions'>Terms & Conditions</a>.
           </p>
