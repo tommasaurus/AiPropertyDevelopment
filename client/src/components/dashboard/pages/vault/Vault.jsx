@@ -115,6 +115,11 @@ const Vault = () => {
     }
   };
 
+  const handleDelete = () => {
+    fetchFolderData(selectedFolder);
+    setSelectedRow(null);
+  };
+
   const formatDate = (dateString) => {
     return dateString ? new Date(dateString).toLocaleDateString() : "N/A";
   };
@@ -428,6 +433,8 @@ const Vault = () => {
           columns={tableColumns}
           isOpen={!!selectedRow}
           onClose={() => setSelectedRow(null)}
+          onDelete={handleDelete}
+          currentFolder={selectedFolder}
         />
       </div>
     </div>

@@ -137,6 +137,32 @@
   background-color: #e5e7eb;
 }
 
+.vault-popup-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ef4444;
+  padding: 8px 16px;
+  margin: 8px 16px;
+  background-color: #fef2f2;
+  border-radius: 4px;
+}
+
+.vault-popup-button-delete {
+  background-color: #ef4444 !important;
+  color: white !important;
+  margin-right: auto;
+}
+
+.vault-popup-button-delete:hover {
+  background-color: #dc2626 !important;
+}
+
+.vault-popup-button-delete:disabled {
+  background-color: #fca5a5 !important;
+  cursor: not-allowed;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
