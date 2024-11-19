@@ -1,0 +1,170 @@
+/* VaultRowPopup.css */
+.vault-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.vault-popup-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
+}
+
+.vault-popup-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.vault-popup-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.vault-popup-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: none;
+  background: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.vault-popup-close:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.vault-popup-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.vault-popup-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vault-popup-field {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.vault-popup-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.vault-popup-value {
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #111827;
+  word-break: break-word;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+/* Special styling for long formatted text */
+.vault-popup-field:has(.vault-popup-value:not(:empty)) {
+  background-color: #f9fafb;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+/* Adjust the grid for special lease terms */
+.vault-popup-field:has(.vault-popup-value > pre),
+.vault-popup-field:has(.vault-popup-value[style*="white-space: pre"]) {
+  grid-template-columns: 1fr;
+}
+
+.vault-popup-field:has(.vault-popup-value > pre) .vault-popup-label,
+.vault-popup-field:has(.vault-popup-value[style*="white-space: pre"])
+  .vault-popup-label {
+  margin-bottom: 0.5rem;
+}
+
+.vault-popup-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.vault-popup-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.vault-popup-button:hover {
+  background-color: #e5e7eb;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .vault-popup-field {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .vault-popup-label {
+    margin-bottom: 0.25rem;
+  }
+}
