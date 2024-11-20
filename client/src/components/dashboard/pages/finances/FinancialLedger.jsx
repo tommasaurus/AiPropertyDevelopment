@@ -1,145 +1,112 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./FinancialLedger.css";
 import Sidebar from "../../sidebar/Sidebar";
 import TopNavigation from "../../TopNavigation/TopNavigation";
+import AddTransaction from "./AddTransaction";
+import api from "../../../../services/api";
 
 const FinancialLedger = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const summaryData = {
-    sent: {
-      amount: "$36,500.50",
-      label: "Sent",
-      subtext: "12 invoice",
-    },
-    overdue: {
-      amount: "$12,500.50",
-      label: "Overdue",
-      subtext: "12 invoice",
-    },
-    paid: {
-      amount: "$24,500.50",
-      label: "Paid",
-      subtext: "12 invoice",
-    },
+  const [showAddTransaction, setShowAddTransaction] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [summaryData, setSummaryData] = useState({
+    sent: { amount: "$0.00", label: "Sent", subtext: "0 transactions" },
+    overdue: { amount: "$0.00", label: "Overdue", subtext: "0 transactions" },
+    paid: { amount: "$0.00", label: "Paid", subtext: "0 transactions" },
     score: {
       label: "Payment score",
       value: "Good",
       subtext: "Seamless payments, right on schedule",
     },
+  });
+
+  const fetchTransactions = async () => {
+    setLoading(true);
+    try {
+      const [expensesRes, incomesRes] = await Promise.all([
+        api.get("/expenses"),
+        api.get("/incomes"),
+      ]);
+
+      // Transform expenses (make amounts negative)
+      const expenses = expensesRes.data.map((expense) => ({
+        id: `expense-${expense.id}`,
+        date: new Date(expense.transaction_date).toLocaleDateString(),
+        description: expense.description || "",
+        amount: -Math.abs(expense.amount),
+        account: expense.bank_account || "",
+        method: expense.method || "",
+        entity: expense.entity || "",
+        type: "expense",
+      }));
+
+      // Transform incomes (keep amounts positive)
+      const incomes = incomesRes.data.map((income) => ({
+        id: `income-${income.id}`,
+        date: new Date(income.transaction_date).toLocaleDateString(),
+        description: income.description || "",
+        amount: Math.abs(income.amount),
+        account: income.bank_account || "",
+        method: income.method || "",
+        entity: income.entity || "",
+        type: "income",
+      }));
+
+      // Combine and sort by date
+      const combined = [...expenses, ...incomes].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
+
+      setTransactions(combined);
+
+      // Calculate summary data
+      const totalExpenses = Math.abs(
+        expenses.reduce((sum, exp) => sum + exp.amount, 0)
+      );
+      const totalIncome = incomes.reduce((sum, inc) => sum + inc.amount, 0);
+
+      setSummaryData({
+        sent: {
+          amount: `$${totalExpenses.toFixed(2)}`,
+          label: "Expenses",
+          subtext: `${expenses.length} transactions`,
+        },
+        overdue: {
+          amount: `$${totalIncome.toFixed(2)}`,
+          label: "Income",
+          subtext: `${incomes.length} transactions`,
+        },
+        paid: {
+          amount:
+            totalIncome - totalExpenses >= 0
+              ? `$${(totalIncome - totalExpenses).toFixed(2)}`
+              : `$(${Math.abs(totalIncome - totalExpenses).toFixed(2)})`,
+          label: "Net",
+          subtext: `${combined.length} total transactions`,
+        },
+        score: {
+          label: "Payment score",
+          value: totalIncome > totalExpenses ? "Good" : "Review",
+          subtext:
+            totalIncome > totalExpenses
+              ? "Income exceeds expenses"
+              : "Expenses exceed income",
+        },
+      });
+    } catch (err) {
+      setError("Failed to fetch transactions");
+      console.error("Error fetching transactions:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const transactions = [
-    {
-      id: 1,
-      date: "Mar 16",
-      description: "Github",
-      amount: -2450.5,
-      account: "Company savings",
-      method: "Other",
-      entity: "Github Inc.",
-    },
-    {
-      id: 2,
-      date: "Mar 15",
-      description: "H23504959",
-      amount: 16799.0,
-      account: "Company savings",
-      method: "Payment savings",
-      entity: "Client XYZ Corp",
-    },
-    {
-      id: 3,
-      date: "Mar 14",
-      description: "Figma",
-      amount: -199.5,
-      account: "Debit account",
-      method: "Card",
-      entity: "Figma Ltd",
-    },
-    {
-      id: 1,
-      date: "Mar 16",
-      description: "Github",
-      amount: -2450.5,
-      account: "Company savings",
-      method: "Other",
-      entity: "Github Inc.",
-    },
-    {
-      id: 2,
-      date: "Mar 15",
-      description: "H23504959",
-      amount: 16799.0,
-      account: "Company savings",
-      method: "Payment savings",
-      entity: "Client XYZ Corp",
-    },
-    {
-      id: 3,
-      date: "Mar 14",
-      description: "Figma",
-      amount: -199.5,
-      account: "Debit account",
-      method: "Card",
-      entity: "Figma Ltd",
-    },
-    {
-      id: 1,
-      date: "Mar 16",
-      description: "Github",
-      amount: -2450.5,
-      account: "Company savings",
-      method: "Other",
-      entity: "Github Inc.",
-    },
-    {
-      id: 2,
-      date: "Mar 15",
-      description: "H23504959",
-      amount: 16799.0,
-      account: "Company savings",
-      method: "Payment savings",
-      entity: "Client XYZ Corp",
-    },
-    {
-      id: 3,
-      date: "Mar 14",
-      description: "Figma",
-      amount: -199.5,
-      account: "Debit account",
-      method: "Card",
-      entity: "Figma Ltd",
-    },
-    {
-      id: 1,
-      date: "Mar 16",
-      description: "Github",
-      amount: -2450.5,
-      account: "Company savings",
-      method: "Other",
-      entity: "Github Inc.",
-    },
-    {
-      id: 2,
-      date: "Mar 15",
-      description: "H23504959",
-      amount: 16799.0,
-      account: "Company savings",
-      method: "Payment savings",
-      entity: "Client XYZ Corp",
-    },
-    {
-      id: 3,
-      date: "Mar 14",
-      description: "Figma",
-      amount: -199.5,
-      account: "Debit account",
-      method: "Card",
-      entity: "Figma Ltd",
-    },
-  ];
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   const handleRowSelect = (id) => {
     if (selectedRows.includes(id)) {
@@ -149,54 +116,52 @@ const FinancialLedger = () => {
     }
   };
 
+  // Filter transactions based on search term
+  const filteredTransactions = transactions.filter(
+    (transaction) =>
+      transaction.description
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      transaction.entity?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      transaction.account?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="ledger-container">
       <Sidebar />
       <TopNavigation />
 
       <div className="ledger-summary-boxes">
-        <div className="ledger-summary-box">
-          <div className="ledger-summary-amount">{summaryData.sent.amount}</div>
-          <div className="ledger-summary-label">{summaryData.sent.label}</div>
-          <div className="ledger-summary-subtext">
-            {summaryData.sent.subtext}
+        {Object.entries(summaryData).map(([key, data]) => (
+          <div
+            key={key}
+            className={`ledger-summary-box ${
+              key === "score" ? "ledger-score-box" : ""
+            }`}
+          >
+            {key === "score" ? (
+              <>
+                <div className="ledger-summary-score">{data.value}</div>
+                <div className="ledger-summary-label">{data.label}</div>
+                <div className="ledger-summary-subtext">{data.subtext}</div>
+                <div className="ledger-score-bars">
+                  {[...Array(8)].map((_, i) => (
+                    <div key={i} className="ledger-score-bar" />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="ledger-summary-amount">{data.amount}</div>
+                <div className="ledger-summary-label">{data.label}</div>
+                <div className="ledger-summary-subtext">{data.subtext}</div>
+              </>
+            )}
           </div>
-        </div>
-        <div className="ledger-summary-box">
-          <div className="ledger-summary-amount">
-            {summaryData.overdue.amount}
-          </div>
-          <div className="ledger-summary-label">
-            {summaryData.overdue.label}
-          </div>
-          <div className="ledger-summary-subtext">
-            {summaryData.overdue.subtext}
-          </div>
-        </div>
-        <div className="ledger-summary-box">
-          <div className="ledger-summary-amount">{summaryData.paid.amount}</div>
-          <div className="ledger-summary-label">{summaryData.paid.label}</div>
-          <div className="ledger-summary-subtext">
-            {summaryData.paid.subtext}
-          </div>
-        </div>
-        <div className="ledger-summary-box ledger-score-box">
-          <div className="ledger-summary-score">{summaryData.score.value}</div>
-          <div className="ledger-summary-label">{summaryData.score.label}</div>
-          <div className="ledger-summary-subtext">
-            {summaryData.score.subtext}
-          </div>
-          <div className="ledger-score-bars">
-            <div className="ledger-score-bar"></div>
-            <div className="ledger-score-bar"></div>
-            <div className="ledger-score-bar"></div>
-            <div className="ledger-score-bar"></div>
-            <div className="ledger-score-bar"></div>
-            <div className="ledger-score-bar"></div>
-            <div className="ledger-score-bar"></div>
-            <div className="ledger-score-bar"></div>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="ledger-table-section">
@@ -210,7 +175,12 @@ const FinancialLedger = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="ledger-add-button">+ Add Transaction</button>
+          <button
+            className="ledger-add-button"
+            onClick={() => setShowAddTransaction(true)}
+          >
+            + Add Transaction
+          </button>
         </div>
 
         <table className="ledger-transactions-table">
@@ -229,7 +199,7 @@ const FinancialLedger = () => {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction) => (
+            {filteredTransactions.map((transaction) => (
               <tr
                 key={transaction.id}
                 className={
@@ -269,6 +239,12 @@ const FinancialLedger = () => {
           </tbody>
         </table>
       </div>
+      {showAddTransaction && (
+        <AddTransaction
+          onClose={() => setShowAddTransaction(false)}
+          fetchData={fetchTransactions}
+        />
+      )}
     </div>
   );
 };

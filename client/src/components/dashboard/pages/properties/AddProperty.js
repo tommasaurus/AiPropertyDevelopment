@@ -1,4 +1,3 @@
-// AddProperty.jsx
 import React, { useState } from "react";
 import api from "../../../../services/api";
 import AddressAutocomplete from "../../addressAutocomplete/AddressAutocomplete";
@@ -27,53 +26,6 @@ const AddProperty = ({ onClose, fetchAllData }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const generateSmartPropertyDetails = () => {
-    // Generate random number of floors (1-4)
-    const floors = Math.floor(Math.random() * 4) + 1;
-
-    // Calculate bedrooms based on floors (2-4 bedrooms per floor)
-    const bedroomsPerFloor = Math.floor(Math.random() * 4) + 1;
-    const totalBedrooms = floors * bedroomsPerFloor;
-
-    // Calculate bathrooms (typically fewer than bedrooms)
-    const totalBathrooms = Math.max(floors, Math.ceil(totalBedrooms * 0.7));
-
-    // Base price per bedroom (350k-450k)
-    const pricePerBedroom = Math.random() * 150000 + 350000;
-
-    // Calculate total price based on bedrooms, floors, and a random factor
-    const basePrice = totalBedrooms * pricePerBedroom;
-    const floorMultiplier = 1 + (floors - 1) * 0.2; // Each additional floor adds 20%
-    const randomFactor = 0.9 + Math.random() * 0.2; // ±10% variation
-    const totalPrice = Math.round(basePrice * floorMultiplier * randomFactor);
-
-    // Property types based on size
-    const propertyTypes = [
-      "Single Family Home",
-      "Townhouse",
-      "Multi-Family Home",
-      "Apartment Complex",
-    ];
-    const propertyType =
-      propertyTypes[Math.min(floors - 1, propertyTypes.length - 1)];
-
-    // HOA fee based on property type and size
-    const baseHoaFee = 250;
-    const hoaFee = Math.round(
-      baseHoaFee * (floors * 0.5) * (Math.random() * 0.4 + 0.8)
-    );
-
-    return {
-      num_bedrooms: totalBedrooms,
-      num_bathrooms: totalBathrooms,
-      num_floors: floors,
-      purchase_price: totalPrice,
-      property_type: propertyType,
-      is_hoa: true,
-      hoa_fee: hoaFee,
-    };
-  };
-
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -93,24 +45,11 @@ const AddProperty = ({ onClose, fetchAllData }) => {
   };
 
   const handleNextAddStep = () => {
-    const { address, city, state, zipCode } = formData;
-
-    // Trim the values to check for empty strings
-    if (
-      !address?.trim() ||
-      !city?.trim() ||
-      !state?.trim() ||
-      !zipCode?.trim()
-    ) {
-      setErrorMessage("Please fill in all address fields.");
+    if (!formData.address?.trim()) {
+      setErrorMessage("Please enter an address.");
       return;
     }
 
-    const propertyDetails = generateSmartPropertyDetails();
-    setFormData((prev) => ({
-      ...prev,
-      ...propertyDetails,
-    }));
     setErrorMessage("");
     setAddStep(2);
   };
@@ -203,39 +142,6 @@ const AddProperty = ({ onClose, fetchAllData }) => {
                   onSelectAddress={handleSelectAddress}
                   value={formData.address}
                   onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>City</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>State</label>
-                <input
-                  type="text"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>ZIP Code</label>
-                <input
-                  type="text"
-                  name="zipCode"
-                  value={formData.zipCode}
-                  onChange={handleInputChange}
-                  required
                 />
               </div>
 

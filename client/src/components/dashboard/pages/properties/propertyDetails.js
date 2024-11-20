@@ -338,14 +338,16 @@ const PropertyDetails = ({
                       <th>Date</th>
                       <th>Amount</th>
                       <th>Category</th>
+                      <th>Description</th>
                     </tr>
                   </thead>
                   <tbody>
                     {propertyIncomes.map((income) => (
                       <tr key={income.id}>
-                        <td>{formatDate(income.date_received)}</td>
+                        <td>{formatDate(income.transaction_date)}</td>
                         <td>{formatCurrency(income.amount)}</td>
                         <td>{income.category}</td>
+                        <td>{income.description}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -364,7 +366,7 @@ const PropertyDetails = ({
                   <tbody>
                     {propertyExpenses.map((expense) => (
                       <tr key={expense.id}>
-                        <td>{formatDate(expense.date_incurred)}</td>
+                        <td>{formatDate(expense.transaction_date)}</td>
                         <td>{formatCurrency(expense.amount)}</td>
                         <td>{expense.category}</td>
                         <td>{expense.description}</td>
