@@ -33,7 +33,8 @@ const TopNavigation = () => {
     { type: "sidebar", label: "Properties", path: "/dashboard/properties" },
     { type: "sidebar", label: "Calendar", path: "/dashboard/calendar" },
     { type: "sidebar", label: "Tenants", path: "/dashboard/tenants" },
-    { type: "sidebar", label: "Messages", path: "/dashboard/messages" },
+    { type: "sidebar", label: "Finances", path: "/dashboard/finances" },
+    { type: "sidebar", label: "Vault", path: "/dashboard/vault" },
   ];
 
   useEffect(() => {

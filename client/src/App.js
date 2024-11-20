@@ -15,6 +15,7 @@ import Messages from "./components/dashboard/pages/messages/Messages";
 import Calendar from "./components/dashboard/pages/calendar/Calendar";
 import TenantPage from "./components/dashboard/pages/tenants/Tenant";
 import Vault from "./components/dashboard/pages/vault/Vault";
+import FinancialLedger from "./components/dashboard/pages/finances/FinancialLedger";
 import RequireAuth from "./components/RequireAuth";
 
 function LayoutWithNavbarFooter({ children }) {
@@ -47,7 +48,7 @@ function App() {
                   <Routes>
                     <Route path="" element={<Dashboard />} />
                     <Route path="properties" element={<Properties />} />
-                    <Route path="messages" element={<Messages />} />
+                    <Route path="finances" element={<FinancialLedger />} />
                     <Route path="calendar" element={<Calendar />} />
                     <Route path="tenants" element={<TenantPage />} />
                     <Route path="vault" element={<Vault />} />

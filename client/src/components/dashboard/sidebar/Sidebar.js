@@ -8,7 +8,7 @@ import {
   Settings,
   HelpCircle,
   LogOut,
-  MessagesSquare,
+  Landmark,
   Pin,
   Vault,
 } from "lucide-react";
@@ -68,16 +68,16 @@ const Sidebar = () => {
       active: window.location.pathname === "/dashboard/tenants",
     },
     {
+      icon: Landmark,
+      label: "Finances",
+      path: "/dashboard/finances",
+      active: window.location.pathname === "/dashboard/finances",
+    },
+    {
       icon: Vault,
       label: "Vault",
       path: "/dashboard/vault",
       active: window.location.pathname === "/dashboard/vault",
-    },
-    {
-      icon: MessagesSquare,
-      label: "Messages",
-      path: "/dashboard/messages",
-      active: window.location.pathname === "/dashboard/messages",
     },
   ];
 
