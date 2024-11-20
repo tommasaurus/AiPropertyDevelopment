@@ -9,6 +9,7 @@ import PropertyDetails from "./propertyDetails";
 import UploadDocument from "./UploadDocument";
 import AddProperty from "./AddProperty";
 import Chat from "../../chatBot/Chat";
+import Map from "../../Map/Map";
 import "./Properties.css";
 
 const Properties = () => {
@@ -258,6 +259,13 @@ const Properties = () => {
               </div>
             ))}
           </div>
+
+          {/* Map section */}
+          {filteredProperties.length > 0 && (
+            <div className="dashboard-map-container">
+              <Map />
+            </div>
+          )}
 
           {/* Error Message */}
           {errorMessage && <p className="error-message">{errorMessage}</p>}

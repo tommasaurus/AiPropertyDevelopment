@@ -68,16 +68,16 @@ const Sidebar = () => {
       active: window.location.pathname === "/dashboard/tenants",
     },
     {
-      icon: MessagesSquare,
-      label: "Messages",
-      path: "/dashboard/messages",
-      active: window.location.pathname === "/dashboard/messages",
-    },
-    {
       icon: Vault,
       label: "Vault",
       path: "/dashboard/vault",
       active: window.location.pathname === "/dashboard/vault",
+    },
+    {
+      icon: MessagesSquare,
+      label: "Messages",
+      path: "/dashboard/messages",
+      active: window.location.pathname === "/dashboard/messages",
     },
   ];
 

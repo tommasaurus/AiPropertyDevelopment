@@ -1,17 +1,11 @@
 // AddressAutocomplete.jsx
 import React, { useRef, useEffect } from "react";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMapsScript } from "../../../config/googleMapsConfig";
 import "./AddressAutocomplete.css";
-
-const libraries = ["places"];
 
 const AddressAutocomplete = ({ onSelectAddress, value, onChange }) => {
   const inputRef = useRef(null);
-
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries,
-  });
+  const { isLoaded, loadError } = useGoogleMapsScript();
 
   useEffect(() => {
     if (isLoaded && inputRef.current) {

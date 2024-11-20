@@ -1,6 +1,4 @@
-/* Dashboard.css */
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
-
+/* Base Layout */
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
@@ -13,7 +11,7 @@
   margin-top: 70px;
   margin-left: 73px;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0rem 2rem;
+  padding: 0 2rem;
   width: calc(100% - 73px);
   box-sizing: border-box;
 }
@@ -23,143 +21,202 @@ body.dashboard-sidebar-expanded .dashboard-main {
   width: calc(100% - 230px);
 }
 
-/* Header and Actions Styling */
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
-  padding: 0;
+.dashboard-content-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-.header-actions {
-  display: flex;
-  gap: 1rem;
+/* Map Container */
+.dashboard-map-container {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  height: 450px;
+  margin: 0.5rem auto; /* Changed to auto for horizontal centering */
+  max-width: calc(100% - 2rem); /* Account for padding */
+  width: 100%;
 }
 
-/* Button Styling */
-.nouveau-button {
+.dashboard-map-container .map-page {
+  height: 100%;
+}
+
+.dashboard-map-container .map-container {
+  height: 100%;
+  border-radius: 1rem;
+}
+
+.dashboard-map-container .map-page,
+.dashboard-map-container .map-container,
+.dashboard-map-container .map-container > div {
+  height: 100% !important;
+  width: 100% !important; /* Added to ensure map container respects parent width */
+}
+
+/* Hide Map Headers */
+.dashboard-map-container .header-container,
+.dashboard-map-container .header-actions,
+.dashboard-map-container .map-page > .header-container {
+  display: none;
+}
+
+/* Empty Dashboard */
+.empty-dashboard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-weight: 600;
-  font-size: 0.875rem;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
 }
 
-.nouveau-button.primary {
+.empty-dashboard-layout {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  z-index: 1001;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-dashboard-main {
+  background: transparent;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Welcome Section */
+.welcome-message h1 {
+  color: #1e293b;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.welcome-message p {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-icon {
+  color: #e17b50;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1.5rem;
+}
+
+/* Feature Cards */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: left;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  color: #e17b50;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.add-property-button {
   background: #e17b50;
   color: white;
-}
-
-.nouveau-button.secondary {
-  background: #f1efe7;
-  color: #000000;
-  border: 1px solid #000000;
-}
-
-.nouveau-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.button-icon {
-  width: 18px;
-  height: 18px;
-}
-
-/* Art Nouveau Border */
-.art-nouveau-border {
-  position: relative;
-  margin-top: -1rem;
-  padding: 1rem;
-  background: transparent;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.art-nouveau-corner {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-}
-
-.top-left {
-  top: 0;
-  left: 0;
-  border-right: none;
-  border-bottom: none;
-}
-
-.top-right {
-  top: 0;
-  right: 0;
-  border-left: none;
-  border-bottom: none;
-}
-
-.bottom-left {
-  bottom: 0;
-  left: 0;
-  border-right: none;
-  border-top: none;
-}
-
-.bottom-right {
-  bottom: 0;
-  right: 0;
-  border-left: none;
-  border-top: none;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .dashboard-main {
-    margin-left: 0;
-    width: 100%;
-    transform: translateX(0);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0.5rem 1rem;
-  }
-
-  body.dashboard-sidebar-expanded .dashboard-main {
-    margin-left: 0;
-    width: 100%;
-    transform: translateX(230px);
-  }
-
-  .header-container {
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .header-actions {
-    width: 100%;
-  }
-
-  .nouveau-button {
-    flex: 1;
-    justify-content: center;
-  }
-
-  .art-nouveau-corner {
-    width: 30px;
-    height: 30px;
-  }
-}
-
-/* Loading State */
-.loading-spinner {
-  display: flex;
-  justify-content: center;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
   align-items: center;
-  height: 100vh;
-  font-size: 1.2rem;
-  color: #8b6d5d;
+  gap: 0.5rem;
+}
+
+.add-property-button:hover {
+  background: #c66a45;
+  transform: translateY(-2px);
+}
+
+/* Utilities */
+.content-container {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-map-container {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-map-container {
+    height: 350px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-dashboard-main {
+    padding: 1rem;
+  }
 }
