@@ -1,4 +1,7 @@
 import React from "react";
+import { useEffect } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,16 +14,19 @@ import Frontpage from "./components/frontpage/frontpage";
 import ClientSignup from "./components/clientSignup/clientSignup";
 import Dashboard from "./components/dashboard/Dashboard";
 import Properties from "./components/dashboard/pages/properties/Properties";
+import FinancialLedger from "./components/dashboard/pages/finances/FinancialLedger";
 import Calendar from "./components/dashboard/pages/calendar/Calendar";
 import TenantPage from "./components/dashboard/pages/tenants/Tenant";
 import Vault from "./components/dashboard/pages/vault/Vault";
-import FinancialLedger from "./components/dashboard/pages/finances/FinancialLedger";
 import RequireAuth from "./components/RequireAuth";
 
 function LayoutWithNavbarFooter({ children }) {
   const location = useLocation();
-  // Check if current path is Frontpage or ClientSignup
-  const showNavbarFooter = location.pathname === "/";
+  // Updated condition to handle both root and hash routes
+  const showNavbarFooter =
+    location.pathname === "/" ||
+    location.pathname === "" ||
+    location.hash.includes("#");
 
   return (
     <>
@@ -32,6 +38,16 @@ function LayoutWithNavbarFooter({ children }) {
 }
 
 function App() {
+  useEffect(() => {
+    // Force HTTPS on Vercel deployment
+    if (
+      window.location.protocol === "http:" &&
+      window.location.hostname !== "localhost"
+    ) {
+      window.location.protocol = "https:";
+    }
+  }, []);
+
   return (
     <Router>
       <div className="App">
@@ -57,6 +73,8 @@ function App() {
             />
           </Routes>
         </LayoutWithNavbarFooter>
+        <SpeedInsights />
+        <Analytics />
       </div>
     </Router>
   );
