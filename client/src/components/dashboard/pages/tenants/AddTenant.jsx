@@ -132,7 +132,7 @@ const AddTenant = ({ onClose, fetchTenants }) => {
           ←
         </button>
         <h1>Add New Tenant</h1>
-        <button className="close-button" onClick={onClose}>
+        <button className="tenant-close-button" onClick={onClose}>
           ×
         </button>
       </div>
@@ -169,7 +169,7 @@ const AddTenant = ({ onClose, fetchTenants }) => {
             <div className="form-group profile-picture">
               <label>PROFILE PICTURE</label>
               <div className="profile-upload">
-                <div className="profile-placeholder">No Image</div>
+                <div className="profile-placeholder"></div>
                 <button type="button" className="change-photo-btn">
                   CHANGE PHOTO
                 </button>

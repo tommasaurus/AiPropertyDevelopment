@@ -290,7 +290,7 @@ const TopNavigation = () => {
         <div className="nav-items">
           <button className="notification-wrapper">
             <Bell size={20} />
-            <span className="notification-count">10</span>
+            <span className="notification-count">0</span>
           </button>
           <div className="user-profile">
             <img src={profilePhoto} alt="User avatar" className="user-avatar" />

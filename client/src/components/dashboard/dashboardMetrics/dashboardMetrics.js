@@ -33,8 +33,121 @@ import {
 } from "recharts";
 import "./dashboardMetrics.css";
 
-const DashboardMetrics = () => {
+const DashboardMetrics = ({
+  properties = [],
+  tenants = [],
+  incomes = [],
+  expenses = [],
+}) => {
   const [activeExpenseIndex, setActiveExpenseIndex] = useState(null);
+
+  // Calculate metrics
+  const totalProperties = properties.length;
+  const activeTenantsCount = tenants.length;
+  const paidRentsCount = incomes.length;
+
+  // Calculate residential vs commercial properties
+  const residentialCount = properties.filter((p) => !p.is_commercial).length;
+  const commercialCount = properties.filter((p) => p.is_commercial).length;
+
+  // Calculate monthly revenue (sum of all incomes for current month)
+  const calculateMonthlyRevenue = () => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const monthlyIncome = incomes
+      .filter((income) => {
+        const incomeDate = new Date(income.transaction_date);
+        return (
+          incomeDate.getMonth() === currentMonth &&
+          incomeDate.getFullYear() === currentYear
+        );
+      })
+      .reduce((total, income) => total + (income.amount || 0), 0);
+
+    return monthlyIncome;
+  };
+
+  // Calculate YTD revenue
+  const calculateYTDRevenue = () => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+
+    const ytdIncome = incomes
+      .filter((income) => {
+        const incomeDate = new Date(income.transaction_date);
+        return incomeDate.getFullYear() === currentYear;
+      })
+      .reduce((total, income) => total + (income.amount || 0), 0);
+
+    return ytdIncome;
+  };
+
+  // Get revenue metrics with defaults
+  const monthlyRevenue = calculateMonthlyRevenue();
+  const ytdRevenue = calculateYTDRevenue();
+
+  // Calculate revenue growth percentage
+  const calculateRevenueGrowth = () => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    // Current month revenue
+    const currentMonthRevenue = incomes
+      .filter((income) => {
+        const incomeDate = new Date(income.transaction_date);
+        return (
+          incomeDate.getMonth() === currentMonth &&
+          incomeDate.getFullYear() === currentYear
+        );
+      })
+      .reduce((total, income) => total + (income.amount || 0), 0);
+
+    // Previous month revenue
+    const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+    const previousMonthRevenue = incomes
+      .filter((income) => {
+        const incomeDate = new Date(income.transaction_date);
+        return (
+          incomeDate.getMonth() === previousMonth &&
+          incomeDate.getFullYear() === previousYear
+        );
+      })
+      .reduce((total, income) => total + (income.amount || 0), 0);
+
+    if (previousMonthRevenue === 0) return 0;
+    return (
+      ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) *
+      100
+    ).toFixed(1);
+  };
+
+  const revenueGrowth = calculateRevenueGrowth();
+
+  // Calculate monthly expense (sum of all expenses for current month)
+  const calculateMonthlyExpense = () => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const monthlyExpense = expenses
+      .filter((expense) => {
+        const expenseDate = new Date(expense.transaction_date);
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      })
+      .reduce((total, expense) => total + (expense.amount || 0), 0);
+
+    return monthlyExpense;
+  };
+
+  const monthlyExpense = calculateMonthlyExpense();
 
   const monthlyData = [
     { month: "Jun", revenue: 15000, expenses: 9000 },
@@ -144,11 +257,11 @@ const DashboardMetrics = () => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className='expense-tooltip'>
+        <div className="expense-tooltip">
           <h6>{data.name}</h6>
-          <p className='tooltip-value'>${data.amount.toLocaleString()}</p>
-          <p className='tooltip-percentage'>{data.value}% of total</p>
-          <p className='tooltip-trend'>Year over Year: {data.trend}</p>
+          <p className="tooltip-value">${data.amount.toLocaleString()}</p>
+          <p className="tooltip-percentage">{data.value}% of total</p>
+          <p className="tooltip-trend">Year over Year: {data.trend}</p>
         </div>
       );
     }
@@ -156,157 +269,171 @@ const DashboardMetrics = () => {
   };
 
   return (
-    <div className='dashboard-metrics'>
+    <div className="dashboard-metrics">
       {/* Top Metrics Row */}
-      <div className='metrics-row'>
-        <div className='metric-card'>
-          <div className='metric-header'>
-            <DollarSign className='metric-icon' />
-            <div className='trend-indicator'>
-              <ArrowUpRight className='trend-icon positive' />
-              <span className='trend-positive'>+2.1%</span>
+      <div className="metrics-row">
+        <div className="metric-card">
+          <div className="metric-header">
+            <DollarSign className="metric-icon" />
+            <div className="trend-indicator">
+              <ArrowUpRight className="trend-icon positive" />
+              <span
+                className={`trend-${
+                  revenueGrowth >= 0 ? "positive" : "negative"
+                }`}
+              >
+                {revenueGrowth > 0 ? "+" : ""}
+                {revenueGrowth}%
+              </span>
             </div>
           </div>
-          <div className='metric-content'>
-            <h3>$18,450</h3>
+          <div className="metric-content">
+            <h3>{monthlyRevenue.toLocaleString()}</h3>
             <p>Monthly Revenue</p>
-            <div className='metric-details'>
-              <span>YTD: $198,450</span>
-              <span>Target: $20,000</span>
+            <div className="metric-details">
+              <span>YTD: ${ytdRevenue.toLocaleString()}</span>
+              <span>Target: $0</span>
             </div>
           </div>
         </div>
 
-        <div className='metric-card'>
-          <div className='metric-header'>
-            <Building2 className='metric-icon' />
-            <div className='trend-indicator'>
-              <span className='trend-neutral'>92%</span>
+        <div className="metric-card">
+          <div className="metric-header">
+            <Building2 className="metric-icon" />
+            <div className="trend-indicator">
+              <span className="trend-neutral">100%</span>
             </div>
           </div>
-          <div className='metric-content'>
-            <h3>10</h3>
+          <div className="metric-content">
+            <h3>{totalProperties}</h3>
             <p>Total Properties</p>
-            <div className='metric-details'>
-              <span>8 Residential</span>
-              <span>2 Commercial</span>
+            <div className="metric-details">
+              <span>{residentialCount} Residential</span>
+              <span>{commercialCount} Commercial</span>
             </div>
           </div>
         </div>
 
-        <div className='metric-card'>
-          <div className='metric-header'>
-            <Users className='metric-icon' />
-            <div className='trend-indicator'>
-              <span className='trend-positive'>98%</span>
+        <div className="metric-card">
+          <div className="metric-header">
+            <Users className="metric-icon" />
+            <div className="trend-indicator">
+              <span className="trend-positive">100%</span>
             </div>
           </div>
-          <div className='metric-content'>
-            <h3>24</h3>
+          <div className="metric-content">
+            <h3>{activeTenantsCount}</h3>
             <p>Active Tenants</p>
-            <div className='metric-details'>
-              <span>2 New this month</span>
-              <span>1 Moving out</span>
+            <div className="metric-details">
+              <span>{activeTenantsCount} New this month</span>
+              <span>0 Moving out</span>
             </div>
           </div>
         </div>
 
-        <div className='metric-card'>
-          <div className='metric-header'>
-            <Receipt className='metric-icon' />
-            <div className='trend-indicator'>
-              <ArrowDownRight className='trend-icon negative' />
-              <span className='trend-negative'>3 Late</span>
+        <div className="metric-card">
+          <div className="metric-header">
+            <Receipt className="metric-icon" />
+            <div className="trend-indicator">
+              <ArrowDownRight className="trend-icon negative" />
+              <span className="trend-negative">0 Late</span>
             </div>
           </div>
-          <div className='metric-content'>
-            <h3>21</h3>
+          <div className="metric-content">
+            <h3>{paidRentsCount}</h3>
             <p>Paid Rents</p>
-            <div className='metric-details'>
-              <span>$5,200 Outstanding</span>
+            <div className="metric-details">
+              <span>$0 Outstanding</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Charts Row */}
-      <div className='charts-row'>
+      <div className="charts-row">
         {/* Revenue Trend */}
-        <div className='chart-card'>
-          <div className='chart-header'>
+        <div className="chart-card">
+          <div className="chart-header">
             <div>
               <h4>Revenue vs Expenses</h4>
-              <span className='subtitle'>Last 6 months</span>
+              <span className="subtitle">Last 6 months</span>
             </div>
-            <TrendingUp className='chart-icon' />
+            <TrendingUp className="chart-icon" />
           </div>
-          <div className='chart-content'>
-            <ResponsiveContainer width='100%' height={200}>
+          <div className="chart-content">
+            <ResponsiveContainer width="100%" height={200}>
               <LineChart data={monthlyData}>
-                <XAxis dataKey='month' axisLine={false} tickLine={false} />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} />
                 <YAxis axisLine={false} tickLine={false} />
                 <Tooltip />
                 <Line
-                  type='monotone'
-                  dataKey='revenue'
-                  stroke='#10b981'
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#10b981"
                   strokeWidth={2}
                   dot={false}
                 />
                 <Line
-                  type='monotone'
-                  dataKey='expenses'
-                  stroke='#ef4444'
+                  type="monotone"
+                  dataKey="expenses"
+                  stroke="#ef4444"
                   strokeWidth={2}
                   dot={false}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <div className='sub-metrics'>
-            <div className='sub-metric-card'>
-              <Wallet className='sub-metric-icon' />
+          <div className="sub-metrics">
+            <div className="sub-metric-card">
+              <Wallet className="sub-metric-icon" />
               <div>
                 <h5>Net Income</h5>
-                <span>$7,650</span>
+                <span>${monthlyRevenue.toLocaleString()}</span>
               </div>
             </div>
-            <div className='sub-metric-card'>
-              <TrendingUp className='sub-metric-icon' />
+            <div className="sub-metric-card">
+              <TrendingUp className="sub-metric-icon" />
               <div>
                 <h5>YoY Growth</h5>
-                <span>+15.2%</span>
+                <span>{revenueGrowth}%</span>
               </div>
             </div>
-            <div className='sub-metric-card'>
-              <Building className='sub-metric-icon' />
+            <div className="sub-metric-card">
+              <Building className="sub-metric-icon" />
               <div>
                 <h5>Avg. per Property</h5>
-                <span>$1,845</span>
+                <span>
+                  $
+                  {properties.length > 0
+                    ? (monthlyRevenue / properties.length).toLocaleString()
+                    : "0"}
+                </span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Enhanced Expense Breakdown */}
-        <div className='chart-card expense-card'>
-          <div className='chart-header'>
+        <div className="chart-card expense-card">
+          <div className="chart-header">
             <div>
               <h4>Expense Breakdown</h4>
-              <span className='subtitle'>Current month • Total: $20,000</span>
+              <span className="subtitle">
+                Current month • Total: ${monthlyExpense}
+              </span>
             </div>
-            <ChartPie className='chart-icon' />
+            <ChartPie className="chart-icon" />
           </div>
-          <div className='expense-content'>
-            <div className='expense-chart'>
-              <ResponsiveContainer width='100%' height={300}>
+          <div className="expense-content">
+            <div className="expense-chart">
+              <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
                     data={enhancedExpenseBreakdown}
-                    dataKey='value'
-                    nameKey='name'
-                    cx='50%'
-                    cy='50%'
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
                     innerRadius={70}
                     outerRadius={90}
                     activeIndex={activeExpenseIndex}
@@ -318,7 +445,7 @@ const DashboardMetrics = () => {
                       <Cell
                         key={`cell-${index}`}
                         fill={entry.color}
-                        className='expense-cell'
+                        className="expense-cell"
                       />
                     ))}
                   </Pie>
@@ -326,7 +453,7 @@ const DashboardMetrics = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className='expense-details'>
+            <div className="expense-details">
               {enhancedExpenseBreakdown.map((category, index) => (
                 <div
                   key={index}
@@ -336,32 +463,32 @@ const DashboardMetrics = () => {
                   onMouseEnter={() => setActiveExpenseIndex(index)}
                   onMouseLeave={() => setActiveExpenseIndex(null)}
                 >
-                  <div className='category-header'>
-                    <div className='category-title'>
+                  <div className="category-header">
+                    <div className="category-title">
                       <span
-                        className='category-dot'
+                        className="category-dot"
                         style={{ backgroundColor: category.color }}
                       />
                       <h6>{category.name}</h6>
                     </div>
-                    <div className='category-metrics'>
-                      <span className='category-amount'>
+                    <div className="category-metrics">
+                      <span className="category-amount">
                         ${category.amount.toLocaleString()}
                       </span>
-                      <span className='category-percentage'>
+                      <span className="category-percentage">
                         {category.value}%
                       </span>
                     </div>
                   </div>
-                  <div className='category-breakdown'>
+                  <div className="category-breakdown">
                     {category.breakdown.map((item, itemIndex) => (
-                      <div key={itemIndex} className='breakdown-item'>
-                        <div className='breakdown-label'>
+                      <div key={itemIndex} className="breakdown-item">
+                        <div className="breakdown-label">
                           <span>{item.name}</span>
                         </div>
-                        <div className='breakdown-values'>
+                        <div className="breakdown-values">
                           <span>${item.amount.toLocaleString()}</span>
-                          <span className='breakdown-percentage'>
+                          <span className="breakdown-percentage">
                             {item.value}%
                           </span>
                         </div>
@@ -376,54 +503,54 @@ const DashboardMetrics = () => {
       </div>
 
       {/* Property Management Row */}
-      <div className='management-row'>
+      <div className="management-row">
         {/* Maintenance Metrics */}
-        <div className='management-card'>
-          <div className='management-header'>
+        <div className="management-card">
+          <div className="management-header">
             <div>
               <h4>Maintenance Overview</h4>
-              <span className='subtitle'>Current month statistics</span>
+              <span className="subtitle">Current month statistics</span>
             </div>
-            <Wrench className='management-icon' />
+            <Wrench className="management-icon" />
           </div>
-          <div className='management-content'>
-            <ResponsiveContainer width='100%' height={120}>
+          <div className="management-content">
+            <ResponsiveContainer width="100%" height={120}>
               <BarChart data={maintenanceData}>
-                <XAxis dataKey='status' axisLine={false} tickLine={false} />
+                <XAxis dataKey="status" axisLine={false} tickLine={false} />
                 <YAxis axisLine={false} tickLine={false} />
-                <Bar dataKey='count' fill='#8b5cf6' />
+                <Bar dataKey="count" fill="#8b5cf6" />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Upcoming Renewals */}
-        <div className='management-card'>
-          <div className='management-header'>
+        <div className="management-card">
+          <div className="management-header">
             <div>
               <h4>Upcoming Renewals</h4>
-              <span className='subtitle'>Next 30 days</span>
+              <span className="subtitle">Next 30 days</span>
             </div>
-            <CalendarClock className='management-icon' />
+            <CalendarClock className="management-icon" />
           </div>
-          <div className='renewal-list'>
-            <div className='renewal-item'>
-              <Home className='renewal-icon' />
-              <div className='renewal-details'>
+          <div className="renewal-list">
+            <div className="renewal-item">
+              <Home className="renewal-icon" />
+              <div className="renewal-details">
                 <h5>123 Main St, Apt 4B</h5>
                 <p>Due in 7 days • Current rent: $1,500</p>
               </div>
             </div>
-            <div className='renewal-item'>
-              <Building className='renewal-icon' />
-              <div className='renewal-details'>
+            <div className="renewal-item">
+              <Building className="renewal-icon" />
+              <div className="renewal-details">
                 <h5>456 Commerce Ave, Suite 201</h5>
                 <p>Due in 14 days • Current rent: $2,800</p>
               </div>
             </div>
-            <div className='renewal-item'>
-              <Home className='renewal-icon' />
-              <div className='renewal-details'>
+            <div className="renewal-item">
+              <Home className="renewal-icon" />
+              <div className="renewal-details">
                 <h5>789 Park Rd, Unit 2A</h5>
                 <p>Due in 21 days • Current rent: $1,800</p>
               </div>
@@ -432,32 +559,32 @@ const DashboardMetrics = () => {
         </div>
 
         {/* Task Summary */}
-        <div className='management-card'>
-          <div className='management-header'>
+        <div className="management-card">
+          <div className="management-header">
             <div>
               <h4>Task Summary</h4>
-              <span className='subtitle'>Today's overview</span>
+              <span className="subtitle">Today's overview</span>
             </div>
-            <CheckCircle className='management-icon' />
+            <CheckCircle className="management-icon" />
           </div>
-          <div className='task-list'>
-            <div className='task-item urgent'>
-              <Clock className='task-icon' />
-              <div className='task-details'>
+          <div className="task-list">
+            <div className="task-item urgent">
+              <Clock className="task-icon" />
+              <div className="task-details">
                 <h5>Urgent Inspection</h5>
                 <p>Unit 4B - Water leak reported</p>
               </div>
             </div>
-            <div className='task-item'>
-              <Users className='task-icon' />
-              <div className='task-details'>
+            <div className="task-item">
+              <Users className="task-icon" />
+              <div className="task-details">
                 <h5>Tenant Meeting</h5>
                 <p>2:00 PM - New lease signing</p>
               </div>
             </div>
-            <div className='task-item'>
-              <Wrench className='task-icon' />
-              <div className='task-details'>
+            <div className="task-item">
+              <Wrench className="task-icon" />
+              <div className="task-details">
                 <h5>Maintenance Follow-up</h5>
                 <p>HVAC repair completion check</p>
               </div>

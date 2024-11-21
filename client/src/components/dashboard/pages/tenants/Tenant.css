@@ -21,6 +21,10 @@ body.dashboard-sidebar-expanded .tenant-page-container {
   width: calc(100% - 230px);
 }
 
+body.dashboard-sidebar-expanded .search-box {
+  width: 250px;
+}
+
 .tenant-page-header {
   display: flex;
   justify-content: space-between;

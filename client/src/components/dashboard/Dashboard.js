@@ -15,22 +15,35 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const [properties, setProperties] = useState([]);
+  const [tenants, setTenants] = useState([]);
+  const [incomes, setIncomes] = useState([]);
+  const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const fetchProperties = async () => {
+  const fetchFields = async () => {
     try {
-      const response = await api.get("/properties");
-      setProperties(response.data);
+      const [propertiesRes, tenantsRes, incomesRes, expensesRes] =
+        await Promise.all([
+          api.get("/properties"),
+          api.get("/tenants"),
+          api.get("/incomes"),
+          api.get("/expenses"),
+        ]);
+
+      setProperties(propertiesRes.data);
+      setTenants(tenantsRes.data);
+      setIncomes(incomesRes.data);
+      setExpenses(expensesRes.data);
     } catch (error) {
-      console.error("Error fetching properties:", error);
+      console.error("Error fetching fields:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProperties();
+    fetchFields();
   }, []);
 
   useEffect(() => {
@@ -74,7 +87,12 @@ const Dashboard = () => {
             <div className="header-actions"></div>
           </div>
           <div className="dashboard-content-wrapper">
-            <DashboardMetrics properties={properties} />
+            <DashboardMetrics
+              properties={properties}
+              tenants={tenants}
+              incomes={incomes}
+              expenses={expenses}
+            />
             {properties.length === 0 ? (
               <div className="empty-dashboard-overlay">
                 <EmptyDashboard />

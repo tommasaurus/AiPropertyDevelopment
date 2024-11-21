@@ -510,6 +510,10 @@
   .management-row {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .metric-card {
+    margin-top: 0; /* Remove negative margin when in compressed view */
+  }
 }
 
 @media (max-width: 1024px) {
