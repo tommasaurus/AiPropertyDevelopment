@@ -79,6 +79,7 @@
 
 .login-page-logo img {
   max-width: 165px;
+  margin-top: 0.5rem;
   height: auto;
 }
 
@@ -125,14 +126,14 @@
   border-color: #d1d5db;
 }
 
-.divider {
+.login-divider {
   text-align: center;
   margin: 1.5rem 0;
   position: relative;
 }
 
-.divider::before,
-.divider::after {
+.login-divider::before,
+.login-divider::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -141,14 +142,14 @@
   background-color: #e3e8ee;
 }
 
-.divider::before {
+.login-divider::before {
   left: 0;
 }
-.divider::after {
+.login-divider::after {
   right: 0;
 }
 
-.divider span {
+.login-divider span {
   background-color: white;
   padding: 0 16px;
   color: #697386;
@@ -224,6 +225,17 @@
   padding: 0;
 }
 
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.remember-me-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 .custom-checkbox {
   appearance: none;
   width: 16px;
@@ -233,6 +245,7 @@
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
+  margin: 0;
 }
 
 .custom-checkbox:checked {
@@ -253,6 +266,8 @@
 .checkbox-text {
   font-size: 14px;
   color: #1a1f36;
+  margin-left: 0.5rem;
+  line-height: 1;
 }
 
 .sign-in-button {

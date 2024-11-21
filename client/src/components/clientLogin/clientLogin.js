@@ -126,7 +126,7 @@ const ClientLogin = () => {
           Continue with Google
         </button>
 
-        <div className="divider">
+        <div className="login-divider">
           <span>or sign in with username</span>
         </div>
 
@@ -171,7 +171,7 @@ const ClientLogin = () => {
           </div>
 
           <div className="remember-me">
-            <label className="checkbox-container">
+            <label className="remember-me-label">
               <input
                 type="checkbox"
                 checked={rememberMe}
