@@ -1,4 +1,3 @@
-/* src/components/properties/UploadDocument.css */
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 
 :root {
@@ -12,7 +11,7 @@
   --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-.modal {
+.uploadlease-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -26,11 +25,11 @@
   padding: 2rem;
 }
 
-.modal-content {
+.uploadlease-modal-content {
   background: var(--modal-bg);
   border-radius: 24px;
   width: 90%;
-  max-width: 700px;
+  max-width: 600px;
   max-height: 85vh;
   overflow: hidden;
   position: relative;
@@ -38,7 +37,7 @@
   border: 2px solid var(--border-color);
 }
 
-.modal-header {
+.uploadlease-modal-header {
   padding: 1.5rem;
   border-bottom: 2px solid var(--border-color);
   display: flex;
@@ -47,13 +46,13 @@
   background: var(--primary-bg);
 }
 
-.header-content {
+.uploadlease-header-content {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.header-icon {
+.uploadlease-header-icon {
   width: 42px;
   height: 42px;
   background: var(--modal-bg);
@@ -65,7 +64,7 @@
   border: 2px solid var(--border-color);
 }
 
-.modal-header h2 {
+.uploadlease-modal-header h2 {
   margin: 0;
   color: var(--text-primary);
   font-size: 1.5rem;
@@ -73,7 +72,7 @@
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 
-.close-button {
+.uploadlease-close-button {
   width: 42px;
   height: 42px;
   border-radius: 12px;
@@ -87,79 +86,31 @@
   transition: all 0.2s ease;
 }
 
-.close-button:hover {
+.uploadlease-close-button:hover {
   background: var(--hover-bg);
   transform: rotate(90deg);
 }
 
-.upload-container {
+.uploadlease-container {
   background: var(--primary-bg);
   height: calc(100% - 80px);
   display: flex;
   flex-direction: column;
 }
 
-/* Steps Indicator */
-.steps-indicator {
-  display: flex;
-  justify-content: space-between;
-  padding: 1.5rem;
-  gap: 1rem;
-}
-
-.step {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: var(--modal-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-weight: 500;
-}
-
-.step.active {
-  background: var(--accent-color);
-  color: white;
-  border-color: transparent;
-}
-
-.step-number {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: currentColor;
-  color: var(--modal-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-}
-
-.step.active .step-number {
-  background: white;
-  color: var(--accent-color);
-}
-
-/* Upload Content */
-.upload-content {
+.uploadlease-content {
   padding: 1.5rem;
   flex-grow: 1;
   overflow-y: auto;
 }
 
-.upload-step {
+.uploadlease-step {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* File Drop Area */
-.file-drop-area {
+.uploadlease-file-drop-area {
   border: 2px dashed var(--border-color);
   border-radius: 16px;
   padding: 2.5rem;
@@ -172,36 +123,35 @@
   transition: all 0.3s ease;
 }
 
-.file-drop-area:hover {
+.uploadlease-file-drop-area:hover {
   border-color: var(--accent-color);
   background: var(--hover-bg);
 }
 
-.file-drop-area.active {
+.uploadlease-file-drop-area.active {
   border-style: solid;
   border-color: var(--accent-color);
 }
 
-.upload-icon {
+.uploadlease-upload-icon {
   color: var(--accent-color);
   opacity: 0.8;
 }
 
-.upload-text {
+.uploadlease-upload-text {
   font-size: 1.1rem;
   font-weight: 500;
   color: var(--text-primary);
   margin: 0;
 }
 
-.upload-subtext {
+.uploadlease-upload-subtext {
   font-size: 0.9rem;
   color: var(--text-secondary);
   margin: 0;
 }
 
-/* File Preview */
-.file-preview {
+.uploadlease-file-preview {
   background: var(--modal-bg);
   border-radius: 12px;
   padding: 1rem;
@@ -211,14 +161,14 @@
   border: 2px solid var(--border-color);
 }
 
-.file-info {
+.uploadlease-file-info {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   color: var(--text-primary);
 }
 
-.remove-file {
+.uploadlease-remove-file {
   background: none;
   border: none;
   color: #dc2626;
@@ -231,86 +181,22 @@
   transition: all 0.2s ease;
 }
 
-.remove-file:hover {
+.uploadlease-remove-file:hover {
   background: rgba(220, 38, 38, 0.1);
 }
 
-/* Document Type Selection */
-.section-title {
-  margin-bottom: 1.5rem;
+.uploadlease-property-option {
+  margin: 1.5rem 0;
 }
 
-.section-title h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 0.5rem 0;
-}
-
-.section-description {
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-.document-type-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.document-type-box {
-  padding: 1rem;
-  background: var(--modal-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.document-type-box:hover {
-  border-color: var(--accent-color);
-  background: var(--hover-bg);
-}
-
-.document-type-box.selected {
-  background: var(--accent-color);
-  color: white;
-  border-color: transparent;
-}
-
-.custom-type-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  font-size: 1rem;
-  background: var(--modal-bg);
-  transition: all 0.3s ease;
-}
-
-.custom-type-input:focus {
-  border-color: var(--accent-color);
-  outline: none;
-  box-shadow: 0 0 0 3px var(--hover-bg);
-}
-
-/* Property Selection */
-.property-option {
-  margin-bottom: 1.5rem;
-}
-
-.checkbox-wrapper {
+.uploadlease-checkbox-wrapper {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
 }
 
-.checkbox-wrapper input[type="checkbox"] {
+.uploadlease-checkbox-wrapper input[type="checkbox"] {
   width: 20px;
   height: 20px;
   border: 2px solid var(--border-color);
@@ -318,18 +204,18 @@
   accent-color: var(--accent-color);
 }
 
-.checkbox-label {
+.uploadlease-checkbox-label {
   font-weight: 500;
   color: var(--text-primary);
 }
 
-.help-text {
+.uploadlease-help-text {
   margin: 0.5rem 0 0;
   color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
-.property-select {
+.uploadlease-property-select {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 2px solid var(--border-color);
@@ -340,14 +226,13 @@
   transition: all 0.3s ease;
 }
 
-.property-select:focus {
+.uploadlease-property-select:focus {
   border-color: var(--accent-color);
   outline: none;
   box-shadow: 0 0 0 3px var(--hover-bg);
 }
 
-/* Error Message */
-.error-message {
+.uploadlease-error-message {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -359,18 +244,15 @@
   border: 1px solid #fee2e2;
 }
 
-/* Footer */
-.modal-footer {
+.uploadlease-modal-footer {
   padding: 1.5rem;
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
   border-top: 2px solid var(--border-color);
   background: var(--primary-bg);
 }
 
-.primary-button,
-.secondary-button {
+.uploadlease-primary-button {
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-weight: 600;
@@ -382,77 +264,82 @@
   min-width: 120px;
   justify-content: center;
   font-family: "Plus Jakarta Sans", sans-serif;
-}
-
-.primary-button {
   background: var(--accent-color);
   color: white;
   border: none;
+  cursor: pointer;
 }
 
-.primary-button:hover:not(:disabled) {
+.uploadlease-primary-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-.secondary-button {
-  background: var(--modal-bg);
-  color: var(--text-primary);
-  border: 2px solid var(--border-color);
-}
-
-.secondary-button:hover {
-  background: var(--hover-bg);
-}
-
-.primary-button:disabled {
+.uploadlease-primary-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
 /* Scrollbar Styling */
-.modal-content::-webkit-scrollbar,
-.upload-content::-webkit-scrollbar {
+.uploadlease-modal-content::-webkit-scrollbar,
+.uploadlease-content::-webkit-scrollbar {
   width: 8px;
 }
 
-.modal-content::-webkit-scrollbar-track,
-.upload-content::-webkit-scrollbar-track {
+.uploadlease-modal-content::-webkit-scrollbar-track,
+.uploadlease-content::-webkit-scrollbar-track {
   background: var(--primary-bg);
   border-radius: 4px;
 }
 
-.modal-content::-webkit-scrollbar-thumb,
-.upload-content::-webkit-scrollbar-thumb {
+.uploadlease-modal-content::-webkit-scrollbar-thumb,
+.uploadlease-content::-webkit-scrollbar-thumb {
   background: var(--accent-color);
   border-radius: 4px;
 }
 
-.modal-content::-webkit-scrollbar-thumb:hover,
-.upload-content::-webkit-scrollbar-thumb:hover {
+.uploadlease-modal-content::-webkit-scrollbar-thumb:hover,
+.uploadlease-content::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .modal {
+  .uploadlease-modal {
     padding: 1rem;
   }
 
-  .steps-indicator {
+  .uploadlease-modal-content {
+    width: 95%;
+  }
+
+  .uploadlease-modal-footer {
     flex-direction: column;
   }
 
-  .document-type-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .modal-footer {
-    flex-direction: column-reverse;
-  }
-
-  .primary-button,
-  .secondary-button {
+  .uploadlease-primary-button {
     width: 100%;
+  }
+
+  .uploadlease-header-content {
+    gap: 0.75rem;
+  }
+
+  .uploadlease-modal-header h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .uploadlease-upload-text {
+    font-size: 1rem;
+  }
+
+  .uploadlease-upload-subtext {
+    font-size: 0.8rem;
+  }
+
+  .uploadlease-file-drop-area {
+    padding: 1.5rem;
   }
 }

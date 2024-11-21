@@ -1,6 +1,6 @@
-// src/components/properties/UploadDocument.js
+// src/components/dashboard/UploadDocument.js
 import React, { useState, useRef } from "react";
-import api from "../../../../services/api";
+import api from "../../../services/api";
 import {
   Upload,
   X,
@@ -142,17 +142,17 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
   };
 
   return (
-    <div className='modal'>
-      <div className='modal-content'>
-        <div className='modal-header'>
-          <div className='header-content'>
-            <div className='header-icon'>
+    <div className="modal">
+      <div className="modal-content">
+        <div className="modal-header">
+          <div className="header-content">
+            <div className="header-icon">
               <FileText size={24} />
             </div>
             <h2>Upload Document</h2>
           </div>
           <button
-            className='close-button'
+            className="close-button"
             onClick={() => {
               onClose();
               resetUploadStates();
@@ -162,27 +162,27 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
           </button>
         </div>
 
-        <div className='upload-container'>
+        <div className="upload-container">
           {/* Steps Indicator */}
-          <div className='steps-indicator'>
+          <div className="steps-indicator">
             <div className={`step ${uploadStep >= 1 ? "active" : ""}`}>
-              <div className='step-number'>1</div>
+              <div className="step-number">1</div>
               <span>Upload File</span>
             </div>
             <div className={`step ${uploadStep >= 2 ? "active" : ""}`}>
-              <div className='step-number'>2</div>
+              <div className="step-number">2</div>
               <span>Document Type</span>
             </div>
             <div className={`step ${uploadStep >= 3 ? "active" : ""}`}>
-              <div className='step-number'>3</div>
+              <div className="step-number">3</div>
               <span>Property Details</span>
             </div>
           </div>
 
-          <div className='upload-content'>
+          <div className="upload-content">
             {/* Step 1: Upload File */}
             {uploadStep === 1 && (
-              <div className='upload-step'>
+              <div className="upload-step">
                 <div
                   className={`file-drop-area ${file ? "active" : ""}`}
                   onDragOver={(e) => e.preventDefault()}
@@ -197,29 +197,29 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <input
-                    type='file'
+                    type="file"
                     ref={fileInputRef}
                     onChange={handleFileChange}
                     style={{ display: "none" }}
-                    accept='image/*,.pdf,.doc,.docx'
+                    accept="image/*,.pdf,.doc,.docx"
                   />
-                  <Upload size={48} className='upload-icon' />
-                  <p className='upload-text'>
+                  <Upload size={48} className="upload-icon" />
+                  <p className="upload-text">
                     Drag & drop files here, or click to upload
                   </p>
-                  <p className='upload-subtext'>
+                  <p className="upload-subtext">
                     Supported formats: PDF, DOC, DOCX, Images
                   </p>
                 </div>
 
                 {file && (
-                  <div className='file-preview'>
-                    <div className='file-info'>
+                  <div className="file-preview">
+                    <div className="file-info">
                       <FileText size={20} />
                       <span>{file.name}</span>
                     </div>
                     <button
-                      className='remove-file'
+                      className="remove-file"
                       onClick={() => setFile(null)}
                     >
                       <Trash2 size={20} />
@@ -231,16 +231,16 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
 
             {/* Step 2: Document Type */}
             {uploadStep === 2 && (
-              <div className='upload-step'>
-                <div className='section-title'>
+              <div className="upload-step">
+                <div className="section-title">
                   <h3>Document Type</h3>
-                  <p className='section-description'>
+                  <p className="section-description">
                     The document type has been determined as:{" "}
                     <strong>{selectedDocType}</strong>
                   </p>
                 </div>
 
-                <div className='document-type-grid'>
+                <div className="document-type-grid">
                   {documentTypes.map((type) => (
                     <div
                       key={type}
@@ -259,9 +259,9 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
 
                 {selectedDocType === "Other" && (
                   <input
-                    type='text'
-                    className='custom-type-input'
-                    placeholder='Enter custom document type'
+                    type="text"
+                    className="custom-type-input"
+                    placeholder="Enter custom document type"
                     value={customDocType}
                     onChange={(e) => setCustomDocType(e.target.value)}
                   />
@@ -271,27 +271,27 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
 
             {/* Step 3: Property Selection */}
             {uploadStep === 3 && (
-              <div className='upload-step'>
-                <div className='section-title'>
+              <div className="upload-step">
+                <div className="section-title">
                   <h3>Property Details</h3>
                 </div>
 
                 {selectedDocType.toLowerCase() === "lease" && (
-                  <div className='property-option'>
-                    <label className='checkbox-wrapper'>
+                  <div className="property-option">
+                    <label className="checkbox-wrapper">
                       <input
-                        type='checkbox'
+                        type="checkbox"
                         checked={useExistingProperty}
                         onChange={(e) => {
                           setUseExistingProperty(e.target.checked);
                           if (!e.target.checked) setSelectedProperty(null);
                         }}
                       />
-                      <span className='checkbox-label'>
+                      <span className="checkbox-label">
                         Link to Existing Property
                       </span>
                     </label>
-                    <p className='help-text'>
+                    <p className="help-text">
                       {useExistingProperty
                         ? "Select an existing property below"
                         : "Property information will be extracted from the lease"}
@@ -309,9 +309,9 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
                       );
                       setSelectedProperty(property);
                     }}
-                    className='property-select'
+                    className="property-select"
                   >
-                    <option value='' disabled>
+                    <option value="" disabled>
                       Select a property
                     </option>
                     {properties.map((property) => (
@@ -326,7 +326,7 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
 
             {/* Error Message */}
             {errorMessage && (
-              <div className='error-message'>
+              <div className="error-message">
                 <AlertCircle size={20} />
                 <span>{errorMessage}</span>
               </div>
@@ -334,10 +334,10 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
           </div>
 
           {/* Footer Actions */}
-          <div className='modal-footer'>
+          <div className="modal-footer">
             {uploadStep > 1 && (
               <button
-                className='secondary-button'
+                className="secondary-button"
                 onClick={() => {
                   setUploadStep((prev) => prev - 1);
                   setErrorMessage("");
@@ -349,7 +349,7 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
 
             {uploadStep < 3 && (
               <button
-                className='primary-button'
+                className="primary-button"
                 onClick={
                   uploadStep === 1
                     ? handleDetermineDocType
@@ -369,7 +369,7 @@ const UploadDocument = ({ properties, onClose, fetchAllData }) => {
 
             {uploadStep === 3 && (
               <button
-                className='primary-button'
+                className="primary-button"
                 onClick={handleProcessDocument}
                 disabled={uploading}
               >

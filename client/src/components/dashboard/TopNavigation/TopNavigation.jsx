@@ -1,11 +1,10 @@
-// src/components/TopNavigation/TopNavigation.js
-
 import React, { useState, useEffect, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { Bell } from "lucide-react";
+import { Bell, Upload } from "lucide-react";
 import api from "../../../services/api";
 import PropertyDetails from "../pages/properties/propertyDetails";
+import UploadDocument from "../uploadDocument/UploadDocument";
 import profilePhoto from "../../../assets/img/DefaultProfilePhoto.webp";
 import "./TopNavigation.css";
 
@@ -15,7 +14,8 @@ const TopNavigation = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [userName, setUserName] = useState("");
-  const [selectedProperty, setSelectedProperty] = useState(null); // New state for selected property
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
   const suggestionsRef = useRef(null);
   const inputRef = useRef(null);
@@ -120,12 +120,10 @@ const TopNavigation = () => {
           activeSuggestionIndex < suggestions.length
         ) {
           e.preventDefault();
-          // Only set the query, do not open the popup
           const suggestion = suggestions[activeSuggestionIndex];
           setQuery(suggestion.label);
           setSuggestions([]);
           setActiveSuggestionIndex(-1);
-          // Do not open the popup
         }
       } else if (e.key === "Enter") {
         e.preventDefault();
@@ -149,7 +147,6 @@ const TopNavigation = () => {
 
   const handleSuggestionClick = (suggestion) => {
     selectSuggestion(suggestion);
-    // Now, if it's a property, open the popup
     if (suggestion.type === "property") {
       const property = properties.find((p) => p.id === suggestion.id);
       setSelectedProperty(property);
@@ -288,6 +285,13 @@ const TopNavigation = () => {
         </div>
 
         <div className="nav-items">
+          <button
+            className="upload-wrapper"
+            onClick={() => setShowUploadModal(true)}
+          >
+            <Upload size={20} />
+            <span>Upload</span>
+          </button>
           <button className="notification-wrapper">
             <Bell size={20} />
             <span className="notification-count">0</span>
@@ -299,11 +303,18 @@ const TopNavigation = () => {
         </div>
       </div>
 
-      {/* Render PropertyDetails Popup */}
       {selectedProperty && (
         <PropertyDetails
           property={selectedProperty}
           onClose={() => setSelectedProperty(null)}
+        />
+      )}
+
+      {showUploadModal && (
+        <UploadDocument
+          properties={properties}
+          onClose={() => setShowUploadModal(false)}
+          fetchAllData={() => {}}
         />
       )}
     </div>

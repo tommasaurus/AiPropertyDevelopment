@@ -3,6 +3,7 @@ import { Search, Settings, Plus, Folder, ChevronRight } from "lucide-react";
 import { toast } from "react-toastify";
 import Sidebar from "../../sidebar/Sidebar";
 import TopNavigation from "../../TopNavigation/TopNavigation";
+import Chat from "../../chatBot/Chat";
 import api from "../../../../services/api";
 import VaultRowPopup from "./VaultRowPopup";
 import "./Vault.css";
@@ -313,6 +314,7 @@ const Vault = () => {
     <div className="vault-container">
       <Sidebar />
       <TopNavigation />
+      <Chat />
       <div className="vault-content">
         <h2 className="vault-recent-activity-title">Recent activity</h2>
 

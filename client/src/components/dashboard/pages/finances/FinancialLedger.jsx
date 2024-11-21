@@ -4,6 +4,7 @@ import Sidebar from "../../sidebar/Sidebar";
 import TopNavigation from "../../TopNavigation/TopNavigation";
 import AddTransaction from "./AddTransaction";
 import api from "../../../../services/api";
+import Chat from "../../chatBot/Chat";
 
 const FinancialLedger = () => {
   const [selectedRows, setSelectedRows] = useState([]);
@@ -133,6 +134,7 @@ const FinancialLedger = () => {
     <div className="ledger-container">
       <Sidebar />
       <TopNavigation />
+      <Chat />
 
       <div className="ledger-summary-boxes">
         {Object.entries(summaryData).map(([key, data]) => (

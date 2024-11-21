@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import api from "../../../../services/api";
 import AddressAutocomplete from "../../addressAutocomplete/AddressAutocomplete";
-import { Home, X, ChevronRight } from "lucide-react";
+import UploadLease from "../../uploadDocument/UploadLease";
+import { Home, X, ChevronRight, Upload } from "lucide-react";
 import "./AddProperty.css";
 
 const AddProperty = ({ onClose, fetchAllData }) => {
@@ -25,6 +26,7 @@ const AddProperty = ({ onClose, fetchAllData }) => {
   const [addStep, setAddStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showLeaseUpload, setShowLeaseUpload] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -105,6 +107,7 @@ const AddProperty = ({ onClose, fetchAllData }) => {
     setAddStep(1);
     setErrorMessage("");
     setIsSubmitting(false);
+    setShowLeaseUpload(false);
   };
 
   return (
@@ -122,154 +125,184 @@ const AddProperty = ({ onClose, fetchAllData }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="steps-indicator">
-            <div className={`step ${addStep === 1 ? "active" : ""}`}>
-              <div className="step-number">1</div>
-              <span>Address Information</span>
-            </div>
-            <div className={`step ${addStep === 2 ? "active" : ""}`}>
-              <div className="step-number">2</div>
-              <span>Property Details</span>
-            </div>
+        {showLeaseUpload ? (
+          <div className="back-section">
+            <button
+              className="back-button"
+              onClick={() => setShowLeaseUpload(false)}
+            >
+              Back to Address Entry
+            </button>
+            <UploadLease
+              onClose={() => {
+                onClose();
+                setShowLeaseUpload(false);
+              }}
+              fetchAllData={fetchAllData}
+            />
           </div>
-
-          {addStep === 1 && (
-            <div className="form-grid">
-              <div className="form-group full-width">
-                <label>Address</label>
-                <AddressAutocomplete
-                  onSelectAddress={handleSelectAddress}
-                  value={formData.address}
-                  onChange={handleInputChange}
-                />
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className="steps-indicator">
+              <div className={`step ${addStep === 1 ? "active" : ""}`}>
+                <div className="step-number">1</div>
+                <span>Address Information</span>
               </div>
-
-              {errorMessage && (
-                <div className="error-message">{errorMessage}</div>
-              )}
-
-              <div className="button-group">
-                <button
-                  type="button"
-                  className="primary-button"
-                  onClick={handleNextAddStep}
-                >
-                  Next <ChevronRight size={22} strokeWidth={2.5} />
-                </button>
+              <div className={`step ${addStep === 2 ? "active" : ""}`}>
+                <div className="step-number">2</div>
+                <span>Property Details</span>
               </div>
             </div>
-          )}
 
-          {addStep === 2 && (
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Bedrooms</label>
-                <input
-                  type="number"
-                  name="num_bedrooms"
-                  value={formData.num_bedrooms}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Bathrooms</label>
-                <input
-                  type="number"
-                  name="num_bathrooms"
-                  value={formData.num_bathrooms}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Floors</label>
-                <input
-                  type="number"
-                  name="num_floors"
-                  value={formData.num_floors}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Purchase Price</label>
-                <input
-                  type="number"
-                  name="purchase_price"
-                  value={formData.purchase_price}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Property Type</label>
-                <input
-                  type="text"
-                  name="property_type"
-                  value={formData.property_type}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="checkbox-section">
-                <div className="checkbox-group">
-                  <input
-                    type="checkbox"
-                    name="is_commercial"
-                    checked={formData.is_commercial}
+            {addStep === 1 && (
+              <div className="form-grid">
+                <div className="form-group full-width">
+                  <label>Address</label>
+                  <AddressAutocomplete
+                    onSelectAddress={handleSelectAddress}
+                    value={formData.address}
                     onChange={handleInputChange}
                   />
-                  <label>Commercial Property</label>
                 </div>
 
-                <div className="checkbox-group">
+                {errorMessage && (
+                  <div className="error-message">{errorMessage}</div>
+                )}
+
+                <div className="divider">
+                  <span>OR</span>
+                </div>
+
+                <div
+                  className="upload-option"
+                  onClick={() => setShowLeaseUpload(true)}
+                >
+                  <Upload size={24} />
+                  <span>Upload a lease document instead</span>
+                </div>
+
+                <div className="button-group">
+                  <button
+                    type="button"
+                    className="primary-button"
+                    onClick={handleNextAddStep}
+                  >
+                    Next <ChevronRight size={22} strokeWidth={2.5} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {addStep === 2 && (
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Bedrooms</label>
                   <input
-                    type="checkbox"
-                    name="is_hoa"
-                    checked={formData.is_hoa}
+                    type="number"
+                    name="num_bedrooms"
+                    value={formData.num_bedrooms}
                     onChange={handleInputChange}
                   />
-                  <label>HOA Property</label>
                 </div>
 
-                {formData.is_hoa && (
-                  <div className="form-group">
-                    <label>HOA Fee</label>
+                <div className="form-group">
+                  <label>Bathrooms</label>
+                  <input
+                    type="number"
+                    name="num_bathrooms"
+                    value={formData.num_bathrooms}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Floors</label>
+                  <input
+                    type="number"
+                    name="num_floors"
+                    value={formData.num_floors}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Purchase Price</label>
+                  <input
+                    type="number"
+                    name="purchase_price"
+                    value={formData.purchase_price}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Property Type</label>
+                  <input
+                    type="text"
+                    name="property_type"
+                    value={formData.property_type}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="checkbox-section">
+                  <div className="checkbox-group">
                     <input
-                      type="number"
-                      name="hoa_fee"
-                      value={formData.hoa_fee}
+                      type="checkbox"
+                      name="is_commercial"
+                      checked={formData.is_commercial}
                       onChange={handleInputChange}
                     />
+                    <label>Commercial Property</label>
                   </div>
+
+                  <div className="checkbox-group">
+                    <input
+                      type="checkbox"
+                      name="is_hoa"
+                      checked={formData.is_hoa}
+                      onChange={handleInputChange}
+                    />
+                    <label>HOA Property</label>
+                  </div>
+
+                  {formData.is_hoa && (
+                    <div className="form-group">
+                      <label>HOA Fee</label>
+                      <input
+                        type="number"
+                        name="hoa_fee"
+                        value={formData.hoa_fee}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {errorMessage && (
+                  <div className="error-message">{errorMessage}</div>
                 )}
-              </div>
 
-              {errorMessage && (
-                <div className="error-message">{errorMessage}</div>
-              )}
-
-              <div className="button-group">
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={() => setAddStep(1)}
-                >
-                  Back
-                </button>
-                <button
-                  type="submit"
-                  className="primary-button"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Adding..." : "Add Property"}
-                </button>
+                <div className="button-group">
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => setAddStep(1)}
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    className="primary-button"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Adding..." : "Add Property"}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-        </form>
+            )}
+          </form>
+        )}
       </div>
     </div>
   );

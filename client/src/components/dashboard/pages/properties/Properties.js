@@ -6,7 +6,7 @@ import Sidebar from "../../sidebar/Sidebar";
 import TopNavigation from "../../TopNavigation/TopNavigation";
 import api from "../../../../services/api";
 import PropertyDetails from "./propertyDetails";
-import UploadDocument from "./UploadDocument";
+import UploadDocument from "../../uploadDocument/UploadDocument";
 import AddProperty from "./AddProperty";
 import Chat from "../../chatBot/Chat";
 import Map from "../../Map/Map";

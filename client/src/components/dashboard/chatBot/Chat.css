@@ -1,7 +1,7 @@
 /* Chat.css */
 .popup-chat-container {
   position: fixed;
-  bottom: 8vh;
+  bottom: 6vh;
   right: 4vh;
   width: 400px;
   height: 600px;
@@ -25,7 +25,7 @@
 
 .chat-trigger {
   position: fixed;
-  bottom: 8vh;
+  bottom: 6vh;
   right: 4vh;
   display: flex;
   align-items: center;

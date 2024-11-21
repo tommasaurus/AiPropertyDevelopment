@@ -39,12 +39,13 @@ body.dashboard-sidebar-expanded .top-navigation {
   margin-left: 1.5rem;
   height: 40px;
   padding: 8px 40px 8px 38px; /* Changed left padding from 16px to 40px */
-  border: 1px solid #744b3e;
   border-radius: 9px;
   font-size: 14px;
   font-weight: 500;
   background-color: #fcfeff;
   transition: all 0.2s ease;
+  border: 1px solid rgba(225, 123, 80, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle depth */
 }
 
 .top-navigation .search-input:focus {
@@ -166,6 +167,38 @@ body.dashboard-sidebar-expanded .top-navigation {
 .top-navigation .suggestion-item:hover,
 .top-navigation .suggestion-item.active {
   background-color: #fdf5f1; /* Lighter, more subtle hover state */
+  color: #e17b50;
+}
+
+/* Upload Document Button */
+.upload-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 15px;
+  transition: background-color 0.2s ease;
+  border: 0;
+  background-color: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: #e17b50;
+  cursor: pointer;
+  gap: 8px;
+  border: 1px solid rgba(225, 123, 80, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle depth */
+}
+
+.upload-wrapper svg {
+  color: #a85c3c;
+  transition: color 0.2s ease;
+}
+
+.upload-wrapper:hover {
+  background-color: #fef8f0;
+}
+
+.upload-wrapper:hover svg {
   color: #e17b50;
 }
 
