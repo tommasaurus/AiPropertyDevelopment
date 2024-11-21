@@ -18,23 +18,26 @@ const Dashboard = () => {
   const [tenants, setTenants] = useState([]);
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
+  const [leases, setLeases] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchFields = async () => {
     try {
-      const [propertiesRes, tenantsRes, incomesRes, expensesRes] =
+      const [propertiesRes, tenantsRes, incomesRes, expensesRes, leasesRes] =
         await Promise.all([
           api.get("/properties"),
           api.get("/tenants"),
           api.get("/incomes"),
           api.get("/expenses"),
+          api.get("/leases"),
         ]);
 
       setProperties(propertiesRes.data);
       setTenants(tenantsRes.data);
       setIncomes(incomesRes.data);
       setExpenses(expensesRes.data);
+      setLeases(leasesRes.data);
     } catch (error) {
       console.error("Error fetching fields:", error);
     } finally {
@@ -92,6 +95,7 @@ const Dashboard = () => {
               tenants={tenants}
               incomes={incomes}
               expenses={expenses}
+              leases={leases}
             />
             {properties.length === 0 ? (
               <div className="empty-dashboard-overlay">

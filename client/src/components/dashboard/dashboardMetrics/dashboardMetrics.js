@@ -38,6 +38,7 @@ const DashboardMetrics = ({
   tenants = [],
   incomes = [],
   expenses = [],
+  leases = [],
 }) => {
   const [activeExpenseIndex, setActiveExpenseIndex] = useState(null);
 
@@ -66,7 +67,12 @@ const DashboardMetrics = ({
       })
       .reduce((total, income) => total + (income.amount || 0), 0);
 
-    return monthlyIncome;
+    // Add monthly rent from active leases
+    const monthlyLeaseIncome = leases
+      .filter((lease) => lease.is_active)
+      .reduce((total, lease) => total + (lease.rent_amount_monthly || 0), 0);
+
+    return monthlyIncome + monthlyLeaseIncome;
   };
 
   // Calculate YTD revenue
