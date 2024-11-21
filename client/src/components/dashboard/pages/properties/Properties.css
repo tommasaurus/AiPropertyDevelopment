@@ -142,6 +142,9 @@
   border: 1px solid #000000;
   overflow: hidden;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
 }
 
 .property-card:hover {
@@ -174,6 +177,7 @@
 
 .property-card-content {
   padding: 1.5rem;
+  flex: 1;
 }
 
 .property-address {
@@ -211,6 +215,7 @@
   padding: 1rem 1.5rem;
   background: #f9f9f9;
   border-top: 1px solid #f0f0f0;
+  margin-top: auto;
 }
 
 .purchase-date {
