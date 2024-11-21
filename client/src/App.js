@@ -11,7 +11,6 @@ import Frontpage from "./components/frontpage/frontpage";
 import ClientSignup from "./components/clientSignup/clientSignup";
 import Dashboard from "./components/dashboard/Dashboard";
 import Properties from "./components/dashboard/pages/properties/Properties";
-import Messages from "./components/dashboard/pages/messages/Messages";
 import Calendar from "./components/dashboard/pages/calendar/Calendar";
 import TenantPage from "./components/dashboard/pages/tenants/Tenant";
 import Vault from "./components/dashboard/pages/vault/Vault";

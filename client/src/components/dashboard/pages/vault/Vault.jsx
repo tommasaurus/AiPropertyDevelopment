@@ -172,6 +172,7 @@ const Vault = () => {
       "invoice_id",
       "tenant_id",
       "contract_id",
+      "vendor_id",
       "property",
       "tenants",
       "payments",
