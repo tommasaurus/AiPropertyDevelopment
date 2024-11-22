@@ -111,6 +111,23 @@ const Properties = () => {
     return totalRent;
   };
 
+  // Get the earliest lease end date attached to a specific property
+  const getEarliestLeaseEndDate = (propertyId) => {
+    const propertyLeases = leases.filter(
+      (lease) =>
+        lease.property_id === propertyId && lease.is_active && lease.end_date
+    );
+
+    if (propertyLeases.length === 0) return null;
+
+    const earliestEndDate = propertyLeases.reduce((earliest, lease) => {
+      const endDate = new Date(lease.end_date);
+      return earliest === null || endDate < earliest ? endDate : earliest;
+    }, null);
+
+    return earliestEndDate;
+  };
+
   // Fetch all data
   const fetchAllData = async () => {
     setIsLoading(true);
@@ -267,7 +284,8 @@ const Properties = () => {
                 </div>
                 <div className="property-card-footer">
                   <span className="purchase-date">
-                    Purchased: {formatDate(property.purchase_date)}
+                    Lease Ends:{" "}
+                    {formatDate(getEarliestLeaseEndDate(property.id))}
                   </span>
                 </div>
               </div>
