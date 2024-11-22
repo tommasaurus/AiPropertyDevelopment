@@ -22,7 +22,6 @@ async def signup_user(db: AsyncSession, email: str, password: str, name: str):
 
     if user:
         if user.hashed_password is None:
-            # The email is registered via OAuth
             raise HTTPException(
                 status_code=400,
                 detail="Email is associated with a social account. Please log in using that method."
@@ -41,7 +40,16 @@ async def signup_user(db: AsyncSession, email: str, password: str, name: str):
         await db.rollback()
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    return {"msg": "User created successfully"}
+    # Generate tokens immediately after successful signup
+    access_token = create_access_token(data={"sub": normalized_email})
+    refresh_token = create_refresh_token(data={"sub": normalized_email})
+
+    return {
+        "msg": "User created successfully",
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer"
+    }
 
 # Login service
 async def login_user(db: AsyncSession, email: str, password: str):

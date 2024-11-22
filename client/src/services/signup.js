@@ -8,10 +8,10 @@ const signupUser = async (name, email, password) => {
       password: password,
       name: name,
     });
-    console.log("User signed up successfully:", response.data);
+
+    // Return the full response data which now includes tokens
     return response.data;
   } catch (error) {
-    // Extract the error message from the response
     const errorMessage =
       error.response?.data?.detail?.[0]?.msg ||
       error.response?.data?.detail ||

@@ -59,8 +59,20 @@ const ClientSignup = () => {
     }
 
     try {
-      await signupUser(name, email, password);
-      navigate("/dashboard");
+      const response = await signupUser(name, email, password);
+
+      // Store tokens if signup was successful
+      if (response.access_token) {
+        // Store access token in memory or state management solution
+        localStorage.setItem("access_token", response.access_token);
+
+        // The refresh token should be automatically set as a cookie by the backend
+
+        // Navigate to dashboard after successful signup and token storage
+        navigate("/dashboard");
+      } else {
+        navigate("/login"); // Fallback in case tokens aren't received
+      }
     } catch (error) {
       const errorDetail = error.response?.data?.detail;
       setError(errorDetail || error.message || "Signup failed");
