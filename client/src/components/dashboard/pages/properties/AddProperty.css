@@ -1,4 +1,4 @@
-/* AddProperty.css */
+/* Base styles and variables */
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 
 :root {
@@ -12,7 +12,8 @@
   --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-.modal {
+/* Modal Structure */
+.add-property-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -26,7 +27,7 @@
   padding: 2rem;
 }
 
-.modal-content {
+.add-property-modal-content {
   background: var(--modal-bg);
   border-radius: 24px;
   width: 90%;
@@ -38,7 +39,8 @@
   border: 2px solid var(--border-color);
 }
 
-.modal-header {
+/* Modal Header */
+.add-property-modal-header {
   padding: 1.5rem;
   border-bottom: 2px solid var(--border-color);
   display: flex;
@@ -65,7 +67,7 @@
   border: 2px solid var(--border-color);
 }
 
-.modal-header h2 {
+.add-property-modal-header h2 {
   margin: 0;
   color: var(--text-primary);
   font-size: 1.5rem;
@@ -139,7 +141,7 @@
   color: var(--accent-color);
 }
 
-/* Form Elements */
+/* Form Layout */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -158,6 +160,7 @@
   grid-column: 1 / -1;
 }
 
+/* Form Elements */
 .form-group label {
   font-size: 0.875rem;
   font-weight: 500;
@@ -181,7 +184,7 @@
   box-shadow: 0 0 0 3px var(--hover-bg);
 }
 
-/* Checkbox Section */
+/* Checkbox Styles */
 .checkbox-section {
   grid-column: 1 / -1;
   display: flex;
@@ -224,12 +227,10 @@
   border-top: 2px solid var(--border-color);
 }
 
-.primary-button {
+.primary-button,
+.secondary-button {
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  background: var(--accent-color);
-  color: white;
-  border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -239,6 +240,12 @@
   font-weight: 600;
   font-size: 0.9rem;
   min-width: 120px;
+}
+
+.primary-button {
+  background: var(--accent-color);
+  color: white;
+  border: none;
 }
 
 .primary-button:hover {
@@ -247,20 +254,9 @@
 }
 
 .secondary-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
   background: var(--modal-bg);
   color: var(--text-primary);
   border: 2px solid var(--border-color);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-weight: 600;
-  font-size: 0.9rem;
-  min-width: 120px;
 }
 
 .secondary-button:hover {
@@ -268,9 +264,9 @@
 }
 
 /* Messages */
-.error-message {
+.add-property-modal .error-message {
   grid-column: 1 / -1;
-  margin: 1rem 0;
+  margin: 0.5rem;
   padding: 1rem;
   border-radius: 12px;
   color: #dc3545;
@@ -278,60 +274,78 @@
   border: 1px solid #dc3545;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 500;
-}
-
-/* Upload Lease Section */
-.back-section {
-  background: var(--primary-bg);
-  padding: 1.5rem;
-}
-
-.back-button {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
 }
 
-.back-button:hover {
-  color: var(--accent-color);
-}
-
-.upload-option {
+/* File Upload Area */
+.uploadlease-file-drop-area {
   grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
+  border: 2px dashed var(--border-color);
+  border-radius: 16px;
+  padding: 3rem 2rem;
   background: var(--modal-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: var(--text-primary);
-  font-weight: 500;
+  width: 100%;
+  min-height: 240px;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.upload-option:hover {
-  background: var(--hover-bg);
+.uploadlease-file-drop-area:hover {
   border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-.upload-option svg {
+.uploadlease-icon {
   color: var(--accent-color);
+  width: 54px;
+  height: 54px;
+  margin-bottom: 0.5rem;
 }
 
+.uploadlease-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.uploadlease-subtext {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+/* File Preview */
+.file-preview {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--modal-bg);
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+/* Divider */
 .divider {
   text-align: center;
   position: relative;
   grid-column: 1 / -1;
-  margin: 1.5rem 0;
+  margin: 0.4rem 0;
 }
 
 .divider::before {
@@ -350,6 +364,25 @@
   color: var(--text-secondary);
   position: relative;
   font-weight: 500;
+}
+
+/* Scrollbar */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--primary-bg);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
 
 /* Responsive Design */
@@ -375,23 +408,4 @@
     width: 100%;
     justify-content: center;
   }
-}
-
-/* Scrollbar Styling */
-.modal-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal-content::-webkit-scrollbar-track {
-  background: var(--primary-bg);
-  border-radius: 4px;
-}
-
-.modal-content::-webkit-scrollbar-thumb {
-  background: var(--accent-color);
-  border-radius: 4px;
-}
-
-.modal-content::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
 }
