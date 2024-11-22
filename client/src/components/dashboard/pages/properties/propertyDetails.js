@@ -70,8 +70,8 @@ const PropertyDetails = ({
       setIsDeleting(true);
       console.log("Attempting to delete property:", property.id);
       await onDelete(property.id);
-      setShowDeleteModal(false); // Close the modal on success
-      onClose(); // Close the property details
+      setShowDeleteModal(false);
+      onClose();
     } catch (error) {
       console.error("Delete confirmation error:", error);
       toast.error("Failed to delete property. Please try again.");
@@ -131,11 +131,9 @@ const PropertyDetails = ({
     (p) => p.property_id === property.id
   );
 
-  const currentTenantIds = propertyLeases
-    .filter((lease) => lease.is_active)
-    .map((lease) => lease.tenant_id);
-  const propertyTenants = tenants.filter((t) =>
-    currentTenantIds.includes(t.id)
+  // Updated tenant filtering logic
+  const propertyTenants = tenants.filter(
+    (tenant) => tenant.property_id === property.id
   );
 
   const formatLeaseTerms = (specialLeaseTerms) => {
@@ -195,7 +193,7 @@ const PropertyDetails = ({
           <div className="modal-header-buttons">
             <button
               className="delete-property-button"
-              onClick={() => setShowDeleteModal(true)} // CORRECT
+              onClick={() => setShowDeleteModal(true)}
             >
               Delete Property
             </button>
@@ -278,16 +276,32 @@ const PropertyDetails = ({
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {propertyTenants.map((tenant) => (
-                    <tr key={tenant.id}>
-                      <td>{`${tenant.first_name} ${tenant.last_name}`}</td>
-                      <td>{tenant.email}</td>
-                      <td>{tenant.phone}</td>
+                  {propertyTenants.length > 0 ? (
+                    propertyTenants.map((tenant) => (
+                      <tr key={tenant.id}>
+                        <td>{`${tenant.first_name} ${tenant.last_name}`}</td>
+                        <td>{tenant.email || "N/A"}</td>
+                        <td>{tenant.phone_number || "N/A"}</td>
+                        <td>
+                          <span
+                            className={`status-badge ${tenant.status?.toLowerCase()}`}
+                          >
+                            {tenant.status || "Unknown"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        No tenants found for this property
+                      </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             )}
