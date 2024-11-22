@@ -97,6 +97,20 @@ const Properties = () => {
     return dateString ? new Date(dateString).toLocaleDateString() : "N/A";
   };
 
+  // Calculate total monthly rent for a property
+  const calculateTotalMonthlyRent = (propertyId) => {
+    const propertyLeases = leases.filter(
+      (lease) => lease.property_id === propertyId && lease.is_active
+    );
+
+    const totalRent = propertyLeases.reduce(
+      (sum, lease) => sum + (lease.rent_amount_monthly || 0),
+      0
+    );
+
+    return totalRent;
+  };
+
   // Fetch all data
   const fetchAllData = async () => {
     setIsLoading(true);
@@ -236,9 +250,9 @@ const Properties = () => {
                       </span>
                     </div>
                     <div className="detail-item">
-                      <span className="detail-label">Purchase Price</span>
+                      <span className="detail-label">Monthly Rent</span>
                       <span className="detail-value">
-                        {formatCurrency(property.purchase_price)}
+                        {formatCurrency(calculateTotalMonthlyRent(property.id))}
                       </span>
                     </div>
                     <div className="detail-item">
