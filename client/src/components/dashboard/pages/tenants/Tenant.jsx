@@ -167,7 +167,13 @@ const TenantPage = () => {
                     <span className="label">Monthly Rent</span>
                     <span className="value">
                       {tenant.lease && tenant.lease.rent_amount_monthly
-                        ? `$${tenant.lease.rent_amount_monthly}`
+                        ? `$${tenant.lease.rent_amount_monthly.toLocaleString(
+                            undefined,
+                            {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            }
+                          )}`
                         : "N/A"}
                     </span>
                   </div>

@@ -90,7 +90,12 @@ const Properties = () => {
   // Helper functions
   const formatCurrency = (value) => {
     const num = Number(value);
-    return !isNaN(num) ? `$${num.toFixed(2)}` : "N/A";
+    return !isNaN(num)
+      ? `$${num.toLocaleString(undefined, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        })}`
+      : "N/A";
   };
 
   const formatDate = (dateString) => {

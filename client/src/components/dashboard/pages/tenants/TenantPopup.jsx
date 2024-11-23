@@ -138,7 +138,13 @@ const TenantPopup = ({ tenant, onClose, fetchTenants }) => {
                   <span className="popup-label">Monthly Rent</span>
                   <span className="popup-value">
                     {tenant.lease && tenant.lease.rent_amount_monthly
-                      ? `$${tenant.lease.rent_amount_monthly}`
+                      ? `$${tenant.lease.rent_amount_monthly.toLocaleString(
+                          undefined,
+                          {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }
+                        )}`
                       : "N/A"}
                   </span>
                 </div>
