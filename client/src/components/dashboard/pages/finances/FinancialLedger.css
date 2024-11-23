@@ -14,6 +14,20 @@ body.dashboard-sidebar-expanded .ledger-container {
   width: calc(100% - 230px);
 }
 
+.ledger-search-filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.ledger-button-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .ledger-summary-boxes {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -67,8 +81,13 @@ body.dashboard-sidebar-expanded .ledger-container {
 .ledger-score-bar {
   flex: 1;
   height: 4px;
-  background-color: #4caf50;
   border-radius: 2px;
+  background-color: #4caf50;
+  transition: background-color 0.3s ease;
+}
+
+.ledger-score-box[data-status="negative"] .ledger-score-bar {
+  background-color: #dc2626;
 }
 
 .ledger-table-section {
@@ -76,6 +95,11 @@ body.dashboard-sidebar-expanded .ledger-container {
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 20px;
+}
+
+.ledger-table-wrapper {
+  position: relative;
+  overflow: auto;
 }
 
 .ledger-search-filter-bar {
@@ -204,4 +228,135 @@ tr[data-positive="true"] td.ledger-amount {
 
 .ledger-checkbox:hover {
   border-color: #d9d9d9;
+}
+
+/* Row Action Menu Styles */
+.row-action-menu {
+  position: fixed;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  z-index: 1000;
+  min-width: 120px;
+}
+
+.row-action-delete-button {
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.row-action-delete-button:hover {
+  background-color: #f3f4f6;
+}
+
+/* Delete Modal Styles */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.delete-modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  margin: 0 16px;
+}
+
+.delete-modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.delete-modal-message {
+  margin-bottom: 24px;
+  color: #4b5563;
+}
+
+.delete-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.delete-modal-cancel-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.delete-modal-cancel-button:hover {
+  background-color: #e5e7eb;
+}
+
+.delete-modal-confirm-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #dc2626;
+  color: white;
+  cursor: pointer;
+}
+
+.delete-modal-confirm-button:hover {
+  background-color: #b91c1c;
+}
+
+/* Table Button Styles */
+.selected-delete-button {
+  padding: 10px 16px; /* Match add transaction button padding */
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px; /* Match add transaction button radius */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px; /* Match add transaction button font size */
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.selected-delete-button:hover {
+  background-color: #b91c1c;
+}
+
+.table-more-options-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+}
+
+.table-more-options-button:hover {
+  color: #374151;
 }

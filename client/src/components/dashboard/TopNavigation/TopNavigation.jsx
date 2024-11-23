@@ -8,7 +8,7 @@ import UploadDocument from "../uploadDocument/UploadDocument";
 import profilePhoto from "../../../assets/img/DefaultProfilePhoto.webp";
 import "./TopNavigation.css";
 
-const TopNavigation = () => {
+const TopNavigation = ({ onDataUpdate }) => {
   const [query, setQuery] = useState("");
   const [properties, setProperties] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
@@ -314,7 +314,12 @@ const TopNavigation = () => {
         <UploadDocument
           properties={properties}
           onClose={() => setShowUploadModal(false)}
-          fetchAllData={() => {}}
+          fetchAllData={() => {
+            // Call the onDataUpdate prop after successful upload
+            if (onDataUpdate) {
+              onDataUpdate();
+            }
+          }}
         />
       )}
     </div>

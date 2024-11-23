@@ -1,10 +1,99 @@
 import React, { useState, useEffect } from "react";
+import { X, AlertTriangle, MoreVertical, Trash } from "lucide-react";
+import { toast } from "react-toastify";
 import "./FinancialLedger.css";
 import Sidebar from "../../sidebar/Sidebar";
 import TopNavigation from "../../TopNavigation/TopNavigation";
 import AddTransaction from "./AddTransaction";
 import api from "../../../../services/api";
 import Chat from "../../chatBot/Chat";
+
+// Row Action Menu Component
+const RowActionMenu = ({ isOpen, onClose, onDelete, position }) => {
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    setShowConfirm(true);
+    onClose(); // Close the menu when showing confirm
+  };
+
+  return (
+    <>
+      <div
+        className="row-action-menu"
+        style={{
+          position: "fixed",
+          top: `${position.y}px`,
+          left: `${position.x}px`,
+          transform: "translate(-100%, -50%)", // Center vertically and position to left
+        }}
+      >
+        <button
+          onClick={handleDeleteClick}
+          className="row-action-delete-button"
+        >
+          <Trash size={16} />
+          Delete
+        </button>
+      </div>
+
+      {showConfirm && (
+        <DeleteConfirmModal
+          isOpen={true}
+          onClose={() => setShowConfirm(false)}
+          onConfirm={() => {
+            onDelete();
+            setShowConfirm(false);
+          }}
+          count={1}
+        />
+      )}
+    </>
+  );
+};
+
+// Delete Confirmation Modal Component
+const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, count }) => {
+  if (!isOpen) return null;
+
+  const handleConfirm = (e) => {
+    e.stopPropagation();
+    onConfirm();
+  };
+
+  return (
+    <div className="delete-modal-overlay">
+      <div className="delete-modal-content">
+        <h3 className="delete-modal-title">Confirm Delete</h3>
+        <p className="delete-modal-message">
+          Are you sure you want to delete {count} selected{" "}
+          {count === 1 ? "transaction" : "transactions"}? This action cannot be
+          undone.
+        </p>
+        <div className="delete-modal-buttons">
+          <button onClick={onClose} className="delete-modal-cancel-button">
+            Cancel
+          </button>
+          <button
+            onClick={handleConfirm}
+            className="delete-modal-confirm-button"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const formatNumberWithCommas = (number) => {
+  const parts = Math.abs(number).toFixed(2).split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `$${number < 0 ? "(" : ""}${parts.join(".")}${number < 0 ? ")" : ""}`;
+};
 
 const FinancialLedger = () => {
   const [selectedRows, setSelectedRows] = useState([]);
@@ -13,6 +102,12 @@ const FinancialLedger = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [actionMenu, setActionMenu] = useState({
+    isOpen: false,
+    position: { x: 0, y: 0 },
+    transactionId: null,
+  });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [summaryData, setSummaryData] = useState({
     sent: { amount: "$0.00", label: "Sent", subtext: "0 transactions" },
     overdue: { amount: "$0.00", label: "Overdue", subtext: "0 transactions" },
@@ -68,33 +163,32 @@ const FinancialLedger = () => {
         expenses.reduce((sum, exp) => sum + exp.amount, 0)
       );
       const totalIncome = incomes.reduce((sum, inc) => sum + inc.amount, 0);
+      const netAmount = totalIncome - totalExpenses;
+      const isPositive = totalIncome > totalExpenses;
 
       setSummaryData({
         sent: {
-          amount: `$${totalExpenses.toFixed(2)}`,
+          amount: formatNumberWithCommas(totalExpenses),
           label: "Expenses",
           subtext: `${expenses.length} transactions`,
         },
         overdue: {
-          amount: `$${totalIncome.toFixed(2)}`,
+          amount: formatNumberWithCommas(totalIncome),
           label: "Income",
           subtext: `${incomes.length} transactions`,
         },
         paid: {
-          amount:
-            totalIncome - totalExpenses >= 0
-              ? `$${(totalIncome - totalExpenses).toFixed(2)}`
-              : `$(${Math.abs(totalIncome - totalExpenses).toFixed(2)})`,
+          amount: formatNumberWithCommas(netAmount),
           label: "Net",
           subtext: `${combined.length} total transactions`,
         },
         score: {
           label: "Payment score",
-          value: totalIncome > totalExpenses ? "Good" : "Review",
-          subtext:
-            totalIncome > totalExpenses
-              ? "Income exceeds expenses"
-              : "Expenses exceed income",
+          value: isPositive ? "Good" : "Review",
+          subtext: isPositive
+            ? "Income exceeds expenses"
+            : "Expenses exceed income",
+          status: isPositive ? "positive" : "negative", // Add this line
         },
       });
     } catch (err) {
@@ -105,17 +199,97 @@ const FinancialLedger = () => {
     }
   };
 
+  const refreshData = () => {
+    fetchTransactions();
+  };
+
   useEffect(() => {
     fetchTransactions();
   }, []);
 
   const handleRowSelect = (id) => {
-    if (selectedRows.includes(id)) {
-      setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+    setSelectedRows((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((rowId) => rowId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedRows(filteredTransactions.map((t) => t.id));
     } else {
-      setSelectedRows([...selectedRows, id]);
+      setSelectedRows([]);
     }
   };
+
+  const handleMoreOptionsClick = (e, transactionId) => {
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    setActionMenu({
+      isOpen: true,
+      position: {
+        x: rect.left,
+        y: rect.top + rect.height / 2 + window.scrollY,
+      },
+      transactionId,
+    });
+  };
+
+  const handleDeleteSelected = async () => {
+    try {
+      const deletePromises = selectedRows.map((id) => {
+        const type = id.startsWith("expense") ? "expenses" : "incomes";
+        const cleanId = id.replace(/^(expense|income)-/, "");
+        return api.delete(`/${type}/${cleanId}`);
+      });
+
+      await Promise.all(deletePromises);
+      toast.success(`Successfully deleted ${selectedRows.length} transactions`);
+      fetchTransactions();
+      setSelectedRows([]);
+      setShowDeleteModal(false);
+    } catch (error) {
+      console.error("Error deleting transactions:", error);
+      toast.error("Failed to delete some transactions");
+    }
+  };
+
+  const handleSingleDelete = async (transactionId) => {
+    try {
+      const type = transactionId.startsWith("expense") ? "expenses" : "incomes";
+      const cleanId = transactionId.replace(/^(expense|income)-/, "");
+      await api.delete(`/${type}/${cleanId}`);
+      toast.success("Transaction deleted successfully");
+      fetchTransactions();
+      setActionMenu({
+        isOpen: false,
+        position: { x: 0, y: 0 },
+        transactionId: null,
+      });
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+      toast.error("Failed to delete transaction");
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (actionMenu.isOpen) {
+        setActionMenu({
+          isOpen: false,
+          position: { x: 0, y: 0 },
+          transactionId: null,
+        });
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [actionMenu.isOpen]);
 
   // Filter transactions based on search term
   const filteredTransactions = transactions.filter(
@@ -133,7 +307,7 @@ const FinancialLedger = () => {
   return (
     <div className="ledger-container">
       <Sidebar />
-      <TopNavigation />
+      <TopNavigation onDataUpdate={refreshData} />
       <Chat />
 
       <div className="ledger-summary-boxes">
@@ -143,6 +317,7 @@ const FinancialLedger = () => {
             className={`ledger-summary-box ${
               key === "score" ? "ledger-score-box" : ""
             }`}
+            data-status={key === "score" ? data.status : undefined}
           >
             {key === "score" ? (
               <>
@@ -177,76 +352,125 @@ const FinancialLedger = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button
-            className="ledger-add-button"
-            onClick={() => setShowAddTransaction(true)}
-          >
-            + Add Transaction
-          </button>
+          <div className="ledger-button-group">
+            {selectedRows.length > 0 && (
+              <button
+                className="selected-delete-button"
+                onClick={() => setShowDeleteModal(true)}
+              >
+                <Trash size={16} />
+                Delete Selected ({selectedRows.length})
+              </button>
+            )}
+            <button
+              className="ledger-add-button"
+              onClick={() => setShowAddTransaction(true)}
+            >
+              + Add Transaction
+            </button>
+          </div>
         </div>
 
-        <table className="ledger-transactions-table">
-          <thead>
-            <tr>
-              <th>
-                <input type="checkbox" className="ledger-checkbox" />
-              </th>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Entity</th>
-              <th>Amount</th>
-              <th>Bank account</th>
-              <th>Method</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredTransactions.map((transaction) => (
-              <tr
-                key={transaction.id}
-                className={
-                  selectedRows.includes(transaction.id) ? "ledger-selected" : ""
-                }
-                data-positive={transaction.amount > 0}
-              >
-                <td>
+        <div className="ledger-table-wrapper">
+          <table className="ledger-transactions-table">
+            <thead>
+              <tr>
+                <th>
                   <input
                     type="checkbox"
                     className="ledger-checkbox"
-                    checked={selectedRows.includes(transaction.id)}
-                    onChange={() => handleRowSelect(transaction.id)}
+                    checked={
+                      filteredTransactions.length > 0 &&
+                      selectedRows.length === filteredTransactions.length
+                    }
+                    onChange={handleSelectAll}
                   />
-                </td>
-                <td>{transaction.date}</td>
-                <td className="ledger-description">
-                  {transaction.description}
-                </td>
-                <td className="ledger-entity">{transaction.entity}</td>
-                <td
-                  className={`ledger-amount ${
-                    transaction.amount > 0
-                      ? "ledger-positive"
-                      : "ledger-negative"
-                  }`}
-                >
-                  ${Math.abs(transaction.amount).toFixed(2)}
-                </td>
-                <td>{transaction.account}</td>
-                <td>{transaction.method}</td>
-                <td>
-                  <button className="ledger-more-options">⋯</button>
-                </td>
+                </th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Entity</th>
+                <th>Amount</th>
+                <th>Bank account</th>
+                <th>Method</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredTransactions.map((transaction) => (
+                <tr
+                  key={transaction.id}
+                  className={`${
+                    selectedRows.includes(transaction.id)
+                      ? "ledger-selected"
+                      : ""
+                  } hover:bg-gray-50`}
+                  data-positive={transaction.amount > 0}
+                >
+                  <td>
+                    <input
+                      type="checkbox"
+                      className="ledger-checkbox"
+                      checked={selectedRows.includes(transaction.id)}
+                      onChange={() => handleRowSelect(transaction.id)}
+                    />
+                  </td>
+                  <td>{transaction.date}</td>
+                  <td className="ledger-description">
+                    {transaction.description}
+                  </td>
+                  <td className="ledger-entity">{transaction.entity}</td>
+                  <td
+                    className={`ledger-amount ${
+                      transaction.amount > 0
+                        ? "ledger-positive"
+                        : "ledger-negative"
+                    }`}
+                  >
+                    {formatNumberWithCommas(transaction.amount)}
+                  </td>
+                  <td>{transaction.account}</td>
+                  <td>{transaction.method}</td>
+                  <td>
+                    <button
+                      className="table-more-options-button"
+                      onClick={(e) => handleMoreOptionsClick(e, transaction.id)}
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
       {showAddTransaction && (
         <AddTransaction
           onClose={() => setShowAddTransaction(false)}
           fetchData={fetchTransactions}
         />
       )}
+
+      <RowActionMenu
+        isOpen={actionMenu.isOpen}
+        onClose={() =>
+          setActionMenu({
+            isOpen: false,
+            position: { x: 0, y: 0 },
+            transactionId: null,
+          })
+        }
+        onDelete={() => handleSingleDelete(actionMenu.transactionId)}
+        position={actionMenu.position}
+      />
+
+      <DeleteConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteSelected}
+        count={selectedRows.length}
+      />
     </div>
   );
 };

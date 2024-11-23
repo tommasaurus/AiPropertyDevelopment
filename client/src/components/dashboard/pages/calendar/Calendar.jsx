@@ -34,156 +34,11 @@ const Calendar = () => {
   }, []);
 
   const events = [
-    // Week 1
-    {
-      id: 1,
-      title: "Property Inspection - Nob Hill Complex",
-      start: new Date(2024, 10, 1, 9, 0),
-      end: new Date(2024, 10, 1, 10, 30),
-      location: "1200 California St, San Francisco",
-      type: "primary",
-      attendees: ["JM", "KL", "RT"],
-    },
-    {
-      id: 2,
-      title: "Tenant Lease Signing - SOMA Unit",
-      start: new Date(2024, 10, 1, 14, 0),
-      end: new Date(2024, 10, 1, 15, 15),
-      location: "888 Brannan St, San Francisco",
-      type: "success",
-      attendees: ["JM", "CW"],
-    },
-    {
-      id: 3,
-      title: "Building Maintenance Review",
-      start: new Date(2024, 10, 4, 10, 0),
-      end: new Date(2024, 10, 4, 11, 30),
-      location: "Marina District Property",
-      type: "warning",
-      attendees: ["JM", "MT", "RS"],
-    },
-
-    // Week 2
-    {
-      id: 4,
-      title: "Quarterly Budget Meeting",
-      start: new Date(2024, 10, 7, 13, 0),
-      end: new Date(2024, 10, 7, 14, 30),
-      location: "Virtual Meeting",
-      type: "dark",
-      attendees: ["JM", "FD", "AC", "BL"],
-    },
-    {
-      id: 5,
-      title: "Property Tax Assessment",
-      start: new Date(2024, 10, 8, 11, 0),
-      end: new Date(2024, 10, 8, 12, 0),
-      location: "City Hall, San Francisco",
-      type: "warning",
-      attendees: ["JM", "TX"],
-    },
-    {
-      id: 6,
-      title: "New Property Viewing",
-      start: new Date(2024, 10, 8, 15, 0),
-      end: new Date(2024, 10, 8, 16, 30),
-      location: "Pacific Heights",
-      type: "primary",
-      attendees: ["JM", "BC"],
-    },
-
-    // Week 3
-    {
-      id: 7,
-      title: "Contractor Meeting - Renovation",
-      start: new Date(2024, 10, 12, 9, 0),
-      end: new Date(2024, 10, 12, 10, 30),
-      location: "Hayes Valley Project",
-      type: "dark",
-      attendees: ["JM", "CT", "PM"],
-    },
-    {
-      id: 8,
-      title: "Tenant Association Meeting",
-      start: new Date(2024, 10, 14, 18, 0),
-      end: new Date(2024, 10, 14, 19, 30),
-      location: "Community Room - Mission District",
-      type: "success",
-      attendees: ["JM", "TA", "RB"],
-    },
-    {
-      id: 9,
-      title: "Insurance Policy Review",
-      start: new Date(2024, 10, 15, 10, 0),
-      end: new Date(2024, 10, 15, 11, 0),
-      location: "Virtual Meeting",
-      type: "warning",
-      attendees: ["JM", "IN"],
-    },
-
-    // Week 4
-    {
-      id: 10,
-      title: "Emergency System Testing",
-      start: new Date(2024, 10, 19, 8, 0),
-      end: new Date(2024, 10, 19, 10, 0),
-      location: "Multiple Properties",
-      type: "warning",
-      attendees: ["JM", "ST", "FD"],
-    },
-    {
-      id: 11,
-      title: "Lease Renewal Meeting",
-      start: new Date(2024, 10, 20, 14, 0),
-      end: new Date(2024, 10, 20, 15, 0),
-      location: "Richmond District Property",
-      type: "success",
-      attendees: ["JM", "TN"],
-    },
-    {
-      id: 12,
-      title: "Staff Training Session",
-      start: new Date(2024, 10, 21, 9, 0),
-      end: new Date(2024, 10, 21, 12, 0),
-      location: "Training Center",
-      type: "primary",
-      attendees: ["JM", "ST", "TR", "HR"],
-    },
-
-    // Week 5
-    {
-      id: 13,
-      title: "End of Month Inspection",
-      start: new Date(2024, 10, 25, 13, 0),
-      end: new Date(2024, 10, 25, 16, 0),
-      location: "All Properties",
-      type: "dark",
-      attendees: ["JM", "IN", "PM"],
-    },
-    {
-      id: 14,
-      title: "Holiday Decoration Planning",
-      start: new Date(2024, 10, 27, 11, 0),
-      end: new Date(2024, 10, 27, 12, 30),
-      location: "Main Office",
-      type: "success",
-      attendees: ["JM", "DC", "MT"],
-    },
-    {
-      id: 15,
-      title: "Year-End Budget Review",
-      start: new Date(2024, 10, 29, 14, 0),
-      end: new Date(2024, 10, 29, 16, 0),
-      location: "Conference Room",
-      type: "primary",
-      attendees: ["JM", "FD", "AC", "CEO"],
-    },
-
     {
       id: 15,
       title: "Lease Renewal for Thomas Qu",
-      start: new Date(2024, 10, 30, 7, 0),
-      end: new Date(2024, 10, 30, 16, 0),
+      start: new Date(2024, 10, 30, 8, 0),
+      end: new Date(2024, 10, 30, 9, 0),
       type: "primary",
     },
   ];
@@ -264,11 +119,11 @@ const Calendar = () => {
       days.push(
         <div
           key={`prev-${i}`}
-          className='calendar-day other-month'
+          className="calendar-day other-month"
           onClick={() => handleDayClick(year, month, day)}
         >
-          <div className='day-number'>{day}</div>
-          <div className='events-container'></div>
+          <div className="day-number">{day}</div>
+          <div className="events-container"></div>
         </div>
       );
     }
@@ -299,8 +154,8 @@ const Calendar = () => {
             )
           }
         >
-          <div className='day-number'>{day}</div>
-          <div className='events-container'>
+          <div className="day-number">{day}</div>
+          <div className="events-container">
             {dayEvents.map((event, index) => (
               <div
                 key={event.id}
@@ -310,15 +165,15 @@ const Calendar = () => {
                 )}\n${event.title}`}
                 onClick={(e) => handleEventClick(event, e)}
               >
-                <div className='event-time'>
+                <div className="event-time">
                   {formatEventTime(event.start)} - {formatEventTime(event.end)}
                 </div>
-                <div className='event-title'>{event.title}</div>
+                <div className="event-title">{event.title}</div>
               </div>
             ))}
             {dayEvents.length > 3 && (
               <div
-                className='more-events'
+                className="more-events"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDayClick(
@@ -345,11 +200,11 @@ const Calendar = () => {
       days.push(
         <div
           key={`next-${i}`}
-          className='calendar-day other-month'
+          className="calendar-day other-month"
           onClick={() => handleDayClick(year, month, i)}
         >
-          <div className='day-number'>{i}</div>
-          <div className='events-container'></div>
+          <div className="day-number">{i}</div>
+          <div className="events-container"></div>
         </div>
       );
     }
@@ -358,30 +213,30 @@ const Calendar = () => {
   };
 
   return (
-    <div className='calendar-layout'>
+    <div className="calendar-layout">
       <Sidebar />
       <TopNavigation />
       <Chat />
 
-      <main className='calendar-main'>
-        <div className='calendar-content'>
-          <div className='calendar-header'>
-            <div className='header-center'>
-              <div className='calendar-type'>
-                <button className='nav-button' onClick={handlePrevMonth}>
-                  <ChevronLeft className='nav-icon' />
+      <main className="calendar-main">
+        <div className="calendar-content">
+          <div className="calendar-header">
+            <div className="header-center">
+              <div className="calendar-type">
+                <button className="nav-button" onClick={handlePrevMonth}>
+                  <ChevronLeft className="nav-icon" />
                 </button>
-                <span className='current-month'>
+                <span className="current-month">
                   {formatMonth(currentDate)}, {currentDate.getFullYear()}
                 </span>
-                <button className='nav-button' onClick={handleNextMonth}>
-                  <ChevronRight className='nav-icon' />
+                <button className="nav-button" onClick={handleNextMonth}>
+                  <ChevronRight className="nav-icon" />
                 </button>
               </div>
             </div>
-            <div className='header-left'>
-              <div className='view-options-container'>
-                <div className='view-options-wrapper'>
+            <div className="header-left">
+              <div className="view-options-container">
+                <div className="view-options-wrapper">
                   {["Day", "Week", "Month"].map((view) => (
                     <button
                       key={view}
@@ -396,11 +251,11 @@ const Calendar = () => {
                 </div>
               </div>
             </div>
-            <div className='header-right'>
-              <button className='today-button' onClick={handleTodayClick}>
+            <div className="header-right">
+              <button className="today-button" onClick={handleTodayClick}>
                 Today ({getTodayDate()})
               </button>
-              <button className='new-schedule-button'>+ New Schedule</button>
+              <button className="new-schedule-button">+ New Schedule</button>
             </div>
           </div>
 
@@ -421,7 +276,7 @@ const Calendar = () => {
             />
           ) : (
             <>
-              <div className='calendar-days'>
+              <div className="calendar-days">
                 {[
                   "Monday",
                   "Tuesday",
@@ -431,12 +286,12 @@ const Calendar = () => {
                   "Saturday",
                   "Sunday",
                 ].map((day) => (
-                  <span key={day} className='day-label'>
+                  <span key={day} className="day-label">
                     {day}
                   </span>
                 ))}
               </div>
-              <div className='calendar-grid'>{renderCalendarDays()}</div>
+              <div className="calendar-grid">{renderCalendarDays()}</div>
             </>
           )}
         </div>
