@@ -36,9 +36,9 @@ const Calendar = () => {
   const events = [
     {
       id: 15,
-      title: "Lease Renewal for Thomas Qu",
-      start: new Date(2024, 10, 30, 8, 0),
-      end: new Date(2024, 10, 30, 9, 0),
+      title: "Lease Ending for Thomas Qu",
+      start: new Date(2024, 10, 29, 8, 0),
+      end: new Date(2024, 10, 29, 9, 0),
       type: "primary",
     },
   ];
